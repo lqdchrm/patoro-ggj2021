@@ -1,5 +1,5 @@
 # Preparation
-* add yout discord token to .env file
+* add your discord token to .env file
 
 
 # DEV infos
