@@ -11,21 +11,13 @@ using System.Threading.Tasks;
 namespace LostAndFound.Game.LostAndFound
 
 {
-    public class CozyHut : CommonRoom
+    public class RobsWorld : CommonRoom
     {
-        public bool FireTurnedOn = false;
+        //public bool FireTurnedOn = false;
 
-        public override string Name => "Cozy Hut";
+        public override string Name => "Robs World";
 
-        protected override bool IsCommandVisible(string cmd)
-        {
-            switch(cmd)
-            {
-                case "FIRE": return false;
-            }
-            return base.IsCommandVisible(cmd);
-        }
-
+        /*
         [Command("FIRE", "Make a fire")]
         public async Task LightFire(PlayerCommand cmd)
         {
@@ -42,5 +34,6 @@ namespace LostAndFound.Game.LostAndFound
                 }
             }
         }
+        */
     }
 }

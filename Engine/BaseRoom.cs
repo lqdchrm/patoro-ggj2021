@@ -12,8 +12,11 @@ namespace LostAndFound.Engine
 {
     public abstract class BaseRoom
     {
-        private readonly Dictionary<string, MethodInfo> Commands = new Dictionary<string, MethodInfo>();
-        protected readonly Dictionary<string, CommandAttribute> CommandDefs = new Dictionary<string, CommandAttribute>();
+        private readonly Dictionary<string, MethodInfo> CommandMethods = new Dictionary<string, MethodInfo>();
+        private readonly Dictionary<string, CommandAttribute> CommandDefs = new Dictionary<string, CommandAttribute>();
+
+        protected IEnumerable<CommandAttribute> Commands => CommandDefs.Values.Where(cmd => IsCommandVisible(cmd.Name));
+        protected abstract bool IsCommandVisible(string cmdName);
 
         internal BaseGame Game { get; set; }
         internal DiscordChannel VoiceChannel { get; set; }
@@ -45,7 +48,7 @@ namespace LostAndFound.Engine
         public async Task HandleCommandAsync(PlayerCommand cmd)
         {
             MethodInfo method;
-            if (Commands.TryGetValue(cmd.Command, out method))
+            if (IsCommandVisible(cmd.Command) &&  CommandMethods.TryGetValue(cmd.Command, out method))
             {
                 var task = (Task)method.Invoke(this, new object[] { cmd });
                 await task;
@@ -58,7 +61,7 @@ namespace LostAndFound.Engine
             foreach (var method in methods)
             {
                 var attrib = method.GetCustomAttribute<CommandAttribute>();
-                Commands.Add(attrib.Name, method);
+                CommandMethods.Add(attrib.Name, method);
                 CommandDefs.Add(attrib.Name, attrib);
             }
         }
