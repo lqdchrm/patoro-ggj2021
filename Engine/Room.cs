@@ -8,12 +8,14 @@ using System.Reflection;
 
 namespace LostAndFound.Engine
 {
-    public abstract class Room
+    public abstract class Room<TGame, TPlayer>
+         where TGame : DiscordGame<TGame, TPlayer>
+        where TPlayer : BasePlayer<TGame, TPlayer>
     {
         private readonly Dictionary<string, MethodInfo> Commands = new Dictionary<string, MethodInfo>();
         protected readonly Dictionary<string, CommandAttribute> CommandDefs = new Dictionary<string, CommandAttribute>();
 
-        internal DiscordGame Game { get; set; }
+        internal DiscordGame<TGame, TPlayer> Game { get; set; }
         internal DiscordChannel VoiceChannel { get; set; }
 
         public abstract string Name { get; }
@@ -23,7 +25,7 @@ namespace LostAndFound.Engine
             BuildCommands();
         }
 
-        public async Task SendMessageAsync(Player fromPlayer, string msg)
+        public async Task SendMessageAsync(TPlayer fromPlayer, string msg)
         {
             var tasks = Game.Players.Values
                 .Where(p => p.Room == this)
@@ -40,7 +42,7 @@ namespace LostAndFound.Engine
             await Task.WhenAll(tasks);
         }
 
-        public async Task HandleCommandAsync(Player player, string command)
+        public async Task HandleCommandAsync(TPlayer player, string command)
         {
             MethodInfo method;
             if (Commands.TryGetValue(command, out method))

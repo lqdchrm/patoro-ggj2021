@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game
+namespace LostAndFound.Game.LostAndFund
 {
-    public abstract class BaseRoom : Room
+    public abstract class BaseRoom : Room<LostAndFoundGame, Player>
     {
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(Player player)

@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game
+namespace LostAndFound.Game.LostAndFund
+
 {
     public class CozyHut : BaseRoom
     {

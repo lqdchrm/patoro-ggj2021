@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.Mansion.Rooms
 {
-    class Laboratory : BaseRoom
+    class Laboratory : MansionRoom
     {
         public override string Name => "L";
 

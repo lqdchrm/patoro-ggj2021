@@ -12,7 +12,9 @@ using System.Collections.Concurrent;
 
 namespace LostAndFound.Engine
 {
-    public abstract class DiscordGame : AbstractGame, IDisposable
+    public abstract class DiscordGame<TGame, TPlayer> : AbstractGame<TGame, TPlayer>
+        where TGame : DiscordGame<TGame, TPlayer>
+        where TPlayer : BasePlayer<TGame, TPlayer>
     {
         protected DiscordClient client;
 
@@ -20,10 +22,9 @@ namespace LostAndFound.Engine
 
         protected DiscordChannel parentChannel;
         protected DiscordChannel helpChannel;
-        private bool disposedValue;
 
-        protected readonly Dictionary<string, Room> rooms = new Dictionary<string, Room>();
-        protected readonly Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
+        protected readonly Dictionary<string, Room<TGame, TPlayer>> rooms = new Dictionary<string, Room<TGame, TPlayer>>();
+        protected readonly Dictionary<ulong, TPlayer> players = new Dictionary<ulong, TPlayer>();
 
         public string Name { get; }
         public bool Ready { get; private set; }
@@ -32,6 +33,7 @@ namespace LostAndFound.Engine
         public virtual bool IsEverythingCommand => false;
         #endregion
 
+        public abstract TPlayer CreatePlayer(string userName);
 
         public DiscordGame(string name, DiscordClient client, DiscordGuild guild)
         {
@@ -158,27 +160,24 @@ namespace LostAndFound.Engine
             return room;
         }
 
-        public IReadOnlyDictionary<string, Room> Rooms => rooms;
+        public IReadOnlyDictionary<string, Room<TGame, TPlayer>> Rooms => rooms;
         #endregion
 
 
         #region Player Helpers
-        public IReadOnlyDictionary<string, Player> Players => players.Values.ToDictionary(p => p.Name);
+        public IReadOnlyDictionary<string, TPlayer> Players => players.Values.ToDictionary(p => p.Name);
 
-        private async Task<Player> GetOrCreatePlayer(DiscordMember member)
+        private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
         {
-            Player player;
-            if (!players.TryGetValue(member.Id, out player))
+            if (!players.TryGetValue(member.Id, out var player))
             {
                 Console.Error.WriteLine($"[ENGINE] Adding player {member.DisplayName} ...");
-                player = new Player(member.DisplayName);
+                player = CreatePlayer(member.DisplayName);
                 players.Add(member.Id, player);
 
                 player.Channel = await this.guild.CreateChannelAsync($"📜 {player.Name}", ChannelType.Text, parentChannel);
 
                 player.User = member;
-
-                player.Game = this;
 
                 await player.InitAsync();
 
@@ -188,33 +187,21 @@ namespace LostAndFound.Engine
             return player;
         }
 
-        protected virtual Task NewPlayer(Player player) => Task.CompletedTask;
+        protected virtual Task NewPlayer(TPlayer player) => Task.CompletedTask;
 
-        protected virtual async void Dispose(bool disposing)
+        protected override async void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                disposedValue = true;
-                if (disposing)
-                {
-                    client.VoiceStateUpdated -= VoiceStateUpdated;
-                    client.MessageCreated -= OnMessageCreated;
+                client.VoiceStateUpdated -= VoiceStateUpdated;
+                client.MessageCreated -= OnMessageCreated;
 
-                    // cleanup
-                    await CleanupAsync();
-
-                }
-
+                // cleanup
+                await CleanupAsync();
             }
         }
-
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
+
+
+    #endregion
 }

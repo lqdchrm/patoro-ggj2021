@@ -6,13 +6,13 @@ using DSharpPlus;
 using LostAndFound.Engine;
 using LostAndFound.Engine.Events;
 
-namespace LostAndFound.Game
+namespace LostAndFound.Game.LostAndFund
 {
 
-    public class LostAndFoundGame : DiscordGame
+    public class LostAndFoundGame : DiscordGame<LostAndFoundGame, Player>
     {
-        private Room CozyHut;
-        private Room TheWoods;
+        private BaseRoom CozyHut;
+        private BaseRoom TheWoods;
 
         public LostAndFoundGame(string name, DiscordClient client, DSharpPlus.Entities.DiscordGuild guild) : base(name, client, guild) { }
 
@@ -27,19 +27,24 @@ namespace LostAndFound.Game
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
-        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent e)
+        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent<LostAndFoundGame, Player> e)
         {
             if (e.Player.Room != null)
                 await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
         }
 
-        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs e)
+        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs<LostAndFoundGame, Player> e)
         {
             if (e.OldRoom != null)
                 await e.OldRoom.SendGameEventAsync($"{e.Player.Name} left {e.OldRoom.Name}");
 
             if (e.Player.Room != null)
                 await e.Player.Room.SendGameEventAsync($"{e.Player.Name} entered {e.Player.Room.Name}");
+        }
+
+        public override Player CreatePlayer(string userName)
+        {
+            return new Player(userName, this);
         }
     }
 }

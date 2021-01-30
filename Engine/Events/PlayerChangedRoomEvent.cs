@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Events
 {
-    public class PlayerChangedRoomEventArgs
+    public class PlayerChangedRoomEventArgs<TGame, TPlayer>
+        where TGame : DiscordGame<TGame, TPlayer>
+        where TPlayer : BasePlayer<TGame, TPlayer>
     {
-        public Player Player { get; internal set; }
-        public Room OldRoom { get; internal set; }
+        public TPlayer Player { get; internal set; }
+        public Room<TGame, TPlayer> OldRoom { get; internal set; }
     }
 }

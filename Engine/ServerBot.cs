@@ -17,13 +17,13 @@ namespace LostAndFound.Engine
 
         private readonly Regex gameRegex = new Regex(@"(?<game>\w+)\s+(?<instance>.+)\s*$");
 
-        private Dictionary<string, Func<string, DiscordClient, DiscordGuild, DiscordGame>> GameMapping = new Dictionary<string, Func<string, DiscordClient, DiscordGuild, DiscordGame>>()
+        private Dictionary<string, Func<string, DiscordClient, DiscordGuild, AbstractGame>> GameMapping = new Dictionary<string, Func<string, DiscordClient, DiscordGuild, AbstractGame>>()
         {
-            {"LostAndFound", (instanceName, client, guild) => new Game.LostAndFoundGame(instanceName,client,guild) },
+            {"LostAndFound", (instanceName, client, guild) => new Game.LostAndFund.LostAndFoundGame(instanceName,client,guild) },
             {"Mansion", (instanceName, client, guild) => new Game.Mansion.MansionGame(instanceName,client,guild) }
         };
 
-        private readonly Dictionary<string, DiscordGame> gameLookup = new Dictionary<string, DiscordGame>();
+        private readonly Dictionary<string, AbstractGame> gameLookup = new Dictionary<string, AbstractGame>();
 
         public ServerBot(DiscordClient sender, DiscordGuild guild)
         {

@@ -1,26 +1,21 @@
 ﻿using DSharpPlus.Entities;
+using LostAndFound.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace LostAndFound.Game.LostAndFund
 {
-    public class Player
+    public class Player : BasePlayer<LostAndFoundGame, Player>
     {
-        internal DiscordGame Game { get; set; }
-        internal DiscordChannel Channel { get; set; }
-        internal DiscordMember User { get; set; }
-
         int Health;
 
-        public string Name { get; }
-        public Room Room { get; internal set; }
 
-        public Player(string name) { this.Name = name; }
+        public Player(string name, LostAndFoundGame game) : base(game, name) { }
 
-        public async Task InitAsync()
+        public override async Task InitAsync()
         {
             this.Health = 3;
             await UpdateStatsAsync();
@@ -44,7 +39,7 @@ namespace LostAndFound.Engine
             if (this.Health > 0) this.Health--;
             await UpdateStatsAsync();
         }
-        
+
         public async Task HealAsync()
         {
             if (this.Health < 3) this.Health++;
