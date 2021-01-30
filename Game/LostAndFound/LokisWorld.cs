@@ -14,12 +14,34 @@ namespace LostAndFound.Game.LostAndFound
     public class LokisWorld : CommonRoom
     {
 
-        private bool isLight;
-        private bool isChained;
+        //private bool isLight;
+        private bool isChained = true;
         private bool isSchleimed;
         private bool isHandWounded;
 
         public override string Name => "Lokis World";
+
+
+        protected override bool IsCommandVisible(string cmd)
+        {
+            if (cmd == "MOVE" && isChained)
+                return false;
+
+            return base.IsCommandVisible(cmd);
+        }
+
+        [Command("MOVE", "Bewege dich in die Freiheit")]
+        public async Task Move(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player)
+                return;
+
+
+            await player.SendGameEventAsync("Du öffnest die Tür und trittst in die Freiheit.");
+            await player.SendGameEventAsync("Dies ist das Ende der Shareware.");
+            await player.SendGameEventAsync("Wenn dir das Spiel gefällt Schicke 0€ in einem Umschlag.");
+
+        }
 
         [Command("USE", "Benutze [X] mit [Y]. [Schreibe USE X Y]")]
         public async Task Use(PlayerCommand cmd)
@@ -104,9 +126,9 @@ namespace LostAndFound.Game.LostAndFound
                         await player.SendGameEventAsync("Ein beißender Schmerz fährt durch deine Hand als du die Letzten Zentimerter mit einem Ruck überwunden hast.");
                         isHandWounded = true;
                     }
-                    isChained = true;
+                    isChained = false;
                     await player.SendGameEventAsync("Du bist Frei.");
-                    await player.SendGameEventAsync("Neuer Befehl [Move].");
+                    await player.SendGameEventAsync("Neuer Befehl [MOVE].");
                 }
             }
             else if (cmd.Args.Any())
@@ -127,11 +149,7 @@ namespace LostAndFound.Game.LostAndFound
             if (cmd.Player is not Player player)
                 return;
 
-            if (isLight)
-            {
-                await player.SendGameEventAsync("");
-            }
-            else
+
             {
                 if (cmd.Args.Any(x => x.Equals("boden", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -162,6 +180,7 @@ namespace LostAndFound.Game.LostAndFound
                 {
                     await player.SendGameEventAsync("Du stehst in einem Dunklen Raum ohne etwas sehen zu können. Du fühlst den kalten steinernen [Boden] unter deinen Füßen.");
                     await player.SendGameEventAsync("Deine Rechte [Hand] hängt in irgendwas fest");
+                    await player.SendGameEventAsync("Ein schmaler Lischtstrahl schimmert auf der Anderen seite des Raumes. Dort scheint eine tür zu sein.");
                 }
 
             }
