@@ -1,5 +1,6 @@
 # Preparation
 * add your discord token to .env file
+* auth your bot with https://discordapp.com/oauth2/authorize?client_id=<CLIENT-ID>&scope=bot&permissions=<PERMISSIONS>
 
 
 # DEV infos
