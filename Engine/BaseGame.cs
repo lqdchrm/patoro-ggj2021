@@ -147,24 +147,8 @@ namespace LostAndFound.Engine
 
                 if (player.Channel == e.Channel)
                 {
-                    if (this.IsEverythingCommand)
-                    {
-                        var input = e.Message.Content.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                        var cmd = BuildCommandFromMessage(player, e);
-                        RaisePlayerCommand(cmd);
-                    }
-                    else
-                    {
-                        var cmd = BuildCommandFromMessage(player, e);
-                        if (cmd.Command == cmd.Command.ToUpperInvariant())
-                        {
-                            RaisePlayerCommand(cmd);
-                        }
-                        else
-                        {
-                            await player.Room.SendMessageAsync(player, e.Message.Content);
-                        }
-                    }
+                    var cmd = BuildCommandFromMessage(player, e);
+                    RaisePlayerCommand(cmd);
                 }
             }
         }
@@ -174,8 +158,9 @@ namespace LostAndFound.Engine
             var input = e.Message.Content.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             return new PlayerCommand()
             {
+                Message = e.Message.Content,
                 Player = player,
-                Command = input[0],
+                Command = input[0].ToUpperInvariant(),
                 Mentions = e.MentionedUsers.Select(u => players.GetValueOrDefault(u.Id)).Where(u => u != null).ToList(),
                 Args = input.Skip(1).Where(s => !s.Contains("@")).ToList()
             };
