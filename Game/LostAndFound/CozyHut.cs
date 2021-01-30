@@ -92,7 +92,7 @@ namespace LostAndFound.Game.LostAndFound
                         await player.SendGameEventAsync($"What do you want to pick up?");
                     else
                     {
-                        if (item.ToLowerInvariant() == "keys")
+                        if (item.ToLowerInvariant() == "keys" && KeysNoticed)
                         {
                             KeysNoticed = false;
                             player.Inventory.Add("keys", Emojis.Keys);
