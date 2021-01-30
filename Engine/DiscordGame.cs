@@ -143,6 +143,7 @@ namespace LostAndFound.Engine
             Console.Error.WriteLine("[ENGINE] ... got guild");
         }
 
+        #region Rooms Helpers
         public override async Task<TRoom> AddRoomAsync<TRoom>(TRoom room)
         {
             rooms.Add(room.Name, room);
@@ -151,6 +152,10 @@ namespace LostAndFound.Engine
 
             return room;
         }
+
+        public IReadOnlyDictionary<string, Room> Rooms => rooms;
+        #endregion
+
 
         #region Player Helpers
         public IReadOnlyDictionary<string, Player> Players => players.Values.ToDictionary(p => p.Name);
