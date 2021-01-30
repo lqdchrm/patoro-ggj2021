@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.LostAndFund
 {
-    public class Player : BasePlayer<LostAndFoundGame, Player>
+    public class Player : BasePlayer<LostAndFoundGame, Player, BaseRoom>
     {
         int Health;
 

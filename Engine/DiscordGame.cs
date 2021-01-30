@@ -12,9 +12,10 @@ using System.Collections.Concurrent;
 
 namespace LostAndFound.Engine
 {
-    public abstract class DiscordGame<TGame, TPlayer> : AbstractGame<TGame, TPlayer>
-        where TGame : DiscordGame<TGame, TPlayer>
-        where TPlayer : BasePlayer<TGame, TPlayer>
+    public abstract class DiscordGame<TGame, TPlayer, TRoom> : AbstractGame<TGame, TPlayer, TRoom>
+        where TGame : DiscordGame<TGame, TPlayer, TRoom>
+        where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
+        where TRoom : Room<TGame, TPlayer, TRoom>
     {
         protected DiscordClient client;
 
@@ -23,7 +24,7 @@ namespace LostAndFound.Engine
         protected DiscordChannel parentChannel;
         protected DiscordChannel helpChannel;
 
-        protected readonly Dictionary<string, Room<TGame, TPlayer>> rooms = new Dictionary<string, Room<TGame, TPlayer>>();
+        protected readonly Dictionary<string, TRoom> rooms = new Dictionary<string, TRoom>();
         protected readonly Dictionary<ulong, TPlayer> players = new Dictionary<ulong, TPlayer>();
 
         public string Name { get; }
@@ -151,16 +152,22 @@ namespace LostAndFound.Engine
         }
 
         #region Rooms Helpers
-        public override async Task<TRoom> AddRoomAsync<TRoom>(TRoom room)
+        public override async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, Permissions allow = default, Permissions deney = default)
         {
             rooms.Add(room.Name, room);
             room.Game = this;
-            room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel);
+            var overaites = new DiscordOverwriteBuilder();
+            overaites = overaites.For(guild.EveryoneRole);
+            if (deney != default)
+                overaites = overaites.Deny(deney);
+            if (allow != default)
+                overaites = overaites.Deny(allow);
+            room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel, overwrites: new[] { overaites });
 
             return room;
         }
 
-        public IReadOnlyDictionary<string, Room<TGame, TPlayer>> Rooms => rooms;
+        public IReadOnlyDictionary<string, TRoom> Rooms => rooms;
         #endregion
 
 
@@ -175,7 +182,11 @@ namespace LostAndFound.Engine
                 player = CreatePlayer(member.DisplayName);
                 players.Add(member.Id, player);
 
-                player.Channel = await this.guild.CreateChannelAsync($"📜 {player.Name}", ChannelType.Text, parentChannel);
+                var overaites = new DiscordOverwriteBuilder();
+
+
+                player.Channel = await this.guild.CreateChannelAsync($"📜 {player.Name}", ChannelType.Text, parentChannel, overwrites: new[] { overaites.For(guild.EveryoneRole).Deny(Permissions.AccessChannels) });
+                await player.Channel.AddOverwriteAsync(member, Permissions.AccessChannels);
 
                 player.User = member;
 

@@ -9,7 +9,7 @@ using LostAndFound.Engine.Events;
 namespace LostAndFound.Game.LostAndFund
 {
 
-    public class LostAndFoundGame : DiscordGame<LostAndFoundGame, Player>
+    public class LostAndFoundGame : DiscordGame<LostAndFoundGame, Player, BaseRoom>
     {
         private BaseRoom CozyHut;
         private BaseRoom TheWoods;
@@ -27,13 +27,13 @@ namespace LostAndFound.Game.LostAndFund
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
-        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent<LostAndFoundGame, Player> e)
+        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent<LostAndFoundGame, Player, BaseRoom> e)
         {
             if (e.Player.Room != null)
                 await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
         }
 
-        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs<LostAndFoundGame, Player> e)
+        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs<LostAndFoundGame, Player, BaseRoom> e)
         {
             if (e.OldRoom != null)
                 await e.OldRoom.SendGameEventAsync($"{e.Player.Name} left {e.OldRoom.Name}");

@@ -11,7 +11,7 @@ using LostAndFound.Game.Mansion.Rooms;
 namespace LostAndFound.Game.Mansion
 {
 
-    public class MansionGame : DiscordGame<MansionGame, MansionPlayer>
+    public class MansionGame : DiscordGame<MansionGame, MansionPlayer, MansionRoom>
     {
         internal Rooms.Void Void { get; private set; }
         internal Rooms.Laboratory Laboratory { get; private set; }
@@ -20,6 +20,9 @@ namespace LostAndFound.Game.Mansion
         internal Kitchen Kitchen { get; private set; }
         internal LivvingRoom LivingRoom { get; private set; }
         internal Hall Hall { get; private set; }
+
+        public override bool IsEverythingCommand => true;
+
 
         private Characters.John John = new Characters.John();
         private Characters.Kathrin Kathrin = new Characters.Kathrin();
@@ -44,24 +47,23 @@ namespace LostAndFound.Game.Mansion
             await base.StartAsync();
 
             Void = await AddRoomAsync(new Rooms.Void());
-            Laboratory = await AddRoomAsync(new Rooms.Laboratory());
-            DiningRoom = await AddRoomAsync(new Rooms.DinginRoom());
-            Kitchen = await AddRoomAsync(new Rooms.Kitchen());
-            LivingRoom = await AddRoomAsync(new Rooms.LivvingRoom());
-            Hall = await AddRoomAsync(new Rooms.Hall());
+            Laboratory = await AddRoomAsync(new Rooms.Laboratory(), deney: Permissions.AccessChannels);
+            DiningRoom = await AddRoomAsync(new Rooms.DinginRoom(), deney: Permissions.AccessChannels);
+            Kitchen = await AddRoomAsync(new Rooms.Kitchen(), deney: Permissions.AccessChannels);
+            LivingRoom = await AddRoomAsync(new Rooms.LivvingRoom(), deney: Permissions.AccessChannels);
+            Hall = await AddRoomAsync(new Rooms.Hall(), deney: Permissions.AccessChannels);
 
 
             PlayerChangedRoom += OnPlayerChangedRoom;
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
-        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent<MansionGame, MansionPlayer> e)
+        private async void OnPlayerCommandSent(object sender, PlayerCommandSentEvent<MansionGame, MansionPlayer, MansionRoom> e)
         {
             if (e.Player.Room != null)
                 await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
         }
 
-        public override bool IsEverythingCommand => false;
 
         protected override async Task NewPlayer(MansionPlayer player)
         {
@@ -143,7 +145,7 @@ namespace LostAndFound.Game.Mansion
 
         }
 
-        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs<MansionGame, MansionPlayer> e)
+        private async void OnPlayerChangedRoom(object sender, PlayerChangedRoomEventArgs<MansionGame, MansionPlayer, MansionRoom> e)
         {
             //if (e.OldRoom != null)
             //    await e.OldRoom.SendGameEventAsync($"{e.Player.Name} left {e.OldRoom.Name}");

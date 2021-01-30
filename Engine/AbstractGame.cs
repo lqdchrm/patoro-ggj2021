@@ -31,27 +31,28 @@ namespace LostAndFound.Engine
             }
         }
     }
-    public abstract class AbstractGame<TGame, TPlayer> : AbstractGame
-        where TGame : DiscordGame<TGame, TPlayer>
-        where TPlayer : BasePlayer<TGame, TPlayer>
+    public abstract class AbstractGame<TGame, TPlayer, TRoom> : AbstractGame
+        where TGame : DiscordGame<TGame, TPlayer, TRoom>
+        where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
+        where TRoom : Room<TGame, TPlayer, TRoom>
     {
 
-        public abstract Task<TRoom> AddRoomAsync<TRoom>(TRoom room) where TRoom : Room<TGame, TPlayer>;
+        public abstract Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, DSharpPlus.Permissions allow = default, DSharpPlus.Permissions deney = default) where TRoomCurrent : TRoom;
 
-        public event EventHandler<PlayerChangedRoomEventArgs<TGame, TPlayer>> PlayerChangedRoom;
-        public void RaisePlayerChangedRoom(TPlayer player, Room<TGame, TPlayer> oldRoom)
+        public event EventHandler<PlayerChangedRoomEventArgs<TGame, TPlayer, TRoom>> PlayerChangedRoom;
+        public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom)
         {
-            PlayerChangedRoom?.Invoke(this, new PlayerChangedRoomEventArgs<TGame, TPlayer>()
+            PlayerChangedRoom?.Invoke(this, new PlayerChangedRoomEventArgs<TGame, TPlayer, TRoom>()
             {
                 Player = player,
                 OldRoom = oldRoom
             });
         }
 
-        public event EventHandler<PlayerCommandSentEvent<TGame, TPlayer>> PlayerCommandSent;
+        public event EventHandler<PlayerCommandSentEvent<TGame, TPlayer, TRoom>> PlayerCommandSent;
         public void RaisePlayerCommand(TPlayer player, string cmd)
         {
-            PlayerCommandSent?.Invoke(this, new PlayerCommandSentEvent<TGame, TPlayer>()
+            PlayerCommandSent?.Invoke(this, new PlayerCommandSentEvent<TGame, TPlayer, TRoom>()
             {
                 Player = player,
                 Command = cmd

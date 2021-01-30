@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.Mansion
 {
-    public abstract class MansionRoom : Room<MansionGame, MansionPlayer>
+    public abstract class MansionRoom : Room<MansionGame, MansionPlayer, MansionRoom>
     {
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(MansionPlayer player)

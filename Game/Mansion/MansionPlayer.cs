@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.Mansion
 {
-    public class MansionPlayer : BasePlayer<MansionGame, MansionPlayer>
+    public class MansionPlayer : BasePlayer<MansionGame, MansionPlayer, MansionRoom>
     {
         internal Characters.BaseCharacter Character { get; set; }
 
@@ -47,9 +47,6 @@ namespace LostAndFound.Game.Mansion
                 await Channel.SendMessageAsync(msg);
         }
 
-        internal async Task MoveTo(Room<MansionGame, MansionPlayer> room)
-        {
-            await room.VoiceChannel.PlaceMemberAsync(this.User);
-        }
+
     }
 }
