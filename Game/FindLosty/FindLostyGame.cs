@@ -13,12 +13,12 @@ namespace LostAndFound.Game.FindLosty
     {
         readonly GameState State;
 
-        readonly FrontYard FrontYard = new FrontYard();
-        readonly EntryHall EntryHall = new EntryHall();
-        readonly DiningRoom DiningRoom = new DiningRoom();
-        readonly Kitchen Kitchen = new Kitchen();
-        readonly LivingRoom LivingRoom = new LivingRoom();
-        readonly Cellar Cellar = new Cellar();
+        readonly public FrontYard FrontYard = new FrontYard();
+        readonly public EntryHall EntryHall = new EntryHall();
+        readonly public DiningRoom DiningRoom = new DiningRoom();
+        readonly public Kitchen Kitchen = new Kitchen();
+        readonly public LivingRoom LivingRoom = new LivingRoom();
+        readonly public Cellar Cellar = new Cellar();
 
         public FindLostyGame(string name, DiscordClient client, DSharpPlus.Entities.DiscordGuild guild) : base(name, client, guild)
         {
