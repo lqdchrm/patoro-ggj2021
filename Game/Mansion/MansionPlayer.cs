@@ -10,40 +10,46 @@ namespace LostAndFound.Game.Mansion
 {
     public class MansionPlayer : BasePlayer<MansionGame, MansionPlayer>
     {
-        int Health;
+        internal Characters.BaseCharacter Character { get; set; }
 
 
         public MansionPlayer(string name, MansionGame game) : base(game, name) { }
 
-        public async Task InitAsync()
-        {
-            this.Health = 3;
-            await UpdateStatsAsync();
-        }
 
-        public async Task SendGameEventAsync(string msg)
+        public async Task SendAsciiArt(string msg)
+        {
+            msg = $"```css\n{msg}\n```";
+            if (Channel != null)
+            {
+                if (msg.Length > 2000)
+                {
+
+                }
+                await Channel.SendMessageAsync(msg);
+            }
+        }
+        public async Task SendMessage(string msg)
+        {
+            //msg = $"```css\n{msg}\n```";
+            if (Channel != null)
+                await Channel.SendMessageAsync(msg);
+        }
+        public async Task SendHeader(string msg)
+        {
+            msg = $"**{msg}**";
+            if (Channel != null)
+                await Channel.SendMessageAsync(msg);
+        }
+        public async Task SendAdministrativeMassage(string msg)
         {
             msg = $"```css\n{msg}\n```";
             if (Channel != null)
                 await Channel.SendMessageAsync(msg);
         }
 
-        public async Task UpdateStatsAsync()
+        internal async Task MoveTo(Room<MansionGame, MansionPlayer> room)
         {
-            await User.ModifyAsync(x => { x.Muted = Health <= 0; });
-            await Channel.ModifyAsync(x => x.Name = $"📜 ${Name} [{Health}]");
-        }
-
-        public async Task HitAsync()
-        {
-            if (this.Health > 0) this.Health--;
-            await UpdateStatsAsync();
-        }
-
-        public async Task HealAsync()
-        {
-            if (this.Health < 3) this.Health++;
-            await UpdateStatsAsync();
+            await room.VoiceChannel.PlaceMemberAsync(this.User);
         }
     }
 }

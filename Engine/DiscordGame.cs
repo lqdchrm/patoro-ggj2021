@@ -182,7 +182,16 @@ namespace LostAndFound.Engine
                 await player.InitAsync();
 
                 Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
-                await NewPlayer(player);
+                _ = NewPlayer(player).ContinueWith(t =>
+                  {
+
+                      if (t.IsFaulted)
+                          Console.Error.WriteLine($"[ENGINE] Failed To Add Player {t.Exception}");
+                      else
+                          Console.Error.WriteLine($"[ENGINE] Player Added {player.Name}");
+
+
+                  });
             }
             return player;
         }

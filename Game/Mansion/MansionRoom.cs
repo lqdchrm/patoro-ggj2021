@@ -21,18 +21,18 @@ namespace LostAndFound.Game.Mansion
 
             var msg = string.Join("\n", intro, commands);
 
-            await player.SendGameEventAsync(msg);
+            await player.SendMessage(msg);
         }
 
 
-        [Command("STATS", "Shows your stats")]
-        public async Task StatsCommand(MansionPlayer player) => await player.UpdateStatsAsync();
+        //[Command("STATS", "Shows your stats")]
+        //public async Task StatsCommand(MansionPlayer player) => await player.UpdateStatsAsync();
 
 
-        [Command("HEAL", "Increases your health")]
-        public async Task HealCommand(MansionPlayer player) => await player.HealAsync();
+        //[Command("HEAL", "Increases your health")]
+        //public async Task HealCommand(MansionPlayer player) => await player.HealAsync();
 
-        [Command("HIT", "Decreases your health")]
-        public async Task HitCommand(MansionPlayer player) => await player.HitAsync();
+        //[Command("HIT", "Decreases your health")]
+        //public async Task HitCommand(MansionPlayer player) => await player.HitAsync();
     }
 }
