@@ -17,6 +17,15 @@ namespace LostAndFound.Game.LostAndFound
 
         public override string Name => "Cozy Hut";
 
+        protected override bool IsCommandVisible(string cmd)
+        {
+            switch(cmd)
+            {
+                case "FIRE": return false;
+            }
+            return base.IsCommandVisible(cmd);
+        }
+
         [Command("FIRE", "Make a fire")]
         public async Task LightFire(PlayerCommand cmd)
         {

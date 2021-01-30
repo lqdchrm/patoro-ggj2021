@@ -11,6 +11,8 @@ namespace LostAndFound.Game.LostAndFound
 {
     public abstract class CommonRoom : BaseRoom
     {
+        protected override bool IsCommandVisible(string cmd) => true;
+
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(PlayerCommand cmd)
         {
@@ -18,7 +20,7 @@ namespace LostAndFound.Game.LostAndFound
             {
                 var intro = $"You are currently at {player.Room.Name}.\n";
 
-                var commands = string.Join("\n", CommandDefs.Values
+                var commands = string.Join("\n", Commands
                     .OrderBy(cmd => cmd.Name)
                     .Select(cmd => $"{cmd.Name} - {cmd.Description}")
                 );
