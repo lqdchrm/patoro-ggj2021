@@ -11,5 +11,7 @@ namespace LostAndFound.Game.FindLosty
         private readonly FindLostyGame Game;
 
         public GameState(FindLostyGame game) { this.Game = game; }
+
+        public bool CanEnterEntryHall => Game.EntryHall.IsFrontDoorOpen;
     }
 }

@@ -29,12 +29,12 @@ namespace LostAndFound.Game.FindLosty
         {
             await base.StartAsync();
 
-            await AddRoomAsync(FrontYard);
-            await AddRoomAsync(EntryHall);
-            await AddRoomAsync(DiningRoom);
-            await AddRoomAsync(Kitchen);
-            await AddRoomAsync(LivingRoom);
-            await AddRoomAsync(Cellar);
+            await AddRoomAsync(FrontYard, true);
+            await AddRoomAsync(EntryHall, false);
+            await AddRoomAsync(DiningRoom, false);
+            await AddRoomAsync(Kitchen, false);
+            await AddRoomAsync(LivingRoom, false);
+            await AddRoomAsync(Cellar, false);
 
             PlayerChangedRoom += OnPlayerChangedRoom;
             PlayerCommandSent += OnPlayerCommandSent;
@@ -43,7 +43,13 @@ namespace LostAndFound.Game.FindLosty
         private async void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
             if (e.Player.Room != null)
+            {
                 await e.Player.Room.HandleCommandAsync(e);
+            } else if (e.Player is Player player)
+            {
+                player.SendGameEventAsync("Command ignored, Please join a Game Voice-Channel.");
+            }
+        
         }
 
         private async void OnPlayerChangedRoom(object sender, PlayerRoomChange e)

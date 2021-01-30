@@ -14,6 +14,8 @@ namespace LostAndFound.Game.FindLosty
     {
         public override string Name => "EntryHall";
 
+        public bool IsFrontDoorOpen = false;
+
         protected override bool IsCommandVisible(string cmd)
         {
             switch (cmd)

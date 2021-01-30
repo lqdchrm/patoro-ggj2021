@@ -46,12 +46,12 @@ namespace LostAndFound.Game.Mansion
         {
             await base.StartAsync();
 
-            Void = await AddRoomAsync(new Rooms.Void());
-            Laboratory = await AddRoomAsync(new Rooms.Laboratory(), deney: Permissions.AccessChannels);
-            DiningRoom = await AddRoomAsync(new Rooms.DinginRoom(), deney: Permissions.AccessChannels);
-            Kitchen = await AddRoomAsync(new Rooms.Kitchen(), deney: Permissions.AccessChannels);
-            LivingRoom = await AddRoomAsync(new Rooms.LivvingRoom(), deney: Permissions.AccessChannels);
-            Hall = await AddRoomAsync(new Rooms.Hall(), deney: Permissions.AccessChannels);
+            Void = await AddRoomAsync(new Rooms.Void(), true);
+            Laboratory = await AddRoomAsync(new Rooms.Laboratory(), false);
+            DiningRoom = await AddRoomAsync(new Rooms.DinginRoom(), false);
+            Kitchen = await AddRoomAsync(new Rooms.Kitchen(), false);
+            LivingRoom = await AddRoomAsync(new Rooms.LivvingRoom(), false);
+            Hall = await AddRoomAsync(new Rooms.Hall(), false);
 
 
             PlayerChangedRoom += OnPlayerChangedRoom;

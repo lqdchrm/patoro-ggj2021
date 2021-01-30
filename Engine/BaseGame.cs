@@ -26,7 +26,6 @@ namespace LostAndFound.Engine
         public string Name { get; }
         public bool Ready { get; private set; }
 
-
         public event EventHandler<PlayerRoomChange> PlayerChangedRoom;
         public void RaisePlayerChangedRoom(BasePlayer player, BaseRoom oldRoom)
         {
@@ -168,20 +167,32 @@ namespace LostAndFound.Engine
         }
 
         #region Rooms Helpers
-        public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, Permissions allow = default, Permissions deney = default)
+        public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
             where TRoomCurrent : BaseRoom
         {
             rooms.Add(room.Name, room);
             room.Game = this;
-            var overaites = new DiscordOverwriteBuilder();
-            overaites = overaites.For(guild.EveryoneRole);
-            if (deney != default)
-                overaites = overaites.Deny(deney);
-            if (allow != default)
-                overaites = overaites.Deny(allow);
-            room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel, overwrites: new[] { overaites });
+                        
+            room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel);
+
+            SetRoomVisibilityAsync(room, visible);
 
             return room;
+        }
+
+        public async Task SetRoomVisibilityAsync(BaseRoom room, bool visible)
+        {
+            var role = guild.EveryoneRole;
+            if (visible)
+            {
+                await room.VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
+                room.IsVisible = true;
+            }
+            else
+            {
+                await room.VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
+                room.IsVisible = false;
+            }
         }
 
         public IReadOnlyDictionary<string, BaseRoom> Rooms => rooms;

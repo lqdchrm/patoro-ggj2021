@@ -23,11 +23,11 @@ namespace LostAndFound.Game.LostAndFound
         {
             await base.StartAsync();
 
-            CozyHut = await AddRoomAsync(new CozyHut());
-            TheWoods = await AddRoomAsync(new TheWoods());
-            RobsWorld = await AddRoomAsync(new RobsWorld());
-            TobisWorld = await AddRoomAsync(new TobisWorld());
-            LokisWorld = await AddRoomAsync(new LokisWorld());
+            CozyHut = await AddRoomAsync(new CozyHut(), true);
+            TheWoods = await AddRoomAsync(new TheWoods(), false);
+            RobsWorld = await AddRoomAsync(new RobsWorld(), false);
+            TobisWorld = await AddRoomAsync(new TobisWorld(), false);
+            LokisWorld = await AddRoomAsync(new LokisWorld(), false);
 
             PlayerChangedRoom += OnPlayerChangedRoom;
             PlayerCommandSent += OnPlayerCommandSent;

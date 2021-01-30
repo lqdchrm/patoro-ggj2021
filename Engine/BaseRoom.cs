@@ -21,6 +21,8 @@ namespace LostAndFound.Engine
         protected internal virtual BaseGame Game { get; set; }
         internal DiscordChannel VoiceChannel { get; set; }
 
+        public virtual bool IsVisible { get; set; }
+
         public abstract string Name { get; }
 
         public BaseRoom()

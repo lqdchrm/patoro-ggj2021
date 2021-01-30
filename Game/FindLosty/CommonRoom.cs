@@ -13,6 +13,9 @@ namespace LostAndFound.Game.FindLosty
     {
         public new FindLostyGame Game => base.Game as FindLostyGame;
 
+        public virtual Task Show() => Game.SetRoomVisibilityAsync(this, true);
+        public virtual Task Hide() => Game.SetRoomVisibilityAsync(this, false);
+
 
         protected override bool IsCommandVisible(string cmd) => true;
 
@@ -34,10 +37,28 @@ namespace LostAndFound.Game.FindLosty
             }
         }
 
-        [Command("HEAL", "Increases your health")]
-        public async Task HealCommand(PlayerCommand cmd)
+        [Command("LOOK", "Look (optional at [thing]), e.g. LOOK Door")]
+        public virtual async Task LookAt(PlayerCommand cmd)
         {
-            await (cmd.Player as Player)?.HealAsync();
+            if (cmd.Player is not Player player) return;
+
+            // TODO
+            await player.SendGameEventAsync("NOT IMPLEMENTED");
+        }
+
+
+        [Command("LISTEN", "Listen")]
+        public virtual async Task Listen(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            var texts = new string[] {
+                "... ... ...",
+                "chirp chirp ... ...",
+                "[LOSTY]: wuff wuff woooooooooo"
+            };
+
+            await player.SendGameEventAsync(texts.TakeOneRandom());
         }
 
         [Command("HIT", "Hits an opponent")]
