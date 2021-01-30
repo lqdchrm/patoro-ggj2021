@@ -9,20 +9,23 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LostAndFound.Game.LostAndFound
-
 {
     public class CozyHut : CommonRoom
     {
+        public override string Name => "Cozy Hut";
+
+        #region STATE
+
         public bool FireTurnedOn = false;
 
-        public override string Name => "Cozy Hut";
+        #endregion
 
         protected override bool IsCommandVisible(string cmd)
         {
-            switch(cmd)
-            {
-                case "FIRE": return false;
-            }
+            //switch(cmd)
+            //{
+            //    case "FIRE": return false;
+            //}
             return base.IsCommandVisible(cmd);
         }
 
@@ -38,7 +41,8 @@ namespace LostAndFound.Game.LostAndFound
                 }
                 else
                 {
-                    await player.SendGameEventAsync("There is already a fire burning.");
+                    await player.SendGameEventAsync("There is already a fire burning. You hurt yourself.");
+                    await player.HitAsync("Fire");
                 }
             }
         }

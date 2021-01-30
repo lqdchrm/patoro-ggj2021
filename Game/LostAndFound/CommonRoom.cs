@@ -25,19 +25,22 @@ namespace LostAndFound.Game.LostAndFound
                     .Select(cmd => $"{cmd.Name} - {cmd.Description}")
                 );
 
-                var msg = string.Join("\n", intro, commands);
+                var msg = string.Join("\n", intro, commands, "");
 
-                await player.SendGameEventAsync(msg);
+                await player.SendGameEventWithStateAsync(msg);
             }
         }
 
         [Command("HEAL", "Increases your health")]
-        public async Task HealCommand(PlayerCommand cmd) => await (cmd.Player as Player)?.HealAsync();
+        public async Task HealCommand(PlayerCommand cmd)
+        {
+            await (cmd.Player as Player)?.HealAsync();
+        }
 
-        [Command("HIT", "Decreases your health")]
+        [Command("HIT", "Hits an opponent")]
         public async Task HitCommand(PlayerCommand cmd)
         {
-            var tasks = cmd.Mentions.Cast<Player>().Select(p => p.HitAsync());
+            var tasks = cmd.Mentions.Cast<Player>().Select(p => p.HitAsync(cmd.Player.Name));
             await Task.WhenAll(tasks);
         }
     }
