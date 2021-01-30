@@ -26,7 +26,7 @@ namespace LostAndFound.Game.LostAndFound
             CozyHut = await AddRoomAsync(new CozyHut());
             TheWoods = await AddRoomAsync(new TheWoods());
             RobsWorld = await AddRoomAsync(new RobsWorld());
-            TobisWorld = await AddRoomAsync(new ToobsWorld());
+            TobisWorld = await AddRoomAsync(new TobisWorld());
             LokisWorld = await AddRoomAsync(new LokisWorld());
 
             PlayerChangedRoom += OnPlayerChangedRoom;
