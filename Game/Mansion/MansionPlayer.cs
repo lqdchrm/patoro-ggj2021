@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.Mansion
 {
-    public class MansionPlayer : BasePlayer<MansionGame, MansionPlayer, MansionRoom>
+    public class MansionPlayer : BasePlayer
     {
         internal Characters.BaseCharacter Character { get; set; }
 

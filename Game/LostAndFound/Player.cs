@@ -8,17 +8,29 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.LostAndFound
 {
-    public class Player : BasePlayer<LostAndFoundGame, Player, CommonRoom>
+    public class Player : BasePlayer
     {
-        int Health;
-
+        private int health;
+        int Health
+        {
+            get => health;
+            set
+            {
+                if (User != null)
+                {
+                    if (value == 0 && health > 0)
+                        User.ModifyAsync(x => x.Muted = true);
+                }
+                health = value;
+            }
+        }
 
         public Player(string name, LostAndFoundGame game) : base(game, name) { }
 
-        public override async Task InitAsync()
+        public override Task InitAsync()
         {
             this.Health = 3;
-            await UpdateStatsAsync();
+            return Task.CompletedTask;
         }
 
         public async Task SendGameEventAsync(string msg)
@@ -28,22 +40,16 @@ namespace LostAndFound.Game.LostAndFound
                 await Channel.SendMessageAsync(msg);
         }
 
-        public async Task UpdateStatsAsync()
-        {
-            await User.ModifyAsync(x => { x.Muted = Health <= 0; });
-            await Channel.ModifyAsync(x => x.Name = $"📜 ${Name} [{Health}]");
-        }
-
-        public async Task HitAsync()
+        public Task HitAsync()
         {
             if (this.Health > 0) this.Health--;
-            await UpdateStatsAsync();
+            return Task.CompletedTask;
         }
 
-        public async Task HealAsync()
+        public Task HealAsync()
         {
             if (this.Health < 3) this.Health++;
-            await UpdateStatsAsync();
+            return Task.CompletedTask;
         }
     }
 }

@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Events
 {
-    public class PlayerCommand<TGame, TPlayer,TRoom>
-        where TGame : BaseGame<TGame, TPlayer,TRoom>
-        where TPlayer : BasePlayer<TGame, TPlayer,TRoom>
-        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
+    public class PlayerCommand
     {
 
-        public TPlayer Player { get; internal set; }
-        public IList<TPlayer> Mentions { get; internal set; }
+        public BasePlayer Player { get; internal set; }
+        public IList<BasePlayer> Mentions { get; internal set; }
         public string Command { get; internal set; }
         public IList<string> Args { get; internal set; }
     }

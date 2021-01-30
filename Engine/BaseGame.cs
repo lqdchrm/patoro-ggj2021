@@ -12,43 +12,35 @@ using System.Collections.Concurrent;
 using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
-{
-    public interface IGame: IDisposable
-    {
-        public Task StartAsync();
-    }
-
-    public abstract class BaseGame<TGame, TPlayer, TRoom> : IGame
-        where TGame : BaseGame<TGame, TPlayer, TRoom>
-        where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
-        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
+{ 
+    public abstract class BaseGame : IDisposable
     {
         private DiscordClient client;
         private DiscordGuild guild;
         private DiscordChannel parentChannel;
         private DiscordChannel helpChannel;
 
-        private readonly Dictionary<string, TRoom> rooms = new Dictionary<string, TRoom>();
-        private readonly Dictionary<ulong, TPlayer> players = new Dictionary<ulong, TPlayer>();
+        private readonly Dictionary<string, BaseRoom> rooms = new Dictionary<string, BaseRoom>();
+        private readonly Dictionary<ulong, BasePlayer> players = new Dictionary<ulong, BasePlayer>();
 
         public string Name { get; }
         public bool Ready { get; private set; }
 
 
-        public event EventHandler<PlayerRoomChange<TGame, TPlayer, TRoom>> PlayerChangedRoom;
-        public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom)
+        public event EventHandler<PlayerRoomChange> PlayerChangedRoom;
+        public void RaisePlayerChangedRoom(BasePlayer player, BaseRoom oldRoom)
         {
-            PlayerChangedRoom?.Invoke(this, new PlayerRoomChange<TGame, TPlayer, TRoom>()
+            PlayerChangedRoom?.Invoke(this, new PlayerRoomChange()
             {
                 Player = player,
                 OldRoom = oldRoom
             });
         }
 
-        public event EventHandler<PlayerCommand<TGame, TPlayer, TRoom>> PlayerCommandSent;
-        public void RaisePlayerCommand(TPlayer player, string cmd)
+        public event EventHandler<PlayerCommand> PlayerCommandSent;
+        public void RaisePlayerCommand(BasePlayer player, string cmd)
         {
-            PlayerCommandSent?.Invoke(this, new PlayerCommand<TGame, TPlayer, TRoom>()
+            PlayerCommandSent?.Invoke(this, new PlayerCommand()
             {
                 Player = player,
                 Command = cmd
@@ -110,27 +102,35 @@ namespace LostAndFound.Engine
             Console.Error.WriteLine("[ENGINE] ... default channels added");
         }
 
-        private async Task VoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs e)
+        private Task VoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs e)
         {
             if (e.Guild.Id != this.guild.Id)
-                return;
+                return Task.CompletedTask;
+
             if (!Ready)
-                return;
+                return Task.CompletedTask;
+
             // handle user info
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
 
             if (oldChannel == newChannel)
-                return;
+                return Task.CompletedTask;
 
             var oldRoom = (oldChannel != null && rooms.ContainsKey(oldChannel.Name)) ? rooms[oldChannel.Name] : null;
             var newRoom = (newChannel != null && rooms.ContainsKey(newChannel.Name)) ? rooms[newChannel.Name] : null;
 
-            var member = await guild.GetMemberAsync(e.User.Id);
-            var player = await GetOrCreatePlayer(member);
-            player.Room = newRoom;
+            // Do not wait for theses
+            Task.Run(async () =>
+            {
+                var member = await guild.GetMemberAsync(e.User.Id);
+                var player = await GetOrCreatePlayer(member);
+                player.Room = newRoom;
 
-            RaisePlayerChangedRoom(player, oldRoom);
+                RaisePlayerChangedRoom(player, oldRoom);
+            });
+
+            return Task.CompletedTask;
         }
 
         private async Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e)
@@ -174,7 +174,7 @@ namespace LostAndFound.Engine
 
         #region Rooms Helpers
         public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, Permissions allow = default, Permissions deney = default)
-            where TRoomCurrent : TRoom
+            where TRoomCurrent : BaseRoom
         {
             rooms.Add(room.Name, room);
             room.Game = this;
@@ -189,16 +189,16 @@ namespace LostAndFound.Engine
             return room;
         }
 
-        public IReadOnlyDictionary<string, TRoom> Rooms => rooms;
+        public IReadOnlyDictionary<string, BaseRoom> Rooms => rooms;
         #endregion
 
 
         #region Player Helpers
-        public IReadOnlyDictionary<string, TPlayer> Players => players.Values.ToDictionary(p => p.Name);
+        public IReadOnlyDictionary<string, BasePlayer> Players => players.Values.ToDictionary(p => p.Name);
 
-        public abstract TPlayer CreatePlayer(string userName);
+        public abstract BasePlayer CreatePlayer(string userName);
 
-        private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
+        private async Task<BasePlayer> GetOrCreatePlayer(DiscordMember member)
         {
             if (!players.TryGetValue(member.Id, out var player))
             {
@@ -206,10 +206,9 @@ namespace LostAndFound.Engine
                 player = CreatePlayer(member.DisplayName);
                 players.Add(member.Id, player);
 
-                var overaites = new DiscordOverwriteBuilder();
+                var overwrites = new DiscordOverwriteBuilder();
 
-
-                player.Channel = await this.guild.CreateChannelAsync($"📜 {player.Name}", ChannelType.Text, parentChannel, overwrites: new[] { overaites.For(guild.EveryoneRole).Deny(Permissions.AccessChannels) });
+                player.Channel = await this.guild.CreateChannelAsync($"📜 {player.Name}", ChannelType.Text, parentChannel, overwrites: new[] { overwrites.For(guild.EveryoneRole).Deny(Permissions.AccessChannels) });
                 await player.Channel.AddOverwriteAsync(member, Permissions.AccessChannels);
 
                 player.User = member;
@@ -231,7 +230,7 @@ namespace LostAndFound.Engine
             return player;
         }
 
-        protected virtual Task NewPlayer(TPlayer player) => Task.CompletedTask;
+        protected virtual Task NewPlayer(BasePlayer player) => Task.CompletedTask;
 
         #endregion
 

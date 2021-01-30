@@ -11,7 +11,7 @@ using LostAndFound.Game.Mansion.Rooms;
 namespace LostAndFound.Game.Mansion
 {
 
-    public class MansionGame : BaseGame<MansionGame, MansionPlayer, MansionRoom>
+    public class MansionGame : BaseGame
     {
         internal Rooms.Void Void { get; private set; }
         internal Laboratory Laboratory { get; private set; }
@@ -58,49 +58,52 @@ namespace LostAndFound.Game.Mansion
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
-        private async void OnPlayerCommandSent(object sender, PlayerCommand<MansionGame, MansionPlayer, MansionRoom> e)
+        private async void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
             if (e.Player.Room != null)
                 await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
         }
 
 
-        protected override async Task NewPlayer(MansionPlayer player)
+        protected override async Task NewPlayer(BasePlayer basePlayer)
         {
-            if (gameStarted)
+            if (basePlayer is MansionPlayer player)
             {
-                await player.SendMessage("Sorry but the game already started.");
 
-                return;
-            }
-
-            await characterSelectionSemaphore.WaitAsync();
-            try
-            {
-                var freeCharacter = this.Characters.FirstOrDefault(x => x.Player is null);
-
-                if (freeCharacter is null)
+                if (gameStarted)
                 {
-                    await player.SendMessage("Sorry but there is no free character left.");
+                    await player.SendMessage("Sorry but the game already started.");
+
                     return;
                 }
-                player.Character = freeCharacter;
-                freeCharacter.Player = player;
-            }
-            finally
-            {
-                characterSelectionSemaphore.Release();
-            }
-            await player.SendAdministrativeMessage("Welcome.\n You can write in this channel everything you do.\nAnd you will find out here what happens to you.");
-            await Task.Delay(TimeSpan.FromSeconds(5));
-            await player.SendAdministrativeMessage("You can alos use the voice chat to chat with character in the same location.");
-            await Task.Delay(TimeSpan.FromSeconds(1));
-            await player.SendAdministrativeMessage("Please do not leave the voice chat manually and stay in this text chat to have an imersive story ;)");
-            await Task.Delay(TimeSpan.FromSeconds(5));
-            await player.SendHeader("Lost in the mansion");
 
-            await Task.Delay(TimeSpan.FromSeconds(2));
-            await player.SendAsciiArt(@"
+                await characterSelectionSemaphore.WaitAsync();
+                try
+                {
+                    var freeCharacter = this.Characters.FirstOrDefault(x => x.Player is null);
+
+                    if (freeCharacter is null)
+                    {
+                        await player.SendMessage("Sorry but there is no free character left.");
+                        return;
+                    }
+                    player.Character = freeCharacter;
+                    freeCharacter.Player = player;
+                }
+                finally
+                {
+                    characterSelectionSemaphore.Release();
+                }
+                await player.SendAdministrativeMessage("Welcome.\n You can write in this channel everything you do.\nAnd you will find out here what happens to you.");
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                await player.SendAdministrativeMessage("You can alos use the voice chat to chat with character in the same location.");
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                await player.SendAdministrativeMessage("Please do not leave the voice chat manually and stay in this text chat to have an imersive story ;)");
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                await player.SendHeader("Lost in the mansion");
+
+                await Task.Delay(TimeSpan.FromSeconds(2));
+                await player.SendAsciiArt(@"
                *         .              *            _.---._      
                              ___   .            ___.'       '.   *
         .              _____[LLL]______________[LLL]_____     \
@@ -120,7 +123,7 @@ namespace LostAndFound.Game.Mansion
           |uu.-'`      #############(______)#############    `'-. u|u|uu|
          _.'`              ~""^""~   (________)   ~""^""^~           `'-.|uu|
 ");
-            await player.SendAsciiArt(@"
+                await player.SendAsciiArt(@"
       ,''          .'    _                             _ `'-.        `'-.
   ~""^""~    _,'~""^""~    _( )_                         _( )_   `'-.        ~""^""~
       _  .'            |___|                         |___|      ~""^""~     _
@@ -135,17 +138,17 @@ namespace LostAndFound.Game.Mansion
 ~""""~|_|_|\/\/\/\/\/\/\/|_|_|\/\/\/\/\/|| ||\/\/\/\/\/|_|_|\/\/\/\/\/\/\/|_lc|~""""~
    [_____]            [_____]                       [_____]            [_____]
 ");
-            await player.MoveTo(this.Rooms[player.Character.StartLocation]);
+                await player.MoveTo(this.Rooms[player.Character.StartLocation]);
 
-            foreach (var p in player.Character.Prolog)
-            {
-                await player.SendMessage(p);
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                foreach (var p in player.Character.Prolog)
+                {
+                    await player.SendMessage(p);
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                }
             }
-
         }
 
-        private async void OnPlayerChangedRoom(object sender, PlayerRoomChange<MansionGame, MansionPlayer, MansionRoom> e)
+        private async void OnPlayerChangedRoom(object sender, PlayerRoomChange e)
         {
             //if (e.OldRoom != null)
             //    await e.OldRoom.SendGameEventAsync($"{e.Player.Name} left {e.OldRoom.Name}");

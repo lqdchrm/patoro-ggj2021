@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Events
 {
-    public class PlayerMessage<TGame, TPlayer,TRoom>
-        where TGame : BaseGame<TGame, TPlayer,TRoom>
-        where TPlayer : BasePlayer<TGame, TPlayer,TRoom>
-        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
+    public class PlayerMessage
     {
-        public TPlayer Player { get; internal set; }
+        public BasePlayer Player { get; internal set; }
         public string Message { get; internal set; }
     }
 }

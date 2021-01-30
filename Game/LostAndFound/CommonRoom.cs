@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.LostAndFound
 {
-    public abstract class CommonRoom : BaseRoom<LostAndFoundGame, Player, CommonRoom>
+    public abstract class CommonRoom : BaseRoom
     {
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(Player player)
@@ -24,11 +24,6 @@ namespace LostAndFound.Game.LostAndFound
 
             await player.SendGameEventAsync(msg);
         }
-
-
-        [Command("STATS", "Shows your stats")]
-        public async Task StatsCommand(Player player) => await player.UpdateStatsAsync();
-
 
         [Command("HEAL", "Increases your health")]
         public async Task HealCommand(Player player) => await player.HealAsync();
