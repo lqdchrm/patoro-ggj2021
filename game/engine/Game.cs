@@ -56,13 +56,15 @@ namespace LostAndFound.Engine
             try
             {
                 // cleanup
-                var oldGroup = e.Guild.Channels.Values.First(c => c.Name == "LostAndFoundGame");
-                foreach (var child in oldGroup.Children)
+                var oldGroup = e.Guild.Channels.Values.FirstOrDefault(c => c.Name == "LostAndFoundGame");
+                if (oldGroup != null)
                 {
-                    await child.DeleteAsync();
+                    foreach (var child in oldGroup.Children)
+                    {
+                        await child.DeleteAsync();
+                    }
+                    await oldGroup.DeleteAsync();
                 }
-                await oldGroup.DeleteAsync();
-
                 this.guild = e.Guild;
 
                 // create Channels
