@@ -52,6 +52,9 @@ namespace LostAndFound.Engine
             {
                 var task = (Task)method.Invoke(this, new object[] { cmd });
                 await task;
+            } else
+            {
+                await cmd.Player.Room.SendMessageAsync(cmd.Player, cmd.Message);
             }
         }
 
