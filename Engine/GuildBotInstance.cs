@@ -20,7 +20,8 @@ namespace LostAndFound.Engine
         private Dictionary<string, Func<string, DiscordClient, DiscordGuild, BaseGame>> GameMapping = new Dictionary<string, Func<string, DiscordClient, DiscordGuild, BaseGame>>()
         {
             {"LostAndFound", (instanceName, client, guild) => new Game.LostAndFound.LostAndFoundGame(instanceName,client,guild) },
-            {"Mansion", (instanceName, client, guild) => new Game.Mansion.MansionGame(instanceName,client,guild) }
+            {"Mansion", (instanceName, client, guild) => new Game.Mansion.MansionGame(instanceName,client,guild) },
+            {"FindLosty", (instanceName, client, guild) => new Game.FindLosty.FindLostyGame(instanceName,client,guild) }
         };
 
         private readonly Dictionary<string, BaseGame> gameLookup = new Dictionary<string, BaseGame>();

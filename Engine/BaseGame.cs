@@ -75,6 +75,7 @@ namespace LostAndFound.Engine
             await parentChannel.DeleteAsync();
             Console.Error.WriteLine("[ENGINE] ... cleaned up");
         }
+
         public async Task CleanupOldAsync()
         {
             Console.Error.WriteLine("[ENGINE] Cleaning up ...");

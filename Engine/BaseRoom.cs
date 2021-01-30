@@ -18,7 +18,7 @@ namespace LostAndFound.Engine
         protected IEnumerable<CommandAttribute> Commands => CommandDefs.Values.Where(cmd => IsCommandVisible(cmd.Name));
         protected abstract bool IsCommandVisible(string cmdName);
 
-        internal BaseGame Game { get; set; }
+        protected internal virtual BaseGame Game { get; set; }
         internal DiscordChannel VoiceChannel { get; set; }
 
         public abstract string Name { get; }

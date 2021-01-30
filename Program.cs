@@ -1,4 +1,5 @@
-﻿using LostAndFound.Game.LostAndFound;
+﻿using LostAndFound.Game.FindLosty;
+using LostAndFound.Game.LostAndFound;
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace LostAndFound
             var bot = new Bot();
             
             // set arg to null for game selection
-            await bot.Start(typeof(LostAndFoundGame));
+            await bot.Start(typeof(FindLostyGame));
             await Task.Delay(-1);
         }
     }
