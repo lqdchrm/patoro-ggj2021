@@ -26,11 +26,15 @@ namespace LostAndFound.Game.LostAndFound
             }
         }
 
+        public readonly Dictionary<string, string> Inventory = new Dictionary<string, string>();
+
         public Player(string name, LostAndFoundGame game) : base(game, name) { }
 
         public override string ToString()
         {
-            return $"{Name} { string.Join("", Enumerable.Repeat(Emojis.Heart, Health)) }";
+            var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
+            var items = string.Join("", Inventory.Values);
+            return $"{Name} {health} {items}";
         }
 
         public override Task InitAsync()
@@ -46,17 +50,46 @@ namespace LostAndFound.Game.LostAndFound
                 await Channel.SendMessageAsync(msg);
         }
 
-        public async Task HitAsync()
+        public async Task SendGameEventWithStateAsync(string msg)
         {
-            if (this.Health > 0)
-                this.Health--;
-            await SendGameEventAsync("Your were hit");
+            msg = $"```css\n{msg}\nYour Status: {this}```";
+            if (Channel != null)
+                await Channel.SendMessageAsync(msg);
         }
 
-        public Task HealAsync()
+        public async Task ShowStatusAsync(string msg)
         {
-            if (this.Health < 3) this.Health++;
-            return Task.CompletedTask;
+            msg = $"```css\nYour Status: {this}```";
+            if (Channel != null)
+                await Channel.SendMessageAsync(msg);
+        }
+
+        public async Task HitAsync( string by = null)
+        {
+            if (this.Health > 0)
+            {
+                this.Health--;
+
+                var msg = "You were hit";
+                if (by != null)
+                    msg += $" by {by}";
+
+                await SendGameEventWithStateAsync(msg);
+            }
+        }
+
+        public async Task HealAsync(string by = null)
+        {
+            if (this.Health < 3)
+            {
+                this.Health++;
+
+                var msg = "You were healed by ";
+                if (by != null)
+                    msg += $" by {by}";
+
+                await SendGameEventWithStateAsync(msg);
+            }
         }
     }
 }
