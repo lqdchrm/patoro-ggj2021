@@ -14,7 +14,7 @@ namespace LostAndFound.Game
         private Room CozyHut;
         private Room TheWoods;
 
-        public LostAndFoundGame() : base("LostAndFoundGame") { }
+        public LostAndFoundGame(string name, DiscordClient client, DSharpPlus.Entities.DiscordGuild guild) : base(name, client, guild) { }
 
         public override async Task StartAsync()
         {

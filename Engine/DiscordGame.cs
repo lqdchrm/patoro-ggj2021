@@ -12,14 +12,15 @@ using System.Collections.Concurrent;
 
 namespace LostAndFound.Engine
 {
-    public abstract class DiscordGame : AbstractGame
+    public abstract class DiscordGame : AbstractGame, IDisposable
     {
         protected DiscordClient client;
-        
+
         protected DiscordGuild guild;
 
         protected DiscordChannel parentChannel;
         protected DiscordChannel helpChannel;
+        private bool disposedValue;
 
         protected readonly Dictionary<string, Room> rooms = new Dictionary<string, Room>();
         protected readonly Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
@@ -27,35 +28,23 @@ namespace LostAndFound.Engine
         public string Name { get; }
         public bool Ready { get; private set; }
 
-        public DiscordGame(string name) { this.Name = name; }
+        public DiscordGame(string name, DiscordClient client, DiscordGuild guild)
+        {
+            this.Name = name;
+            this.client = client;
+            this.guild = guild;
+            client.VoiceStateUpdated += VoiceStateUpdated;
+            client.MessageCreated += OnMessageCreated;
+        }
+
 
         public override async Task StartAsync()
         {
-            DotNetEnv.Env.Load();
 
-            Console.Error.WriteLine("[ENGINE] Creating Discord client ...");
-            client = new DiscordClient(new DiscordConfiguration
-            {
-                Token = System.Environment.GetEnvironmentVariable("DISCORD_TOKEN"),
-                TokenType = TokenType.Bot,
-            });
-            Console.Error.WriteLine("[ENGINE] ... Discord client created");
-
-            Console.Error.WriteLine("[ENGINE] Adding Handlers ...");
-            client.GuildAvailable += async (client, e) => this.guild = e.Guild;
-            client.VoiceStateUpdated += VoiceStateUpdated;
-            client.MessageCreated += OnMessageCreated;
-            Console.Error.WriteLine("[ENGINE] ... Handlers added");
-
-            Console.Error.WriteLine("[ENGINE] Connecting ...");
-            await client.ConnectAsync();
-            Console.Error.WriteLine("[ENGINE] ... Connected");
 
             await WaitForGuildAsync();
 
-            // cleanup
-            await CleanupAsync();
-
+            await CleanupOldAsync();
             // create Channels
             await CreateDefaultChannelsAsync();
 
@@ -63,6 +52,17 @@ namespace LostAndFound.Engine
         }
 
         public async Task CleanupAsync()
+        {
+            Console.Error.WriteLine("[ENGINE] Cleaning up ...");
+
+            foreach (var child in parentChannel.Children)
+            {
+                await child.DeleteAsync();
+            }
+            await parentChannel.DeleteAsync();
+            Console.Error.WriteLine("[ENGINE] ... cleaned up");
+        }
+        public async Task CleanupOldAsync()
         {
             Console.Error.WriteLine("[ENGINE] Cleaning up ...");
             var oldGroup = guild.Channels.Values.FirstOrDefault(c => c.Name == this.Name);
@@ -87,9 +87,10 @@ namespace LostAndFound.Engine
 
         private async Task VoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs e)
         {
+            if (e.Guild.Id != this.guild.Id)
+                return;
             if (!Ready)
                 return;
-
             // handle user info
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
@@ -109,6 +110,9 @@ namespace LostAndFound.Engine
 
         private async Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e)
         {
+            if (e.Guild.Id != this.guild.Id)
+                return;
+
             var member = await guild.GetMemberAsync(e.Author.Id);
             if (member == null) return;
 
@@ -176,6 +180,32 @@ namespace LostAndFound.Engine
 
             }
             return player;
+        }
+
+        protected virtual async void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+                if (disposing)
+                {
+                    client.VoiceStateUpdated -= VoiceStateUpdated;
+                    client.MessageCreated -= OnMessageCreated;
+
+                    // cleanup
+                    await CleanupAsync();
+
+                }
+
+            }
+        }
+
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

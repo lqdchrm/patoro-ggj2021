@@ -10,8 +10,10 @@ namespace LostAndFound
     {
         public static async Task Main(string[] args)
         {
-            var game = new LostAndFoundGame();
-            await game.StartAsync();
+            var engin = new Engine.MainManagement();
+            await engin.Start();
+            //var game = new LostAndFoundGame();
+            //await game.StartAsync();
             await Task.Delay(-1);
         }
     }
