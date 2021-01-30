@@ -17,7 +17,7 @@ namespace LostAndFound.Game.LostAndFound
 
         public override string Name => "Tobis World";
 
-        [Command("look", "look around")]
+        [Command("LOOK", "look around")]
         public async Task Look(PlayerCommand cmd)
         {
             if (cmd.Player is Player player)
@@ -35,11 +35,28 @@ namespace LostAndFound.Game.LostAndFound
             }
         }
 
+        [Command("LIGHT", "light on")]
+        public async Task Light(PlayerCommand cmd)
+        {
+            if (cmd.Player is Player player)
+            {
+                if (!LightOn)
+                {
+                    LightOn = true;
+                    await player.SendGameEventAsync("You turned on the light.");
+                }
+                else
+                {
+                    await player.SendGameEventAsync("The light is already on.");
+                }
+            }
+        }
+
 
         private int kick_count = 0;
-        private long time_of_last_kick = 0;
+        private DateTime time_of_last_kick;
              
-        [Command("kick", "kick something")]
+        [Command("KICK", "kick something")]
         public async Task Kick(PlayerCommand cmd)
         {
             string message = "";
@@ -57,11 +74,15 @@ namespace LostAndFound.Game.LostAndFound
                 {
                     if (door_life != 0)
                     {
-                        long time_of_kick = DateTime.Now.Ticks;
-                        long time_since_last_kick = time_of_last_kick - time_of_last_kick;
-                        if (time_since_last_kick < 0)
+                        DateTime time_of_kick = DateTime.Now;
+                        TimeSpan time_since_last_kick = time_of_last_kick - time_of_last_kick;
+                        if (time_since_last_kick < TimeSpan.FromSeconds(0))
                         {
-                            time_since_last_kick = long.MaxValue;
+                            time_since_last_kick = TimeSpan.FromSeconds(10000);
+                        }
+                        if (time_since_last_kick < TimeSpan.FromSeconds(3))
+                        {
+                            kick_count = 0;
                         }
                         if (kick_count == 0)
                         {
@@ -69,25 +90,21 @@ namespace LostAndFound.Game.LostAndFound
                             kick_count = 1;
                             time_of_last_kick = time_of_kick;
                         }
-                        else if (kick_count == 1 && time_since_last_kick < 2000)
+                        else if (kick_count == 1)
                         {
                             message = "The combined force shake the door and there are cracking sounds. But it feels like you need more force.";
                             kick_count = 2;
                             time_of_last_kick = time_of_kick;
                         }
-                        else if (kick_count == 2 && time_since_last_kick < 2000 && door_life > 1)
+                        else if (kick_count == 2 && door_life > 1)
                         {
                             message = "The combined force shake the door and you can feel it crack. You definitely destroyed it a little.";
-                            kick_count = 2;
                             time_of_last_kick = time_of_kick;
+                            door_life -= 1;
                         }
-                        else if (kick_count == 2 && time_since_last_kick < 2000 && door_life == 1)
+                        else if (kick_count == 2 && door_life == 1)
                         {
                             message = "The combined forces shatter the door into splinters.";
-                        }
-                        else
-                        {
-                            kick_count = 0;
                         }
                     }
                     else
