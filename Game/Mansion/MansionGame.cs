@@ -61,7 +61,7 @@ namespace LostAndFound.Game.Mansion
         private async void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
             if (e.Player.Room != null)
-                await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
+                await e.Player.Room.HandleCommandAsync(e);
         }
 
 

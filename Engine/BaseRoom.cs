@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using LostAndFound.Engine.Attributes;
+using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
 {
@@ -41,12 +42,12 @@ namespace LostAndFound.Engine
             await Task.WhenAll(tasks);
         }
 
-        public async Task HandleCommandAsync(BasePlayer player, string command)
+        public async Task HandleCommandAsync(PlayerCommand cmd)
         {
             MethodInfo method;
-            if (Commands.TryGetValue(command, out method))
+            if (Commands.TryGetValue(cmd.Command, out method))
             {
-                var task = (Task)method.Invoke(this, new object[] { player });
+                var task = (Task)method.Invoke(this, new object[] { cmd });
                 await task;
             }
         }

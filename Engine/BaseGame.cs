@@ -38,13 +38,9 @@ namespace LostAndFound.Engine
         }
 
         public event EventHandler<PlayerCommand> PlayerCommandSent;
-        public void RaisePlayerCommand(BasePlayer player, string cmd)
+        public void RaisePlayerCommand(PlayerCommand cmd)
         {
-            PlayerCommandSent?.Invoke(this, new PlayerCommand()
-            {
-                Player = player,
-                Command = cmd
-            });
+            PlayerCommandSent?.Invoke(this, cmd);
         }
 
         #region configurations
@@ -153,15 +149,16 @@ namespace LostAndFound.Engine
                 {
                     if (this.IsEverythingCommand)
                     {
-                        RaisePlayerCommand(player, e.Message.Content.ToLowerInvariant());
+                        var input = e.Message.Content.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                        var cmd = BuildCommandFromMessage(player, e);
+                        RaisePlayerCommand(cmd);
                     }
                     else
                     {
-
-                        var cmd = e.Message.Content.ToUpperInvariant();
-                        if (e.Message.Content == cmd)
+                        var cmd = BuildCommandFromMessage(player, e);
+                        if (cmd.Command == cmd.Command.ToUpperInvariant())
                         {
-                            RaisePlayerCommand(player, cmd);
+                            RaisePlayerCommand(cmd);
                         }
                         else
                         {
@@ -170,6 +167,18 @@ namespace LostAndFound.Engine
                     }
                 }
             }
+        }
+
+        private PlayerCommand BuildCommandFromMessage(BasePlayer player, MessageCreateEventArgs e)
+        {
+            var input = e.Message.Content.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            return new PlayerCommand()
+            {
+                Player = player,
+                Command = input[0],
+                Mentions = e.MentionedUsers.Select(u => players.GetValueOrDefault(u.Id)).Where(u => u != null).ToList(),
+                Args = input.Skip(1).ToList()
+            };
         }
 
         #region Rooms Helpers

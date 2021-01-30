@@ -1,5 +1,6 @@
 ﻿using LostAndFound.Engine;
 using LostAndFound.Engine.Attributes;
+using LostAndFound.Engine.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +12,27 @@ namespace LostAndFound.Game.LostAndFound
     public abstract class CommonRoom : BaseRoom
     {
         [Command("HELP", "Lists all available commands for this room")]
-        public async Task HelpCommand(Player player)
+        public async Task HelpCommand(PlayerCommand cmd)
         {
-            var intro = $"You are currently at {player.Room.Name}.\n";
+            if (cmd.Player is Player player)
+            {
+                var intro = $"You are currently at {player.Room.Name}.\n";
 
-            var commands = string.Join("\n", CommandDefs.Values
-                .OrderBy(cmd => cmd.Name)
-                .Select(cmd => $"{cmd.Name} - {cmd.Description}")
-            );
+                var commands = string.Join("\n", CommandDefs.Values
+                    .OrderBy(cmd => cmd.Name)
+                    .Select(cmd => $"{cmd.Name} - {cmd.Description}")
+                );
 
-            var msg = string.Join("\n", intro, commands);
+                var msg = string.Join("\n", intro, commands);
 
-            await player.SendGameEventAsync(msg);
+                await player.SendGameEventAsync(msg);
+            }
         }
 
         [Command("HEAL", "Increases your health")]
-        public async Task HealCommand(Player player) => await player.HealAsync();
+        public async Task HealCommand(PlayerCommand cmd) => await (cmd.Player as Player)?.HealAsync();
 
         [Command("HIT", "Decreases your health")]
-        public async Task HitCommand(Player player) => await player.HitAsync();
+        public async Task HitCommand(PlayerCommand cmd) => await (cmd.Player as Player)?.HitAsync();
     }
 }

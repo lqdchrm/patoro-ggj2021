@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using LostAndFound.Engine;
 using LostAndFound.Engine.Attributes;
+using LostAndFound.Engine.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,19 @@ namespace LostAndFound.Game.LostAndFound
         public override string Name => "Cozy Hut";
 
         [Command("FIRE", "Make a fire")]
-        public async Task LightFire(Player player)
+        public async Task LightFire(PlayerCommand cmd)
         {
-            if (!FireTurnedOn)
+            if (cmd.Player is Player player)
             {
-                FireTurnedOn = true;
-                await player.Room.SendGameEventAsync($"{player.Name} lightened a fire");
-            } else
-            {
-                await player.SendGameEventAsync("There is already a fire burning.");
+                if (!FireTurnedOn)
+                {
+                    FireTurnedOn = true;
+                    await player.Room.SendGameEventAsync($"{player.Name} lightened a fire");
+                }
+                else
+                {
+                    await player.SendGameEventAsync("There is already a fire burning.");
+                }
             }
         }
     }

@@ -8,7 +8,6 @@ namespace LostAndFound.Engine.Events
 {
     public class PlayerCommand
     {
-
         public BasePlayer Player { get; internal set; }
         public IList<BasePlayer> Mentions { get; internal set; }
         public string Command { get; internal set; }

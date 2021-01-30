@@ -30,7 +30,7 @@ namespace LostAndFound.Game.LostAndFound
         private async void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
             if (e.Player.Room != null)
-                await e.Player.Room.HandleCommandAsync(e.Player, e.Command);
+                await e.Player.Room.HandleCommandAsync(e);
         }
 
         private async void OnPlayerChangedRoom(object sender, PlayerRoomChange e)
