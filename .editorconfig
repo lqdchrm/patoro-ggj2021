@@ -1,0 +1,7 @@
+﻿[*.{cs,vb}]
+
+# IDE0009: Member access should be qualified.
+dotnet_style_qualification_for_event = true:suggestion
+dotnet_style_qualification_for_field = true:suggestion
+dotnet_style_qualification_for_method = true:suggestion
+dotnet_style_qualification_for_property = true:suggestion
