@@ -9,5 +9,6 @@ namespace LostAndFound.Game
     public static class Emojis
     {
         public const string Heart = "♥";
+        public const string Keys = "🗝";
     }
 }
