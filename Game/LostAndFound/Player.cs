@@ -26,11 +26,15 @@ namespace LostAndFound.Game.LostAndFound
             }
         }
 
+        public readonly Dictionary<string, string> Inventory = new Dictionary<string, string>();
+
         public Player(string name, LostAndFoundGame game) : base(game, name) { }
 
         public override string ToString()
         {
-            return $"{Name} { string.Join("", Enumerable.Repeat(Emojis.Heart, Health)) }";
+            var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
+            var items = string.Join("", Inventory.Values);
+            return $"{Name} {health} {items}";
         }
 
         public override Task InitAsync()
