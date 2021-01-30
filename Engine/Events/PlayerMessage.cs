@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Events
 {
-    public class PlayerCommandSentEvent<TGame, TPlayer,TRoom>
-        where TGame : DiscordGame<TGame, TPlayer,TRoom>
+    public class PlayerMessage<TGame, TPlayer,TRoom>
+        where TGame : BaseGame<TGame, TPlayer,TRoom>
         where TPlayer : BasePlayer<TGame, TPlayer,TRoom>
-        where TRoom : Room<TGame, TPlayer, TRoom>
+        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
     {
-
         public TPlayer Player { get; internal set; }
-        public string Command { get; internal set; }
+        public string Message { get; internal set; }
     }
 }

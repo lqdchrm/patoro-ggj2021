@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game.LostAndFund
+namespace LostAndFound.Game.LostAndFound
 {
-    public class Player : BasePlayer<LostAndFoundGame, Player, BaseRoom>
+    public class Player : BasePlayer<LostAndFoundGame, Player, CommonRoom>
     {
         int Health;
 

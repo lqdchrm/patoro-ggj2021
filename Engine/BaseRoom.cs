@@ -5,23 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using LostAndFound.Engine.Attributes;
 
 namespace LostAndFound.Engine
 {
-    public abstract class Room<TGame, TPlayer, TRoom>
-         where TGame : DiscordGame<TGame, TPlayer, TRoom>
-        where TRoom : Room<TGame, TPlayer, TRoom>
+    public abstract class BaseRoom<TGame, TPlayer, TRoom>
+         where TGame : BaseGame<TGame, TPlayer, TRoom>
+        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
         where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
     {
         private readonly Dictionary<string, MethodInfo> Commands = new Dictionary<string, MethodInfo>();
         protected readonly Dictionary<string, CommandAttribute> CommandDefs = new Dictionary<string, CommandAttribute>();
 
-        internal DiscordGame<TGame, TPlayer, TRoom> Game { get; set; }
+        internal BaseGame<TGame, TPlayer, TRoom> Game { get; set; }
         internal DiscordChannel VoiceChannel { get; set; }
 
         public abstract string Name { get; }
 
-        public Room()
+        public BaseRoom()
         {
             BuildCommands();
         }

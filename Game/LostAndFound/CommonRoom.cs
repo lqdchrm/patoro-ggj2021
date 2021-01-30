@@ -1,13 +1,14 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.Engine.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game.LostAndFund
+namespace LostAndFound.Game.LostAndFound
 {
-    public abstract class BaseRoom : Room<LostAndFoundGame, Player, BaseRoom>
+    public abstract class CommonRoom : BaseRoom<LostAndFoundGame, Player, CommonRoom>
     {
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(Player player)

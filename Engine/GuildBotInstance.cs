@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    internal class ServerBot : IDisposable
+    internal class GuildBotInstance : IDisposable
     {
         private DiscordClient client;
         private DiscordGuild guild;
@@ -17,24 +17,41 @@ namespace LostAndFound.Engine
 
         private readonly Regex gameRegex = new Regex(@"(?<game>\w+)\s+(?<instance>.+)\s*$");
 
-        private Dictionary<string, Func<string, DiscordClient, DiscordGuild, AbstractGame>> GameMapping = new Dictionary<string, Func<string, DiscordClient, DiscordGuild, AbstractGame>>()
+        private Dictionary<string, Func<string, DiscordClient, DiscordGuild, IGame>> GameMapping = new Dictionary<string, Func<string, DiscordClient, DiscordGuild, IGame>>()
         {
-            {"LostAndFound", (instanceName, client, guild) => new Game.LostAndFund.LostAndFoundGame(instanceName,client,guild) },
+            {"LostAndFound", (instanceName, client, guild) => new Game.LostAndFound.LostAndFoundGame(instanceName,client,guild) },
             {"Mansion", (instanceName, client, guild) => new Game.Mansion.MansionGame(instanceName,client,guild) }
         };
 
-        private readonly Dictionary<string, AbstractGame> gameLookup = new Dictionary<string, AbstractGame>();
+        private readonly Dictionary<string, IGame> gameLookup = new Dictionary<string, IGame>();
 
-        public ServerBot(DiscordClient sender, DiscordGuild guild)
+        public GuildBotInstance(DiscordClient sender, DiscordGuild guild, Type defaultGame = null)
         {
             this.client = sender;
             this.guild = guild;
+
             client.MessageCreated += this.Client_MessageCreated;
+
             // TODO: Find the default text changel without using hardcoded strings...
-            var defaultChanel = guild.Channels.FirstOrDefault(x => x.Value.Name == "Allgemein" && x.Value.Type == ChannelType.Text).Value
+            var defaultChanel = 
+                guild.Channels.FirstOrDefault(x => x.Value.Name == "Allgemein" && x.Value.Type == ChannelType.Text).Value
                 ?? guild.Channels.FirstOrDefault(x => x.Value.Type == ChannelType.Text).Value;
-            if (defaultChanel is not null)
-                Welcome(defaultChanel);
+            
+            if (defaultGame != null)
+            {
+                var gameName = defaultGame.Name.Replace("Game", "");
+                var game = GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(gameName, client, guild);
+                if (game != null)
+                {
+                    gameLookup[gameName] = game;
+                    game.StartAsync();
+                }
+
+            } else
+            {
+                if (defaultChanel is not null)
+                    Welcome(defaultChanel);
+            }
         }
 
         private async void Welcome(DiscordChannel defaultChanel)
@@ -50,15 +67,11 @@ namespace LostAndFound.Engine
 
             var match = gameRegex.Match(e.Message.Content);
 
-
             if (e.MentionedUsers.Any(x => x.Id == client.CurrentUser.Id))
             {
 
-
-
                 var gameName = match.Groups["game"].Value;
                 var instanceName = match.Groups["instance"].Value;
-
 
                 var game = GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(instanceName, client, guild);
 
@@ -71,7 +84,6 @@ namespace LostAndFound.Engine
                 }
                 else
                 {
-
                     e.Message.RespondAsync(@$"Not a valid game.");
                     e.Message.RespondAsync(GetValidGames());
                 }

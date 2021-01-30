@@ -1,15 +1,16 @@
 ﻿using DSharpPlus.Entities;
 using LostAndFound.Engine;
+using LostAndFound.Engine.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game.LostAndFund
+namespace LostAndFound.Game.LostAndFound
 
 {
-    public class CozyHut : BaseRoom
+    public class CozyHut : CommonRoom
     {
         public bool FireTurnedOn = false;
 
@@ -21,10 +22,10 @@ namespace LostAndFound.Game.LostAndFund
             if (!FireTurnedOn)
             {
                 FireTurnedOn = true;
-                player.Room.SendGameEventAsync($"{player.Name} lightened a fire");
+                await player.Room.SendGameEventAsync($"{player.Name} lightened a fire");
             } else
             {
-                player.SendGameEventAsync("There is already a fire burning.");
+                await player.SendGameEventAsync("There is already a fire burning.");
             }
         }
     }

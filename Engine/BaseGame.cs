@@ -9,34 +9,57 @@ using DSharpPlus.Net;
 using System.Linq;
 using System.Threading;
 using System.Collections.Concurrent;
+using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
 {
-    public abstract class DiscordGame<TGame, TPlayer, TRoom> : AbstractGame<TGame, TPlayer, TRoom>
-        where TGame : DiscordGame<TGame, TPlayer, TRoom>
-        where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
-        where TRoom : Room<TGame, TPlayer, TRoom>
+    public interface IGame: IDisposable
     {
-        protected DiscordClient client;
+        public Task StartAsync();
+    }
 
-        protected DiscordGuild guild;
+    public abstract class BaseGame<TGame, TPlayer, TRoom> : IGame
+        where TGame : BaseGame<TGame, TPlayer, TRoom>
+        where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
+        where TRoom : BaseRoom<TGame, TPlayer, TRoom>
+    {
+        private DiscordClient client;
+        private DiscordGuild guild;
+        private DiscordChannel parentChannel;
+        private DiscordChannel helpChannel;
 
-        protected DiscordChannel parentChannel;
-        protected DiscordChannel helpChannel;
-
-        protected readonly Dictionary<string, TRoom> rooms = new Dictionary<string, TRoom>();
-        protected readonly Dictionary<ulong, TPlayer> players = new Dictionary<ulong, TPlayer>();
+        private readonly Dictionary<string, TRoom> rooms = new Dictionary<string, TRoom>();
+        private readonly Dictionary<ulong, TPlayer> players = new Dictionary<ulong, TPlayer>();
 
         public string Name { get; }
         public bool Ready { get; private set; }
+
+
+        public event EventHandler<PlayerRoomChange<TGame, TPlayer, TRoom>> PlayerChangedRoom;
+        public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom)
+        {
+            PlayerChangedRoom?.Invoke(this, new PlayerRoomChange<TGame, TPlayer, TRoom>()
+            {
+                Player = player,
+                OldRoom = oldRoom
+            });
+        }
+
+        public event EventHandler<PlayerCommand<TGame, TPlayer, TRoom>> PlayerCommandSent;
+        public void RaisePlayerCommand(TPlayer player, string cmd)
+        {
+            PlayerCommandSent?.Invoke(this, new PlayerCommand<TGame, TPlayer, TRoom>()
+            {
+                Player = player,
+                Command = cmd
+            });
+        }
 
         #region configurations
         public virtual bool IsEverythingCommand => false;
         #endregion
 
-        public abstract TPlayer CreatePlayer(string userName);
-
-        public DiscordGame(string name, DiscordClient client, DiscordGuild guild)
+        public BaseGame(string name, DiscordClient client, DiscordGuild guild)
         {
             this.Name = name;
             this.client = client;
@@ -46,12 +69,10 @@ namespace LostAndFound.Engine
         }
 
 
-        public override async Task StartAsync()
+        public virtual async Task StartAsync()
         {
             await CleanupOldAsync();
-            // create Channels
             await CreateDefaultChannelsAsync();
-
             Ready = true;
         }
 
@@ -152,7 +173,8 @@ namespace LostAndFound.Engine
         }
 
         #region Rooms Helpers
-        public override async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, Permissions allow = default, Permissions deney = default)
+        public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, Permissions allow = default, Permissions deney = default)
+            where TRoomCurrent : TRoom
         {
             rooms.Add(room.Name, room);
             room.Game = this;
@@ -173,6 +195,8 @@ namespace LostAndFound.Engine
 
         #region Player Helpers
         public IReadOnlyDictionary<string, TPlayer> Players => players.Values.ToDictionary(p => p.Name);
+
+        public abstract TPlayer CreatePlayer(string userName);
 
         private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
         {
@@ -209,7 +233,26 @@ namespace LostAndFound.Engine
 
         protected virtual Task NewPlayer(TPlayer player) => Task.CompletedTask;
 
-        protected override async void Dispose(bool disposing)
+        #endregion
+
+        #region IDisposable
+
+        private bool disposedValue;
+        public bool IsDisposed => disposedValue;
+
+        public void Dispose()
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+
+                // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+                Dispose(disposing: true);
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        protected virtual async void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -220,8 +263,7 @@ namespace LostAndFound.Engine
                 await CleanupAsync();
             }
         }
+
+        #endregion
     }
-
-
-    #endregion
 }

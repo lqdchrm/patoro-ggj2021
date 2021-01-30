@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.Engine.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.Mansion
 {
-    public abstract class MansionRoom : Room<MansionGame, MansionPlayer, MansionRoom>
+    public abstract class MansionRoom : BaseRoom<MansionGame, MansionPlayer, MansionRoom>
     {
         [Command("HELP", "Lists all available commands for this room")]
         public async Task HelpCommand(MansionPlayer player)

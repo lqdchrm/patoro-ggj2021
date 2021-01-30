@@ -40,7 +40,7 @@ namespace LostAndFound.Game.Mansion
             if (Channel != null)
                 await Channel.SendMessageAsync(msg);
         }
-        public async Task SendAdministrativeMassage(string msg)
+        public async Task SendAdministrativeMessage(string msg)
         {
             msg = $"```css\n{msg}\n```";
             if (Channel != null)

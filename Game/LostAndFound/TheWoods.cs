@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Game.LostAndFund
+namespace LostAndFound.Game.LostAndFound
 
 {
-    public class TheWoods : BaseRoom
+    public class TheWoods : CommonRoom
     {
         public override string Name => "The Woods";
     }

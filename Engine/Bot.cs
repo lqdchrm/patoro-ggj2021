@@ -1,19 +1,23 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
+using LostAndFound.Engine;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace LostAndFound
 {
-    class MainManagement
+    class Bot
     {
+        private Type defaultGame;
         private DiscordClient client;
-        private readonly Dictionary<ulong, ServerBot> BotLoockup = new Dictionary<ulong, ServerBot>();
+        private readonly Dictionary<ulong, GuildBotInstance> BotLoockup = new Dictionary<ulong, GuildBotInstance>();
 
-        public async Task Start()
+        public async Task Start(Type defaultGame = null)
         {
+            this.defaultGame = defaultGame;
+
             DotNetEnv.Env.Load();
 
             Console.Error.WriteLine("[ENGINE] Creating Discord client ...");
@@ -25,10 +29,9 @@ namespace LostAndFound.Engine
             Console.Error.WriteLine("[ENGINE] ... Discord client created");
 
             Console.Error.WriteLine("[ENGINE] Adding Handlers ...");
-            client.GuildAvailable += ServerActive;
-            client.GuildCreated += ServerActive;
-            client.GuildDeleted += ServerDeactivated;
-
+            client.GuildAvailable += GuildActive;
+            client.GuildCreated += GuildActive;
+            client.GuildDeleted += GuildDeactivated;
             Console.Error.WriteLine("[ENGINE] ... Handlers added");
 
             Console.Error.WriteLine("[ENGINE] Connecting ...");
@@ -36,7 +39,7 @@ namespace LostAndFound.Engine
             Console.Error.WriteLine("[ENGINE] ... Connected");
         }
 
-        private async Task ServerDeactivated(DiscordClient sender, GuildDeleteEventArgs e)
+        private async Task GuildDeactivated(DiscordClient sender, GuildDeleteEventArgs e)
         {
             if (BotLoockup.TryGetValue(e.Guild.Id, out var bot))
             {
@@ -45,11 +48,11 @@ namespace LostAndFound.Engine
             }
         }
 
-        private async Task ServerActive(DiscordClient sender, GuildCreateEventArgs e)
+        private async Task GuildActive(DiscordClient sender, GuildCreateEventArgs e)
         {
             Console.Error.WriteLine($"[ENGINE] ... Guild added {e.Guild.Name}");
 
-            var server = new ServerBot(sender, e.Guild);
+            var server = new GuildBotInstance(sender, e.Guild, defaultGame);
             BotLoockup.Add(e.Guild.Id, server);
         }
     }

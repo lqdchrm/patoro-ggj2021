@@ -4,19 +4,19 @@ using System.Threading.Tasks;
 namespace LostAndFound.Engine
 {
     public class BasePlayer<TGame, TPlayer, TRoom>
-        where TGame : DiscordGame<TGame, TPlayer, TRoom>
+        where TGame : BaseGame<TGame, TPlayer, TRoom>
         where TPlayer : BasePlayer<TGame, TPlayer, TRoom>
-                where TRoom : Room<TGame, TPlayer, TRoom>
+                where TRoom : BaseRoom<TGame, TPlayer, TRoom>
 
     {
 
-        internal DiscordChannel Channel { get; set; }
-        internal DiscordMember User { get; set; }
+        internal protected DiscordChannel Channel { get; set; }
+        internal protected DiscordMember User { get; set; }
 
         public string Name { get; }
 
 
-        internal TGame Game { get; }
+        internal protected TGame Game { get; }
 
         public TRoom Room { get; internal set; }
         public BasePlayer(TGame game, string name)
@@ -26,7 +26,7 @@ namespace LostAndFound.Engine
         }
         public virtual Task InitAsync() => Task.CompletedTask;
 
-        internal async Task MoveTo(TRoom room)
+        public virtual async Task MoveTo(TRoom room)
         {
             var oldChanel = this.Room.VoiceChannel;
             await room.VoiceChannel.AddOverwriteAsync(this.User, DSharpPlus.Permissions.AccessChannels);
