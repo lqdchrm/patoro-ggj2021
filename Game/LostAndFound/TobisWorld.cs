@@ -13,13 +13,12 @@ namespace LostAndFound.Game.LostAndFound
 {
     public class TobisWorld : CommonRoom
     {
-        //public bool FireTurnedOn = false;
+        public bool FireTurnedOn = false;
 
         public override string Name => "Tobis World";
 
-        /*
-        [Command("FIRE", "Make a fire")]
-        public async Task LightFire(PlayerCommand cmd)
+        [Command("look", "look around")]
+        public async Task Look(PlayerCommand cmd)
         {
             if (cmd.Player is Player player)
             {
@@ -34,6 +33,5 @@ namespace LostAndFound.Game.LostAndFound
                 }
             }
         }
-        */
     }
 }
