@@ -35,7 +35,7 @@ namespace LostAndFound.Engine
 
         public async Task UpdateStatsAsync()
         {
-            await User.ModifyAsync(x => x.Muted = Health <= 0);
+            await User.ModifyAsync(x => { x.Muted = Health <= 0; });
             await Channel.ModifyAsync(x => x.Name = $"📜 ${Name} [{Health}]");
         }
 
