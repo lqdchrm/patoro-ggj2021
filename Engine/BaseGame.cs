@@ -177,7 +177,7 @@ namespace LostAndFound.Engine
                 Player = player,
                 Command = input[0],
                 Mentions = e.MentionedUsers.Select(u => players.GetValueOrDefault(u.Id)).Where(u => u != null).ToList(),
-                Args = input.Skip(1).ToList()
+                Args = input.Skip(1).Where(s => !s.Contains("@")).ToList()
             };
         }
 

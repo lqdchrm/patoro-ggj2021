@@ -11,6 +11,10 @@ namespace LostAndFound.Engine
 
         public string Name { get; }
 
+        public override string ToString()
+        {
+            return Name;
+        }
 
         internal protected BaseGame Game { get; }
 

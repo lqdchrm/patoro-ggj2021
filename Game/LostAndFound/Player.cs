@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using LostAndFound.Engine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,11 @@ namespace LostAndFound.Game.LostAndFound
 
         public Player(string name, LostAndFoundGame game) : base(game, name) { }
 
+        public override string ToString()
+        {
+            return $"{Name} { string.Join("", Enumerable.Repeat(Emojis.Heart, Health)) }";
+        }
+
         public override Task InitAsync()
         {
             this.Health = 3;
@@ -40,10 +46,11 @@ namespace LostAndFound.Game.LostAndFound
                 await Channel.SendMessageAsync(msg);
         }
 
-        public Task HitAsync()
+        public async Task HitAsync()
         {
-            if (this.Health > 0) this.Health--;
-            return Task.CompletedTask;
+            if (this.Health > 0)
+                this.Health--;
+            await SendGameEventAsync("Your were hit");
         }
 
         public Task HealAsync()

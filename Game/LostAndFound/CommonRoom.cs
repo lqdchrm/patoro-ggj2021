@@ -33,6 +33,10 @@ namespace LostAndFound.Game.LostAndFound
         public async Task HealCommand(PlayerCommand cmd) => await (cmd.Player as Player)?.HealAsync();
 
         [Command("HIT", "Decreases your health")]
-        public async Task HitCommand(PlayerCommand cmd) => await (cmd.Player as Player)?.HitAsync();
+        public async Task HitCommand(PlayerCommand cmd)
+        {
+            var tasks = cmd.Mentions.Cast<Player>().Select(p => p.HitAsync());
+            await Task.WhenAll(tasks);
+        }
     }
 }

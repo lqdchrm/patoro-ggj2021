@@ -29,7 +29,7 @@ namespace LostAndFound.Engine
         {
             var tasks = Game.Players.Values
                 .Where(p => p.Room == this)
-                .Select(player => player.Channel?.SendMessageAsync($"[{fromPlayer.Name}] {msg}"));
+                .Select(player => player.Channel?.SendMessageAsync($"[{fromPlayer}] {msg}"));
             await Task.WhenAll(tasks);
         }
 
