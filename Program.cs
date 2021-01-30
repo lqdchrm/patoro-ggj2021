@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.EventArgs;
+using LostAndFound.Game;
+
 namespace LostAndFound
 {
     public class Program
@@ -9,16 +11,8 @@ namespace LostAndFound
         public static async Task Main(string[] args)
         {
             var game = new LostAndFoundGame();
-            await game.Start();
-        }
-
-        private static async Task OnMessageCreated(MessageCreateEventArgs e)
-        {
-            if (string.Equals(e.Message.Content, "hello", StringComparison.OrdinalIgnoreCase))
-            {
-                var msg = e.Message.Author.Username;
-                await e.Message.RespondAsync(msg);
-            }
+            await game.StartAsync();
+            await Task.Delay(-1);
         }
     }
 }
