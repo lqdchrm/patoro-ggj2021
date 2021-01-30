@@ -13,6 +13,9 @@ namespace LostAndFound.Game.LostAndFound
     {
         private CommonRoom CozyHut;
         private CommonRoom TheWoods;
+        private CommonRoom RobsWorld;
+        private CommonRoom TobisWorld;
+        private CommonRoom LokisWorld;
 
         public LostAndFoundGame(string name, DiscordClient client, DSharpPlus.Entities.DiscordGuild guild) : base(name, client, guild) { }
 
@@ -22,6 +25,9 @@ namespace LostAndFound.Game.LostAndFound
 
             CozyHut = await AddRoomAsync(new CozyHut());
             TheWoods = await AddRoomAsync(new TheWoods());
+            RobsWorld = await AddRoomAsync(new RobsWorld());
+            TobisWorld = await AddRoomAsync(new ToobsWorld());
+            LokisWorld = await AddRoomAsync(new LokisWorld());
 
             PlayerChangedRoom += OnPlayerChangedRoom;
             PlayerCommandSent += OnPlayerCommandSent;
