@@ -28,6 +28,11 @@ namespace LostAndFound.Engine
         public string Name { get; }
         public bool Ready { get; private set; }
 
+        #region configurations
+        public virtual bool IsEverythingCommand => false;
+        #endregion
+
+
         public DiscordGame(string name, DiscordClient client, DiscordGuild guild)
         {
             this.Name = name;
@@ -40,10 +45,6 @@ namespace LostAndFound.Engine
 
         public override async Task StartAsync()
         {
-
-
-            await WaitForGuildAsync();
-
             await CleanupOldAsync();
             // create Channels
             await CreateDefaultChannelsAsync();
@@ -126,25 +127,25 @@ namespace LostAndFound.Engine
 
                 if (player.Channel == e.Channel)
                 {
-                    var cmd = e.Message.Content.ToUpperInvariant();
-                    if (e.Message.Content == cmd)
+                    if (this.IsEverythingCommand)
                     {
-                        RaisePlayerCommand(player, cmd);
+                        RaisePlayerCommand(player, e.Message.Content.ToLowerInvariant());
                     }
                     else
                     {
-                        await player.Room.SendMessageAsync(player, e.Message.Content);
+
+                        var cmd = e.Message.Content.ToUpperInvariant();
+                        if (e.Message.Content == cmd)
+                        {
+                            RaisePlayerCommand(player, cmd);
+                        }
+                        else
+                        {
+                            await player.Room.SendMessageAsync(player, e.Message.Content);
+                        }
                     }
                 }
             }
-        }
-
-        private async Task WaitForGuildAsync()
-        {
-            Console.Error.WriteLine("[ENGINE] waiting for guild ...");
-            while (guild == null)
-                await Task.Delay(500);
-            Console.Error.WriteLine("[ENGINE] ... got guild");
         }
 
         #region Rooms Helpers
@@ -182,10 +183,12 @@ namespace LostAndFound.Engine
                 await player.InitAsync();
 
                 Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
-
+                await NewPlayer(player);
             }
             return player;
         }
+
+        protected virtual Task NewPlayer(Player player) => Task.CompletedTask;
 
         protected virtual async void Dispose(bool disposing)
         {
