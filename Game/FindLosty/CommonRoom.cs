@@ -80,7 +80,7 @@ namespace LostAndFound.Game.FindLosty
         protected virtual string DescribeRoom(GameCommand cmd) => "NOT implemented";
         protected virtual string DescribeThing(string thing, GameCommand cmd) => "NOT implemented";
 
-        [Command("LOOK", "Look (optional at [thing]), e.g. LOOK Door")]
+        [Command("LOOK", "Look (optional at [thing]), eg LOOK Door")]
         public void LookCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
@@ -152,7 +152,7 @@ namespace LostAndFound.Game.FindLosty
 
         protected virtual string ListenAtThing(string thing, GameCommand cmd) => null;
 
-        [Command("LISTEN", "Listen")]
+        [Command("LISTEN", "Listen (optional at [thing]), eg LISTEN door")]
         public void ListenCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
@@ -251,7 +251,7 @@ namespace LostAndFound.Game.FindLosty
         #region KICK
         protected virtual string KickThing(string thing, GameCommand cmd) => null;
 
-        [Command("KICK", "kick st or sb")]
+        [Command("KICK", "kick [somebody] or [thing], eg KICK door")]
         public void KickCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
@@ -299,7 +299,7 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region HEAL
-        [Command("HEAL", "heal somebody or yourself")]
+        [Command("HEAL", "heal (optional [somebody]), eg HEAL loki")]
         public void HealCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
@@ -329,7 +329,7 @@ namespace LostAndFound.Game.FindLosty
 
         #region OPEN
         protected virtual (bool succes, string msg) OpenThing(string thing, GameCommand cmd) => (false, "You want to open what?");
-        [Command("OPEN", "open sth")]
+        [Command("OPEN", "open a [thing], eg OPEN door")]
         public void OpenCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;

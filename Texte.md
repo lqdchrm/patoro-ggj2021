@@ -131,13 +131,13 @@ Listen right door
 
 open left door
 --------------
-The door is jammed.
+    The door is jammed.
 
 open right door
 --------------
-You open the door. 
+    You open the door. 
 
-And look in the eyes of an An hungry [croc].
+    And look in the eyes of an An hungry [croc].
 _______________________
 | |                 | |
 | |                 | |
@@ -157,14 +157,13 @@ _______________________
 
 
 `Other Players`
-${PLAYER} opens the right door. He startles.
+    ${PLAYER} opens the right door. He startles.
 
 
 
 look croc
 --------------
-The [croc] looks hungry. But luckily its chained on a table..
-
+    The [croc] looks hungry. But luckily its chained on a table..
 
       _____________________ 
      /                    /|
@@ -184,7 +183,7 @@ The [croc] looks hungry. But luckily its chained on a table..
  |     V: V 'vv-' / '_   '.       .'  _..' '.'.                    
   \     '=.____.=/.--'   :_.__.__:_   '.   : :                    
    \____________/(((____.-'        '-.  /   : :                    
-    snd                         (((-'\ .' /                    
+                                (((-'\ .' /                    
                               _____..'  .'                    
                            '-._____.-'                    
 
@@ -194,7 +193,7 @@ The [croc] looks hungry. But luckily its chained on a table..
 open croc
 ----------
 
-No Just no!
+    No Just no!
 
 
 use Tofu croc
