@@ -61,6 +61,7 @@ namespace LostAndFound.Game.FindLosty
 
             string newText = text;
             var matches = extractionRegex.Matches(text).OfType<Match>();
+
             foreach (var item in matches.Select(x => x.Groups["key"]?.Value).Where(x => !string.IsNullOrWhiteSpace(x)))
             {
                 var normalizedItem = item.Replace(" ", "-").ToLowerInvariant();
@@ -275,7 +276,8 @@ namespace LostAndFound.Game.FindLosty
                         {
                             player.SendGameEvent(msg);
                             SendGameEvent($"{player} kicked [{thing}]", player);
-                        } else if (KnownThings.Contains(thing))
+                        }
+                        else if (KnownThings.Contains(thing))
                         {
                             player.SendGameEvent($"You kicked [{thing}]. Nothing happened..");
                             SendGameEvent($"{player} kicked [{thing}]", player);
