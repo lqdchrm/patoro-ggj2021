@@ -32,7 +32,10 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region HELP
-        protected override bool IsCommandVisible(string cmd) => true;
+        protected override bool IsCommandVisible(string cmd)
+        {
+            return true;
+        }
 
         [Command("HELP", "Lists all available commands for this room")]
         public void HelpCommand(PlayerCommand cmd)
@@ -42,6 +45,7 @@ namespace LostAndFound.Game.FindLosty
             var intro = $"You are currently at {player.Room.Name}.\n";
 
             var commands = string.Join("\n", Commands
+                .Where(cmd => cmd.Name.ToLowerInvariant() != "cheat")
                 .OrderBy(cmd => cmd.Name)
                 .Select(cmd => $"{cmd.Name} - {cmd.Description}")
             );
@@ -330,10 +334,11 @@ namespace LostAndFound.Game.FindLosty
         {
             if (cmd.Player is not Player player) return;
 
-            var thing = cmd.Args.FirstOrDefault();
+            var thing = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
             if (thing != null)
             {
                 var (success, msg) = OpenThing(thing, new GameCommand(cmd));
+                msg = ExtractThings(msg);
 
                 if (success)
                 {
@@ -350,6 +355,47 @@ namespace LostAndFound.Game.FindLosty
             {
                 player.SendGameEvent("You want to open what?");
                 SendGameEvent($"[{player}] failed to open {thing}", player);
+            }
+        }
+
+        [Command("CHEAT", "super secret command")]
+        public void CheatCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            if (cmd.Args.Count == 2 && cmd.Args[0] == "open")
+            {
+                switch (cmd.Args[1])
+                {
+                    case "00":
+                        {
+                        Game.FrontYard.Show();
+                        } break;
+                    case "01":
+                        {
+                        Game.EntryHall.Show();
+                        } break;
+                    case "02":
+                        {
+                        Game.DiningRoom.Show();
+                        } break;
+                    case "03":
+                        {
+                        Game.Kitchen.Show();
+                        } break;
+                    case "04":
+                        {
+                        Game.LivingRoom.Show();
+                        } break;
+                    case "05":
+                        {
+                        Game.Cellar.Show();
+                        } break;
+                    default:
+                        {
+                        } break;
+                }
+                SendGameEvent($"[{player}] opened {cmd.Args[1]}", player);
             }
         }
         #endregion

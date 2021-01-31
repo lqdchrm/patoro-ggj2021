@@ -8,6 +8,7 @@ namespace LostAndFound.Game
 {
     public static class Emojis
     {
+        public const string Player = "🕵";
         public const string Heart = "💙";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";
