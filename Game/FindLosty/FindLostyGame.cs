@@ -80,16 +80,20 @@ namespace LostAndFound.Game.FindLosty
 ");
 
             await post(@"
-This is a cooperative textbase adventure.
+This is a cooperative textbased adventure.
 
 When you enter the first Voice chat of this game,
 a text channel only accessable for you will be created.
 
-This channel will tell you everything that happesn in the game
-and your textinput will controle your character.
+This channel will tell you everything that happens in the game
+and your textinput will control your character.
 
 While progressing the game you will unlock new rooms.
 You can navigate between the rooms by switching the voice channels.
+
+The first room is the FrontYard.
+
+The most important commands are HELP and LOOK
 
 Happy gaming :)
 ".FormatMultiline());
