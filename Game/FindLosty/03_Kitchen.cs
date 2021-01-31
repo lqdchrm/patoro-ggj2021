@@ -16,6 +16,7 @@ namespace LostAndFound.Game.FindLosty
         #region LocalState
         bool FirePitOn = false;
         bool FridgeDoorOpen = false;
+        bool ShelvesDoorOpen = false;
         string ThingInMicroWave = null;
 
         #endregion
@@ -46,7 +47,7 @@ namespace LostAndFound.Game.FindLosty
             var roast_string = DescribeThing("roast", cmd);
             var microwave_string = DescribeThing("microwave", cmd);
             return $@"
-                There are shelves at one wall and a large [refrigerator] on the other.
+                There are [shelves] at one wall and a large [refrigerator] on the other.
                 In the middle of the room is a large fire [pit]. {pit_string}
                 {roast_string}
                 {microwave_string}
@@ -58,6 +59,11 @@ namespace LostAndFound.Game.FindLosty
         {
             switch (thing.ToLowerInvariant())
             {
+                case "shelf":
+                case "shelves":
+                    {
+                        return "Some shelves.";
+                    }
                 case "roast":
                     {
                         return "On the fire pit there is a tasty pork [roast]. It's well done.";
@@ -81,7 +87,7 @@ namespace LostAndFound.Game.FindLosty
                     } break;
                 case "microwave":
                     {
-                        string message = "A microwave.";
+                        string message = "A [microwave].";
                         if (ThingInMicroWave == null)
                             message += " There is nothing inside.";
                         else
@@ -105,6 +111,8 @@ namespace LostAndFound.Game.FindLosty
             switch (thing)
             {
                 case "refrigerator": return $"It hums.";
+                case "shelf":
+                case "shelves": return $"You can faintly hear 'The sound of silence' by Simon and Garfunkel.";
                 default: return base.ListenAtThing(thing, cmd);
             }
         }
@@ -131,6 +139,19 @@ namespace LostAndFound.Game.FindLosty
         {
             switch(thing)
             {
+                case "shelves":
+                case "shelf":
+                    {
+                        if (!ShelvesDoorOpen)
+                        {
+                            Inventory.Add("matches", Emojis.Heart);
+                            ShelvesDoorOpen = true;
+                            return (true, "The shelf door opens.");
+                        }
+                        else
+                            return (false, "It's already open.");
+
+                    } break;
                 case "fridge":
                 case "refrigerator":
                     {
@@ -148,6 +169,38 @@ namespace LostAndFound.Game.FindLosty
             }
         }
         #endregion
+
+        [Command("PUT", "put [something] in [something], eg put door in microwave")]
+        public void KickCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            if (cmd.Args.Count == 3 && cmd.Args[1] == "in")
+            {
+                if (player.Inventory.ContainsKey(cmd.Args[0]))
+                {
+                    if (cmd.Args[2] == "microwave")
+                    {
+                        player.SendGameEvent($"You put the {cmd.Args[0]} in the micowave");
+                        ThingInMicroWave = cmd.Args[0];
+                        player.Inventory.Remove(cmd.Args[0]);
+                    }
+                    else
+                    {
+                        player.SendGameEvent($"Put it in the what?!!??");
+                    }
+                }
+                else
+                {
+                    player.SendGameEvent($"You don't have a {cmd.Args[0]}");
+                }
+
+            }
+            else
+            {
+                player.SendGameEvent($"You need to 'put <something> in <something>'");
+            }
+        }
     }
 }
 
