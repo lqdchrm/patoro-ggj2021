@@ -8,17 +8,15 @@ namespace LostAndFound.Engine
 
         internal protected DiscordChannel Channel { get; set; }
         internal protected DiscordMember User { get; set; }
-
-        public string Name { get; }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
         internal protected BaseGame Game { get; }
 
+
+        public string Name { get; }
         public BaseRoom Room { get; internal set; }
+
+
+        public override string ToString() => Name;
+
         public BasePlayer(BaseGame game, string name)
         {
             this.Name = name;
@@ -26,6 +24,17 @@ namespace LostAndFound.Engine
         }
         public virtual Task InitAsync() => Task.CompletedTask;
 
+        public void SendGameEvent(string msg)
+        {
+            msg = $"```css\n{msg}\n```";
+            Channel?.SendMessageAsync(msg);
+        }
+
+        /// <summary>
+        /// TODO: check if needed
+        /// </summary>
+        /// <param name="room"></param>
+        /// <returns></returns>
         public virtual async Task MoveTo(BaseRoom room)
         {
             var oldChanel = this.Room.VoiceChannel;

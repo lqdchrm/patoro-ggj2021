@@ -39,21 +39,23 @@ namespace LostAndFound
             Console.Error.WriteLine("[ENGINE] ... Connected");
         }
 
-        private async Task GuildDeactivated(DiscordClient sender, GuildDeleteEventArgs e)
+        private Task GuildDeactivated(DiscordClient sender, GuildDeleteEventArgs e)
         {
             if (BotLoockup.TryGetValue(e.Guild.Id, out var bot))
             {
                 bot.Dispose();
                 BotLoockup.Remove(e.Guild.Id);
             }
+            return Task.CompletedTask;
         }
 
-        private async Task GuildActive(DiscordClient sender, GuildCreateEventArgs e)
+        private Task GuildActive(DiscordClient sender, GuildCreateEventArgs e)
         {
             Console.Error.WriteLine($"[ENGINE] ... Guild added {e.Guild.Name}");
 
             var server = new GuildBotInstance(sender, e.Guild, defaultGame);
             BotLoockup.Add(e.Guild.Id, server);
+            return Task.CompletedTask;
         }
     }
 }
