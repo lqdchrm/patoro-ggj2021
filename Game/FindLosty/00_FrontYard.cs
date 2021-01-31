@@ -31,10 +31,10 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region Inventory
-        protected override IEnumerable<(string, string)> InitialInventory =>
-            new List<(string, string)>
+        protected override IEnumerable<(string, string, string)> InitialInventory =>
+            new List<(string, string, string)>
             {
-                ("poo", Emojis.Poo),
+                ("poo", Emojis.Poo, "It's Mr. Hanky"),
             };
         #endregion
 

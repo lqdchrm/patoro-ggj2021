@@ -15,9 +15,9 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region Inventory
-        protected override IEnumerable<(string, string)> InitialInventory =>
-            new List<(string, string)> {
-                ("keys", Emojis.Keys),
+        protected override IEnumerable<(string, string, string)> InitialInventory =>
+            new List<(string, string, string)> {
+                // ("keys", Emojis.Keys, "Some keys"),
             };
         #endregion
 
