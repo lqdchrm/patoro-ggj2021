@@ -10,16 +10,8 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Game.FindLosty
 {
-    public class LivingRoom : CommonRoom
+    public class Cellar : CommonRoom
     {
-        public override string Name => "LivingRoom";
-
-        protected override bool IsCommandVisible(string cmd)
-        {
-            switch (cmd)
-            {
-            }
-            return base.IsCommandVisible(cmd);
-        }
+        public override string Name => "Cellar";
     }
 }

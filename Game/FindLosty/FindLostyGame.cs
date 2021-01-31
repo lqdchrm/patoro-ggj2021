@@ -11,14 +11,14 @@ namespace LostAndFound.Game.FindLosty
 
     public class FindLostyGame : BaseGame
     {
-        readonly GameState State;
+        public readonly GameState State;
 
-        readonly public FrontYard FrontYard = new FrontYard();
-        readonly public EntryHall EntryHall = new EntryHall();
-        readonly public DiningRoom DiningRoom = new DiningRoom();
-        readonly public Kitchen Kitchen = new Kitchen();
-        readonly public LivingRoom LivingRoom = new LivingRoom();
-        readonly public Cellar Cellar = new Cellar();
+        public readonly FrontYard FrontYard = new FrontYard();
+        public readonly EntryHall EntryHall = new EntryHall();
+        public readonly DiningRoom DiningRoom = new DiningRoom();
+        public readonly Kitchen Kitchen = new Kitchen();
+        public readonly LivingRoom LivingRoom = new LivingRoom();
+        public readonly Cellar Cellar = new Cellar();
 
         public FindLostyGame(string name, DiscordClient client, DSharpPlus.Entities.DiscordGuild guild) : base(name, client, guild)
         {
@@ -31,7 +31,7 @@ namespace LostAndFound.Game.FindLosty
 
             await AddRoomAsync(FrontYard, true);
             await AddRoomAsync(EntryHall, false);
-            await AddRoomAsync(DiningRoom, true);
+            await AddRoomAsync(DiningRoom, false);
             await AddRoomAsync(Kitchen, false);
             await AddRoomAsync(LivingRoom, false);
             await AddRoomAsync(Cellar, false);
@@ -40,25 +40,31 @@ namespace LostAndFound.Game.FindLosty
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
-        private async void OnPlayerCommandSent(object sender, PlayerCommand e)
+        private void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
-            if (e.Player.Room != null)
+            if (e.Player.Room is CommonRoom room)
             {
-                await e.Player.Room.HandleCommandAsync(e);
+                room.HandleCommand(e);
             } else if (e.Player is Player player)
             {
-                player.SendGameEventAsync("Command ignored, Please join a Game Voice-Channel.");
+                player.SendGameEvent("Command ignored, Please join a Game Voice-Channel.");
             }
         
         }
 
-        private async void OnPlayerChangedRoom(object sender, PlayerRoomChange e)
+        private void OnPlayerChangedRoom(object sender, PlayerRoomChange e)
         {
             if (e.OldRoom != null)
-                await e.OldRoom.SendGameEventAsync($"{e.Player.Name} left {e.OldRoom.Name}");
+            {
+                (e.Player as Player)?.SendGameEvent($"You left {e.OldRoom.Name}");
+                e.OldRoom.SendGameEvent($"[{e.Player}] left {e.OldRoom.Name}", e.Player);
+            }
 
             if (e.Player.Room != null)
-                await e.Player.Room.SendGameEventAsync($"{e.Player.Name} entered {e.Player.Room.Name}");
+            {
+                (e.Player as Player)?.SendGameEventWithState($"You entered {e.Player.Room.Name}");
+                e.Player.Room.SendGameEvent($"[{e.Player}] entered {e.Player.Room.Name}", e.Player);
+            }
         }
 
         public override BasePlayer CreatePlayer(string userName)

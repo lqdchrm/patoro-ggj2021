@@ -44,28 +44,13 @@ namespace LostAndFound.Game.FindLosty
             return Task.CompletedTask;
         }
 
-        public async Task SendGameEventAsync(string msg)
-        {
-            msg = $"```css\n{msg}\n```";
-            if (Channel != null)
-                await Channel.SendMessageAsync(msg);
-        }
-
-        public async Task SendGameEventWithStateAsync(string msg)
+        public void SendGameEventWithState(string msg)
         {
             msg = $"```css\n{msg}\nYour Status: {this}```";
-            if (Channel != null)
-                await Channel.SendMessageAsync(msg);
+            Channel?.SendMessageAsync(msg);
         }
 
-        public async Task ShowStatusAsync(string msg)
-        {
-            msg = $"```css\nYour Status: {this}```";
-            if (Channel != null)
-                await Channel.SendMessageAsync(msg);
-        }
-
-        public async Task HitAsync(string by = null)
+        public void Hit(string by = null)
         {
             if (this.Health > 0)
             {
@@ -75,11 +60,11 @@ namespace LostAndFound.Game.FindLosty
                 if (by != null)
                     msg += $" by {by}";
 
-                await SendGameEventWithStateAsync(msg);
+                SendGameEventWithState(msg);
             }
         }
 
-        public async Task HealAsync(string by = null)
+        public void Heal(string by = null)
         {
             if (this.Health < 3)
             {
@@ -89,7 +74,7 @@ namespace LostAndFound.Game.FindLosty
                 if (by != null)
                     msg += $" by {by}";
 
-                await SendGameEventWithStateAsync(msg);
+                SendGameEventWithState(msg);
             }
         }
     }

@@ -12,54 +12,28 @@ namespace LostAndFound.Engine
 {
     public abstract class BaseRoom
     {
+        #region Commands
+        
         private readonly Dictionary<string, MethodInfo> CommandMethods = new Dictionary<string, MethodInfo>();
         private readonly Dictionary<string, CommandAttribute> CommandDefs = new Dictionary<string, CommandAttribute>();
-
+        
         protected IEnumerable<CommandAttribute> Commands => CommandDefs.Values.Where(cmd => IsCommandVisible(cmd.Name));
+        
         protected abstract bool IsCommandVisible(string cmdName);
-
-        protected internal virtual BaseGame Game { get; set; }
-        internal DiscordChannel VoiceChannel { get; set; }
-
-        public virtual bool IsVisible { get; set; }
-
-        public abstract string Name { get; }
-
-        public BaseRoom()
-        {
-            BuildCommands();
-        }
-
-        public IEnumerable<BasePlayer> Players => Game.Players.Values.Where(p => p.Room == this);
-
-        public async Task SendMessageAsync(BasePlayer fromPlayer, string msg)
-        {
-            var tasks = Game.Players.Values
-                .Where(p => p.Room == this)
-                .Select(player => player.Channel?.SendMessageAsync($"[{fromPlayer}] {msg}"));
-            await Task.WhenAll(tasks);
-        }
-
-        public async Task SendGameEventAsync(string msg, BasePlayer excludePlayer = null)
-        {
-            msg = $"```css\n{msg}\n```";
-            var tasks = Game.Players.Values
-                .Where(p => p.Room == this)
-                .Where(p => excludePlayer != p)
-                .Select(player => player.Channel?.SendMessageAsync(msg));
-            await Task.WhenAll(tasks);
-        }
-
-        public async Task HandleCommandAsync(PlayerCommand cmd)
+        
+        internal void HandleCommand(PlayerCommand cmd)
         {
             MethodInfo method;
-            if (IsCommandVisible(cmd.Command) &&  CommandMethods.TryGetValue(cmd.Command, out method))
+            if (IsCommandVisible(cmd.Command) && CommandMethods.TryGetValue(cmd.Command, out method))
             {
-                var task = (Task)method.Invoke(this, new object[] { cmd });
-                await task;
-            } else
+                method.Invoke(this, new object[] { cmd });
+            }
+            else
             {
-                await cmd.Player.Room.SendMessageAsync(cmd.Player, cmd.Message);
+                foreach (var player in Players)
+                {
+                    player.Channel?.SendMessageAsync($"[{player}] {cmd.Message}");
+                }
             }
         }
 
@@ -71,6 +45,35 @@ namespace LostAndFound.Engine
                 var attrib = method.GetCustomAttribute<CommandAttribute>();
                 CommandMethods.Add(attrib.Name, method);
                 CommandDefs.Add(attrib.Name, attrib);
+            }
+        }
+        #endregion
+
+        internal DiscordChannel VoiceChannel { get; set; }
+        protected internal virtual BaseGame Game { get; set; }
+
+        public abstract string Name { get; }
+
+        public IEnumerable<BasePlayer> Players => Game.Players.Values.Where(p => p.Room == this).ToList();
+
+        #region Visibility
+        public bool IsVisible { get; set; }
+
+        public Task Show() => Game.SetRoomVisibility(this, true);
+        public Task Hide() => Game.SetRoomVisibility(this, false);
+        #endregion
+
+        public BaseRoom()
+        {
+            BuildCommands();
+        }
+
+        public void SendGameEvent(string msg, BasePlayer excludePlayer = null)
+        {
+            msg = $"```css\n{msg}\n```";
+            foreach(var player in Players.Where(p => excludePlayer != p))
+            {
+                player.Channel?.SendMessageAsync(msg);
             }
         }
     }

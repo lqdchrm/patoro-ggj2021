@@ -14,67 +14,117 @@ namespace LostAndFound.Game.FindLosty
         public new FindLostyGame Game => base.Game as FindLostyGame;
         public new IEnumerable<Player> Players => base.Players.Cast<Player>();
 
-        public virtual Task Show() => Game.SetRoomVisibilityAsync(this, true);
-        public virtual Task Hide() => Game.SetRoomVisibilityAsync(this, false);
+        public CommonRoom()
+        {
+            foreach(var item in InitialInventory)
+            {
+                Inventory.Add(item.key, item.icon);
+            }
+        }
+
+        #region Inventory
+        protected virtual IEnumerable<(string key, string icon)> InitialInventory { get; } = new List<(string, string)> { };
 
         public Inventory Inventory { get; } = new Inventory();
+        #endregion
 
+        #region HELP
         protected override bool IsCommandVisible(string cmd) => true;
 
         [Command("HELP", "Lists all available commands for this room")]
-        public async Task HelpCommand(PlayerCommand cmd)
+        public void HelpCommand(PlayerCommand cmd)
         {
-            if (cmd.Player is Player player)
-            {
-                var intro = $"You are currently at {player.Room.Name}.\n";
+            if (cmd.Player is not Player player) return;
 
-                var commands = string.Join("\n", Commands
-                    .OrderBy(cmd => cmd.Name)
-                    .Select(cmd => $"{cmd.Name} - {cmd.Description}")
-                );
+            var intro = $"You are currently at {player.Room.Name}.\n";
 
-                var msg = string.Join("\n", intro, commands, "");
+            var commands = string.Join("\n", Commands
+                .OrderBy(cmd => cmd.Name)
+                .Select(cmd => $"{cmd.Name} - {cmd.Description}")
+            );
 
-                await player.SendGameEventWithStateAsync(msg);
-            }
+            var msg = string.Join("\n", intro, commands, "");
+
+            player.SendGameEventWithState(msg);
         }
+        #endregion
+
+
+        #region LOOK
+        protected virtual bool IsItemVisible(string itemKey) => true;
+        protected virtual string DescribeRoom(GameCommand cmd) => "NOT implemented";
+        protected virtual string DescribeThing(string thing, GameCommand cmd) => "NOT implemented";
 
         [Command("LOOK", "Look (optional at [thing]), e.g. LOOK Door")]
-        public virtual async Task LookAt(PlayerCommand cmd)
+        public void LookCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
 
-            var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
-            var roomText = await Describe(cmd);
+            string msg = null;
+            string thing = cmd.Args.ElementAtOrDefault(0);
 
-            var msg = roomText;
-            if (items.Any())
+            if (thing != null)
             {
-                msg = $"You can see some things: {string.Join(", ", items)}\n\n{roomText}";
+                string itemText = null;
+                if (Inventory.ContainsKey(thing) || IsItemVisible(thing))
+                {
+                    itemText = DescribeThing(thing, new GameCommand(cmd));
+                }
+
+                msg = itemText ?? "Hmm, nothing to see.";
+            } else
+            {
+                var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
+                var roomText = DescribeRoom(new GameCommand(cmd));
+
+                if (items.Any())
+                {
+                    msg = $"You can see some things: {string.Join(", ", items)}\n\n{roomText}";
+                } else
+                {
+                    msg = roomText;
+                }
             }
 
-            await player.SendGameEventAsync(msg);
+            if (msg != null)
+            {
+                var at = thing != null ? $"at {thing}" : "around";
+
+                player.SendGameEvent(msg);
+                SendGameEvent($"[{player}] is looking {at}", player);
+            }
         }
-        protected virtual async Task<string> Describe(PlayerCommand cmd) => "NOT implemented";
-        protected virtual bool IsItemVisible(string itemKey) => true;
+        #endregion
 
 
-        [Command("LISTEN", "Listen")]
-        public virtual async Task Listen(PlayerCommand cmd)
+        #region LISTEN
+        protected virtual string MakeSounds(GameCommand cmd)
         {
-            if (cmd.Player is not Player player) return;
-
             var texts = new string[] {
                 "... ... ...",
                 "chirp chirp ... ...",
                 "[LOSTY]: wuff wuff woooooooooo"
             };
 
-            await player.SendGameEventAsync(texts.TakeOneRandom());
+            return texts.TakeOneRandom();
         }
 
+        [Command("LISTEN", "Listen")]
+        public void ListenCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            player.SendGameEvent(MakeSounds(new GameCommand(cmd)));
+            SendGameEvent($"[{player}] is listening.", player);
+        }
+        #endregion
+
+
+        #region TAKE
+        protected virtual string WhyIsItemNotTakeable(string itemKey) => null;
+
         [Command("TAKE", "pick up or take a [thing], eg TAKE keys")]
-        public virtual async Task Take(PlayerCommand cmd)
+        public void TakeCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
 
@@ -88,22 +138,23 @@ namespace LostAndFound.Game.FindLosty
                 var item = Inventory.Transfer(itemKey, player.Inventory);
                 if (item != null)
                 {
-                    await SendGameEventAsync($"[{player}] now owns {item}", player);
-                    await player.SendGameEventWithStateAsync($"You now own {item}");
+                    SendGameEvent($"[{player}] now owns {item}", player);
+                    player.SendGameEventWithState($"You now own {item}");
                 } else
                 {
-                    await player.SendGameEventAsync($"{itemKey} not found");
+                    player.SendGameEvent($"{itemKey} not found");
                 }
             } else
             {
-                await player.SendGameEventAsync($"{itemKey} can't be taken: {reason}");
+                player.SendGameEvent($"{itemKey} can't be taken: {reason}");
             }
         }
-        protected virtual string WhyIsItemNotTakeable(string itemKey) => null;
+        #endregion
 
 
+        #region DROP
         [Command("DROP", "a [thing], eg DROP keys")]
-        public virtual async Task Drop(PlayerCommand cmd)
+        public void DropCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
 
@@ -114,20 +165,78 @@ namespace LostAndFound.Game.FindLosty
             var item = player.Inventory.Transfer(itemKey, Inventory);
             if (item != null)
             {
-                await SendGameEventAsync($"[{player}] dropped {item}", player);
-                await player.SendGameEventWithStateAsync($"You dropped {item}");
+                SendGameEvent($"[{player}] dropped {item}", player);
+                player.SendGameEventWithState($"You dropped {item}");
             }
             else
             {
-                await player.SendGameEventAsync($"You can't {itemKey} not found");
+                player.SendGameEvent($"You can't drop this. {itemKey} not found");
             }
         }
+        #endregion
 
-        [Command("HIT", "Hits an opponent")]
-        public async Task HitCommand(PlayerCommand cmd)
+
+        #region KICK
+        protected virtual string KickThing(string thing, GameCommand cmd) => null;
+
+        [Command("KICK", "kick st or sb")]
+        public void KickCommand(PlayerCommand cmd)
         {
-            var tasks = cmd.Mentions.Cast<Player>().Select(p => p.HitAsync(cmd.Player.Name));
-            await Task.WhenAll(tasks);
+            if (cmd.Player is not Player player) return;
+
+            var playersKicked = Players
+                .Where(p => p != player)
+                .Where(p => cmd.Message.Contains(p.Name)).ToList();
+
+            if (playersKicked.Any())
+            {
+                playersKicked.ForEach(p => p.Hit(player.Name));
+            }
+            else
+            {
+                var thing = cmd.Args.FirstOrDefault();
+                if (thing != null)
+                {
+                    var msg = KickThing(thing, new GameCommand(cmd));
+                    if (msg != null)
+                        SendGameEvent(msg);
+                    else
+                        player.SendGameEvent("You kicked into thin air.");
+                }
+                else
+                {
+                    player.SendGameEvent("You kicked into thin air.");
+                }
+            }
         }
+        #endregion
+
+        #region OPEN
+        protected virtual (bool succes, string msg) OpenThing(string thing, GameCommand cmd) => (false, "You want to open what?");
+        [Command("OPEN", "open sth")]
+        public void OpenCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            var thing = cmd.Args.FirstOrDefault();
+            if (thing != null)
+            {
+                var (success, msg) = OpenThing(thing, new GameCommand(cmd));
+
+                if (success)
+                {
+                    SendGameEvent(msg);
+                } else
+                {
+                    player.SendGameEvent(msg);
+                    SendGameEvent($"[{player}] failed to open {thing}", player);
+                }
+            } else
+            {
+                player.SendGameEvent("You want to open what?");
+                SendGameEvent($"[{player}] failed to open {thing}", player);
+            }
+        }
+        #endregion
     }
 }

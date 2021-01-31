@@ -42,10 +42,6 @@ namespace LostAndFound.Engine
             PlayerCommandSent?.Invoke(this, cmd);
         }
 
-        #region configurations
-        public virtual bool IsEverythingCommand => false;
-        #endregion
-
         public BaseGame(string name, DiscordClient client, DiscordGuild guild)
         {
             this.Name = name;
@@ -175,12 +171,12 @@ namespace LostAndFound.Engine
                         
             room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel);
 
-            SetRoomVisibilityAsync(room, visible);
+            _ = SetRoomVisibility(room, visible);
 
             return room;
         }
 
-        public async Task SetRoomVisibilityAsync(BaseRoom room, bool visible)
+        public async Task SetRoomVisibility(BaseRoom room, bool visible)
         {
             var role = guild.EveryoneRole;
             if (visible)
