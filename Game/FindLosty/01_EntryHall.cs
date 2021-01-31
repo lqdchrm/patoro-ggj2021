@@ -30,6 +30,26 @@ namespace LostAndFound.Game.FindLosty
         }
         #endregion
 
+        #region Images
+        private const string croc = @"
+_______________________
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |            .-._ | |
+| |  .-''-.__.-'00 /| |
+| | '.___ '    .  /.| |
+| |  V: V 'vv-' / '_| |
+| |   '=.____.=/.--'| |
+| |----------/(((___| |
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |";
+        #endregion
+
         #region Inventory
         protected override IEnumerable<(string, string)> InitialInventory =>
             new List<(string, string)> {
@@ -93,7 +113,13 @@ namespace LostAndFound.Game.FindLosty
 
                 case "metal-door":
                     return @$"A very study door. It would be blast to open it.";
-                
+
+                case "spliters":
+                    return $@"Some splinters";
+
+                case "croc":
+                    return croc;
+
                 default:
                     return base.DescribeThing(thing, cmd);
             }
@@ -186,6 +212,16 @@ namespace LostAndFound.Game.FindLosty
         #region OPEN
         protected override (bool succes, string msg) OpenThing(string thing, GameCommand cmd)
         {
+            switch(thing)
+            {
+                case "left-door":
+                    return (false, "The door is jammed. It might need united force to break open");
+
+                case "right-door":
+                    cmd.Player.SendGameEvent(croc, true);
+                    return (true, $"You open the door.\nAnd look in the eyes of an An hungry [croc].");
+            }
+
             return base.OpenThing(thing, cmd);
         }
         #endregion
