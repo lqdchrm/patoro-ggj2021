@@ -15,8 +15,6 @@ namespace LostAndFound.Game.FindLosty
         public override string Name => "FrontYard";
 
         #region LocalState
-        //TODO: Only for player that has seen it?
-        bool FrontDoorHasBeenSeen = false;
         #endregion
 
         #region Inventory
@@ -32,8 +30,8 @@ namespace LostAndFound.Game.FindLosty
         {
             switch (cmd.ToLowerInvariant())
             {
-                case "open": return FrontDoorHasBeenSeen;
-                case "knock": return FrontDoorHasBeenSeen;
+                case "open": return KnownThings.Contains("door");
+                case "knock": return KnownThings.Contains("door");
 
                 default: return base.IsCommandVisible(cmd);
             }
@@ -48,8 +46,6 @@ namespace LostAndFound.Game.FindLosty
 
         protected override string DescribeRoom(GameCommand cmd)
         {
-            FrontDoorHasBeenSeen = true;
-
             var friends = Players.Where(p => p != cmd.Player);
             var friendsNames = string.Join(", ", friends.Select(p => $"[{p}]"));
             var friendsText = friends.Any()
@@ -97,7 +93,7 @@ namespace LostAndFound.Game.FindLosty
             switch (thing.ToLowerInvariant())
             {
                 case "door":
-                    if (FrontDoorHasBeenSeen)
+                    if (KnownThings.Contains("door"))
                     {
                         if (Game.State.FrontDoorOpen)
                             msg = "The open [door] hits the back wall and then swings back and hits your face.";

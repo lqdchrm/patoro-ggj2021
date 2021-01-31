@@ -26,6 +26,8 @@ namespace LostAndFound.Game.FindLosty
         protected virtual IEnumerable<(string key, string icon)> InitialInventory { get; } = new List<(string, string)> { };
 
         public Inventory Inventory { get; } = new Inventory();
+
+        public HashSet<string> KnownThings { get; } = new HashSet<string>();
         #endregion
 
         #region HELP
@@ -51,7 +53,13 @@ namespace LostAndFound.Game.FindLosty
 
 
         #region LOOK
+        private void ExtractThings(string text)
+        {
+            // TODO: extract [things] and add to KnownThings
+        }
+
         protected virtual bool IsItemVisible(string itemKey) => true;
+
         protected virtual string DescribeRoom(GameCommand cmd) => "NOT implemented";
         protected virtual string DescribeThing(string thing, GameCommand cmd) => "NOT implemented";
 
@@ -61,7 +69,7 @@ namespace LostAndFound.Game.FindLosty
             if (cmd.Player is not Player player) return;
 
             string msg = null;
-            string thing = cmd.Args.ElementAtOrDefault(0);
+            string thing = cmd.Args.ElementAtOrDefault(0)?.ToLowerInvariant();
 
             if (thing != null)
             {
@@ -74,9 +82,13 @@ namespace LostAndFound.Game.FindLosty
                     other.SendGameEvent($"[{player}] is staring at you.");
                     return;
                 }
-                else if (Inventory.ContainsKey(thing) || IsItemVisible(thing))
+                else if (Inventory.ContainsKey(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
+                } else if (KnownThings.Contains(thing))
+                {
+                    itemText = DescribeThing(thing, new GameCommand(cmd));
+                    ExtractThings(itemText);
                 }
 
                 msg = itemText ?? "Hmm, nothing to see.";
@@ -84,6 +96,7 @@ namespace LostAndFound.Game.FindLosty
             {
                 var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
                 var roomText = DescribeRoom(new GameCommand(cmd));
+                ExtractThings(roomText);
 
                 if (items.Any())
                 {
