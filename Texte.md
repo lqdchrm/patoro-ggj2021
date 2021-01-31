@@ -227,6 +227,8 @@ Maybe with more man power.
 `with 2 people`
 It cracks open. You can now enter the dining room.
 
+`Other Players`
+${player} kicks against the door.
 
 ======================================================================================================
 Kitchen
@@ -272,7 +274,49 @@ Look fire
 Dining room
 ======================================================================================================
 
+Hear
+-----
+You hear something squeak.
+
 Look
 ----
-There is a table with four chairs in one corner.
-A door leads to the kitchen.
+There is a [table] with four chairs in one corner.
+A [door] leads to the kitchen.
+
+Look door
+----
+The seems to be in good shape. But does not have any handle. Next to it is a machine that looks like some kind of [scanner].
+
+Look scanner
+----
+A green pulsing light is emitted from the scanner and shines on everything you hold in front of it.
+
+Look Table
+----
+A big table is in the center of the room. Under [table] hidden by the tablecloth there is a [cage] with an hamster.
+
+
+Look cage
+----
+Its a big cage for a hamster. 
+<hamster not taken>
+The hamster is happily rolling on its back. There seems to be something written on its belly
+
+open cage
+--------
+The hamster jumps out of the cage and now runs in the room.
+`Add hamster to room inventory`
+`Other Players`
+${player} sets the hamster free.
+
+look hamster **INVENTAR**
+----------
+
+The hamster has some barcode printed on its belly
+
+use hamster scanner
+-------------------
+
+You hold the hamster in front of the scanner. A short beep. and the door jumps open.
+`Other Players`
+${player} holds the hamster in front of the scanner. A short beep. and the door jumps open.
