@@ -15,5 +15,14 @@ namespace LostAndFound.Game.FindLosty
             var idx = rng.Next(0, list.Count());
             return list.ElementAt(idx);
         }
+
+        public static string FormatMultiline(this string text)
+        {
+            var lines = text.Split(new string[] { "\n\r", "\n", "\r" }, StringSplitOptions.TrimEntries).ToList();
+            if (lines.Count > 0 && lines[0].Length == 0)
+                lines = lines.Skip(1).ToList();
+
+            return string.Join("\n", lines);
+        }
     }
 }
