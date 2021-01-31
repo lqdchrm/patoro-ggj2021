@@ -336,30 +336,30 @@ Dining room
 
 Hear
 -----
-You hear something squeak.
+    You hear something squeak.
 
 Look
 ----
-There is a [table] with four chairs in one corner.
-Next to one of the chairs is a red [button].
-On the other side of the room is a [ergometer].
+    There is a [table] with four chairs in one corner.
+    Next to one of the chairs is a red [button].
+    On the other side of the room is a [ergometer].
 
-A [door] in the right wall leads to the kitchen. 
+    A [door] in the right wall leads to the kitchen. 
 
 Look door
 ----
-The seems to be in good shape. But does not have any handle. Next to it is a machine that looks like some kind of [scanner].
+    The seems to be in good shape. But does not have any handle. Next to it is a machine that looks like some kind of [scanner].
 
 kick door
 ---------
-You kick against the door and a panful feeling rises from feet to your hip. The same trick will not work twice.
-`Other Players`
-${player} Kicks against the door. It hurts but he tries to hide it...
+    You kick against the door and a panful feeling rises from feet to your hip. The same trick will not work twice.
+    `Other Players`
+    ${player} Kicks against the door. It hurts but he tries to hide it...
 
 
 Look ergometer
 ----
-Someone seems to like to ride a bike while breakfasting. A strange [socket] is on fitted to the side.
+    Someone seems to like to ride a bike while breakfasting. A strange [socket] is on fitted to the side.
 
 use ergometer
 -----------
@@ -386,15 +386,15 @@ Two metal rods a stuck in the side with two wires connected to them. A rad and a
 
 Look scanner
 ----
-A green pulsing light is emitted from the scanner and shines on everything you hold in front of it.
+    A green pulsing light is emitted from the scanner and shines on everything you hold in front of it.
 
 open scanner
 -----------
-You can't open it without tools.
+    You can't open it without tools.
 
 Look Table
 ----
-A big table is in the center of the room. Under [table] hidden by the tablecloth there is a [cage] with an hamster.
+    A big table is in the center of the room. Under [table] hidden by the tablecloth there is a [cage] with an hamster.
 
 
 Look cage
@@ -414,7 +414,7 @@ ${player} sets the hamster free.
 look hamster **INVENTAR**
 ----------
 
-The hamster has some barcode printed on its belly.
+    The hamster has some barcode printed on its belly.
 
 use hamster scanner
 -------------------
