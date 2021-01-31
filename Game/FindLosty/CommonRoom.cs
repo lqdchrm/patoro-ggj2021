@@ -54,12 +54,13 @@ namespace LostAndFound.Game.FindLosty
 
 
         #region LOOK
-        private static Regex extractionRegex = new Regex(@"\[\s*(?<key>(\w|\s)+)\s*\]", RegexOptions.Compiled);
+        private static Regex extractionRegex = new Regex(@"\[\s*(?<key>([\w\s-])+)\s*\]", RegexOptions.Compiled);
         private void ExtractThings(string text)
         {
             if (text == null) return;
 
             var matches = extractionRegex.Matches(text).OfType<Match>();
+
             foreach (var item in matches.Select(x => x.Groups["key"]?.Value).Where(x => !string.IsNullOrWhiteSpace(x)))
                 this.KnownThings.Add(item.ToLower());
         }
