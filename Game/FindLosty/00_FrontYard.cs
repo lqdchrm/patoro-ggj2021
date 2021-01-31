@@ -54,7 +54,7 @@ namespace LostAndFound.Game.FindLosty
 
             return $@"
                 You're looking at the beautiful front yard of 404 Foundleroy Road.
-                A picket fence surrounds the mansion in front of you.
+                A picket fence surrounds the [mansion] in front of you.
                 There seems to be only one way into the building. A large oak [door].
                 This looks like some kind of maniac lives here.
 
@@ -66,7 +66,8 @@ namespace LostAndFound.Game.FindLosty
 
         protected override string DescribeThing(string thing, GameCommand cmd) => thing switch
         {
-            "door" => "A sturdy wooden [door].",
+            "door" => "A sturdy wooden [door] with a [plate].",
+            "plate" => "It reads: open [door]",
             _ => null
         };
         #endregion
@@ -88,7 +89,7 @@ namespace LostAndFound.Game.FindLosty
         #region KICK
         protected override string KickThing(string thing, GameCommand cmd)
         {
-            var msg = $"You want to kick what?";
+            string msg = null;
 
             switch (thing.ToLowerInvariant())
             {
