@@ -158,16 +158,29 @@ look croc
 --------------
 The [croc] looks hungry. But luckily its chained on a table..
 
-      _____________________                .-._   _ _ _ _ _ _ _ _                    
-     /                    /|     .-''-.__.-'00 /'-' ' ' ' ' ' ' ' '-.                    
-    /                    / |    '.___ '    .  /.--_'-' '-' '-' _'-' '._                    
-   /____________________/ /      V: V 'vv-' / '_   '.       .'  _..' '.'.                    
-  |_____________________|/|       '=.____.=/.--'   :_.__.__:_   '.   : :                    
-   || ||              || || -------------/(((____.-'        '-.  /   : :                    
-   || ||              || ||     snd                         (((-'\ .' /                    
-   || ||              || ||                               _____..'  .'                    
-   ||                 ||                               '-._____.-'                    
-   ||                 ||    
+
+      _____________________ 
+     /                    /|
+    /                    / |
+   /____________________/ / 
+  |_____________________|/| 
+   || ||              || || 
+   || ||              || || 
+   || ||              || || 
+  _||                 ||    
+ | ||                 ||    
+ |
+ |
+ |               .-._   _ _ _ _ _ _ _ _                    
+ |     .-''-.__.-'00 /'-' ' ' ' ' ' ' ' '-.                    
+ |    '.___ '    .  /.--_'-' '-' '-' _'-' '._                    
+ |     V: V 'vv-' / '_   '.       .'  _..' '.'.                    
+  \     '=.____.=/.--'   :_.__.__:_   '.   : :                    
+   \____________/(((____.-'        '-.  /   : :                    
+    snd                         (((-'\ .' /                    
+                              _____..'  .'                    
+                           '-._____.-'                    
+
 
 
 
@@ -281,11 +294,23 @@ You hear something squeak.
 Look
 ----
 There is a [table] with four chairs in one corner.
-A [door] leads to the kitchen.
+On the other side of the room is a [ergometer].
+
+A [door] in the right wall leads to the kitchen. 
 
 Look door
 ----
 The seems to be in good shape. But does not have any handle. Next to it is a machine that looks like some kind of [scanner].
+
+Look ergometer
+----
+Someone seems to like to ride a bike while breakfasting. 
+
+use ergometer
+-----------
+
+You sit down and start to 
+
 
 Look scanner
 ----
@@ -300,19 +325,20 @@ Look cage
 ----
 Its a big cage for a hamster. 
 <hamster not taken>
-The hamster is happily rolling on its back. There seems to be something written on its belly
+The hamster is happily rolling on its back. There seems to be something written on its belly. The cage is locked with a wire.
 
 open cage
 --------
 The hamster jumps out of the cage and now runs in the room.
 `Add hamster to room inventory`
+`set hamster taken`
 `Other Players`
 ${player} sets the hamster free.
 
 look hamster **INVENTAR**
 ----------
 
-The hamster has some barcode printed on its belly
+The hamster has some barcode printed on its belly.
 
 use hamster scanner
 -------------------
