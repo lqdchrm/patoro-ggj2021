@@ -409,10 +409,37 @@ You hear a a faint buzzer from the dining room.
 You're spooked by a buzzer from the right door.
 
 `other players in dining`
-A loud buzzer sounds from the wall. You look around and can see barely a signs showing the numbers 39820.
+A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers 39820 before they vanish.
 
 
 ======================================================================================================
-Livving room
+Living room
 ======================================================================================================
 
+Look
+-----
+You look around in the big living room. The croc is sitting next the door. A big [sopha] stands on an bright red carpet.
+Opposite the seating area is an old [chimney]. Beneath a [lion-head], that hangs next to the [chimney] is a metal [gun-locker].
+
+Look sopha
+----------
+The sopha is made of a dark lether. It looks comfortable.
+
+Look chimney
+----------
+The chimney gas powered, looks like it wasn't used in some time...
+and could need some cleaning.
+
+use chimney
+----------
+You open the gas but nothing streams out. Either it is empty or clogged.
+You close valve again. Better safe then sorry...
+
+look lion-head
+--------------
+The lion look majestic, epically from so close. But its sleeping. You hear it snore.
+
+look gun-locker
+--------------
+A heavy metal locker. There is now way to force your way in and it is secured in the wall.
+Under the handle is a [pinnpad].
