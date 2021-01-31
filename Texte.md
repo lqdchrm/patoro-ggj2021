@@ -106,6 +106,18 @@ Look metal door
 A very study door. It would be blast to open it.
 
 
+Listen
+------
+You hear a barking from the back of the room.
+
+Listen metal door
+------
+You hear scratching on the other side of the very massive door.
+
+Listen phone
+------
+Tuuuuuuuuuuut...
+
 
 
 
