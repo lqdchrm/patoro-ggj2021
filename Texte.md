@@ -408,7 +408,7 @@ You hear a a faint buzzer from the dining room.
 You're spooked by a buzzer from the right door.
 
 `other players in dining`
-A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers 39820 before they vanish.
+A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers #39820 before they vanish.
 
 
 ======================================================================================================
@@ -441,4 +441,24 @@ The lion look majestic, epically from so close. But its sleeping. You hear it sn
 look gun-locker
 --------------
 A heavy metal locker. There is now way to force your way in and it is secured in the wall.
-Under the handle is a [pinnpad].
+A [pinnpad] is mounted under the handle.
+
+look pin-pad
+------------
+The pinpad is a nine number 
+
+`Enable Command 'Enter PIN'`
+
+
+
+open gun-locker
+--------------
+It is locked.
+`Gunlocker open`
+It's already open.
+
+open gun-locker
+--------------
+It is locked.
+`Gunlocker open`
+It's already open.
