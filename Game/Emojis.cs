@@ -13,5 +13,6 @@ namespace LostAndFound.Game
         public const string Keys = "🔑";
         public const string Hamster = "🐹";
         public const string Poo = "💩";
+        public const string Dynamite = "🧨";
     }
 }
