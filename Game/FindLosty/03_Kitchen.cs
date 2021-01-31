@@ -23,9 +23,9 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region Inventory
-        protected override IEnumerable<(string, string)> InitialInventory =>
-            new List<(string, string)> {
-            // ("keys", Emojis.Keys),
+        protected override IEnumerable<(string, string, string)> InitialInventory =>
+            new List<(string, string, string)> {
+            // ("keys", Emojis.Keys, "Some Keys"),
         };
         #endregion
 
@@ -158,7 +158,7 @@ namespace LostAndFound.Game.FindLosty
                     {
                         if (!FridgeDoorOpen)
                         {
-                            Inventory.Add("tofu", Emojis.Heart);
+                            Inventory.Create("tofu", Emojis.Heart, "Some delicios tofu. Consumable by humans and animals.");
                             FridgeDoorOpen = true;
                             return (true, "The refigerator door opens.");
                         }

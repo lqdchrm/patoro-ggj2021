@@ -19,12 +19,12 @@ namespace LostAndFound.Game.FindLosty
         {
             foreach (var item in InitialInventory)
             {
-                Inventory.Add(item.key, item.icon);
+                Inventory.Create(item.key, item.icon, item.desc);
             }
         }
 
         #region Inventory
-        protected virtual IEnumerable<(string key, string icon)> InitialInventory { get; } = new List<(string, string)> { };
+        protected virtual IEnumerable<(string key, string icon, string desc)> InitialInventory { get; } = new List<(string, string, string)> { };
 
         public Inventory Inventory { get; } = new Inventory();
 
@@ -102,6 +102,12 @@ namespace LostAndFound.Game.FindLosty
                 else if (Inventory.ContainsKey(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
+                    if (itemText == null)
+                        itemText = Inventory[thing].Description;
+                }
+                else if (player.Inventory.ContainsKey(thing))
+                {
+                    itemText = player.Inventory[thing].Description;
                 }
                 else if (KnownThings.Contains(thing))
                 {
