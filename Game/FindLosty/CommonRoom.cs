@@ -276,6 +276,7 @@ namespace LostAndFound.Game.FindLosty
 
                 if (success)
                 {
+                    SendGameEvent($"[{player}] opened [{thing}]", player);
                     SendGameEvent(msg);
                 } else
                 {
