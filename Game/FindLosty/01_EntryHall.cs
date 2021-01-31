@@ -48,6 +48,31 @@ _______________________
 | |                 | |
 | |                 | |
 | |                 | |";
+
+        private const string crocChained = @"
+The [croc] looks hungry. But luckily it is chained to a table.
+
+     /                    /|
+    /                    / |
+   /____________________/ / 
+  |_____________________|/| 
+   || ||              || || 
+   || ||              || || 
+   || ||              || || 
+  _||                 ||    
+ | ||                 ||    
+ |
+ |
+ |               .-._   _ _ _ _ _ _ _ _  
+ |     .-''-.__.-'00 /'-' ' ' ' ' ' ' ' '-.
+ |    '.___ '    .  /.--_'-' '-' '-' _'-' '._
+ |     V: V 'vv-' / '_   '.       .'  _..' '.'.
+  \     '=.____.=/.--'   :_.__.__:_   '.   : :
+   \____________/(((____.-'        '-.  /   : :
+    ...                         (((-'\ .' /
+                              _____..'  .'
+                           '-._____.-'
+";
         #endregion
 
         #region Inventory
@@ -118,7 +143,7 @@ _______________________
                     return $@"Some splinters";
 
                 case "croc":
-                    return croc;
+                    return crocChained;
 
                 default:
                     return base.DescribeThing(thing, cmd);
@@ -219,7 +244,11 @@ _______________________
 
                 case "right-door":
                     cmd.Player.SendGameEvent(croc, true);
+                    cmd.Player.Room.SendGameEvent($"[{cmd.Player}] opens the right door...startling.", cmd.Player);
                     return (true, $"You open the door.\nAnd look in the eyes of an An hungry [croc].");
+
+                case "croc":
+                    return (false, "No! Just NO!");
             }
 
             return base.OpenThing(thing, cmd);
