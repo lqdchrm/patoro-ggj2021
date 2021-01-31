@@ -32,7 +32,7 @@ namespace LostAndFound.Engine
             {
                 foreach (var player in Players)
                 {
-                    player.Channel?.SendMessageAsync($"[{player}] {cmd.Message}");
+                    player.Channel?.SendMessageAsync($"[{cmd.Player.Name}] {cmd.Message}");
                 }
             }
         }

@@ -112,7 +112,7 @@ namespace LostAndFound.Engine
             var oldRoom = (oldChannel != null && rooms.ContainsKey(oldChannel.Name)) ? rooms[oldChannel.Name] : null;
             var newRoom = (newChannel != null && rooms.ContainsKey(newChannel.Name)) ? rooms[newChannel.Name] : null;
 
-            // Do not wait for theses
+            // Do not wait for these
             Task.Run(async () =>
             {
                 var member = await guild.GetMemberAsync(e.User.Id);

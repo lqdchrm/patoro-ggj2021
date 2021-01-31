@@ -15,6 +15,19 @@ namespace LostAndFound.Game.FindLosty
         public override string Name => "FrontYard";
 
         #region LocalState
+        private bool frontDoorOpen = false;
+        public bool FrontDoorOpen
+        {
+            get => frontDoorOpen;
+            set
+            {
+                if (!frontDoorOpen)
+                {
+                    frontDoorOpen = true;
+                    Game.EntryHall.Show();
+                }
+            }
+        }
         #endregion
 
         #region Inventory
@@ -101,8 +114,11 @@ namespace LostAndFound.Game.FindLosty
                 case "door":
                     if (KnownThings.Contains("door"))
                     {
-                        if (Game.State.FrontDoorOpen)
+                        if (FrontDoorOpen)
+                        {
+                            cmd.Player.Hit("swinging door");
                             msg = "The open [door] hits the back wall and then swings back and hits your face.";
+                        }
                         else
                         {
                             cmd.Player.Hit("door");
@@ -121,13 +137,13 @@ namespace LostAndFound.Game.FindLosty
             switch (thing.ToLowerInvariant())
             {
                 case "door":
-                    if (Game.State.FrontDoorOpen)
+                    if (FrontDoorOpen)
                     {
                         return (true, "You open the [door] as much as possible.");
                     }
                     else
                     {
-                        Game.State.FrontDoorOpen = true;
+                        FrontDoorOpen = true;
                         return (true, "The [door] swings open. Who doesn't lock their front [door]?");
                     }
                 default:
@@ -149,7 +165,7 @@ namespace LostAndFound.Game.FindLosty
             }
             else if (cmd.Args.Count > 0 && cmd.Args[0] == "door")
             {
-                if (Game.State.FrontDoorOpen)
+                if (FrontDoorOpen)
                 {
                     player.SendGameEvent("You knock on an open [door]. Still no one answers.");
                 }

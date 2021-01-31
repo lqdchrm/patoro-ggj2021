@@ -11,19 +11,5 @@ namespace LostAndFound.Game.FindLosty
         private readonly FindLostyGame Game;
 
         public GameState(FindLostyGame game) { this.Game = game; }
-
-        private bool frontDoorOpen = false;
-        public bool FrontDoorOpen
-        {
-            get => frontDoorOpen;
-            set
-            {
-                if (!frontDoorOpen)
-                {
-                    frontDoorOpen = true;
-                    Game.EntryHall.Show();
-                }
-            }
-        }
     }
 }
