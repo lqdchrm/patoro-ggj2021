@@ -11,7 +11,9 @@ namespace LostAndFound.Game.FindLosty
 {
     public class Player : BasePlayer
     {
-        private int health;
+        const int PLAYER_MAX_HEALTH = 5;
+
+        private int health = PLAYER_MAX_HEALTH;
         int Health
         {
             get => health;
@@ -20,7 +22,14 @@ namespace LostAndFound.Game.FindLosty
                 if (User != null)
                 {
                     if (value == 0 && health > 0)
+                    {
+                        SendGameEventWithState($"You health has depleted and you are now muted. Try to heal yourself to be able to speak again (or ask the server admin to unmute you).");
                         User.ModifyAsync(x => x.Muted = true);
+                    } else if (health == 0 && value > 0)
+                    {
+                        SendGameEventWithState($"You health was restored and you are now unmuted.");
+                        User.ModifyAsync(x => x.Muted = false);
+                    }
                 }
                 health = value;
             }
@@ -38,43 +47,66 @@ namespace LostAndFound.Game.FindLosty
             return $"{Name} {health} {items}";
         }
 
-        public override Task InitAsync()
-        {
-            this.Health = 3;
-            return Task.CompletedTask;
-        }
-
         public void SendGameEventWithState(string msg)
         {
             msg = $"```css\n{msg}\nYour Status: {this}```";
             Channel?.SendMessageAsync(msg);
         }
 
-        public void Hit(string by = null)
+        public bool Hit(string by = null, Player byPlayer = null)
         {
             if (this.Health > 0)
             {
                 this.Health--;
 
                 var msg = "You were hit";
+
                 if (by != null)
+                {
                     msg += $" by {by}";
+                }
+                else if (byPlayer != null)
+                {
+                    byPlayer.SendGameEvent($"You hit [{this}] really hard.");
+                    msg += $" by [{byPlayer}], but it was probably deserved";
+                }
 
                 SendGameEventWithState(msg);
+                return true;
+            } else
+            {
+                if (byPlayer != null)
+                {
+                    byPlayer.SendGameEvent("Why are you hitting dead people?");
+                    byPlayer.Room.SendGameEvent($"[{byPlayer}] is hitting dead [{this}]. Give a big BOOOO.....", byPlayer);
+                }
             }
+            return false;
         }
 
-        public void Heal(string by = null)
+        public bool Heal(string by = null, Player byPlayer = null)
         {
-            if (this.Health < 3)
+            if (this.Health < PLAYER_MAX_HEALTH)
             {
                 this.Health++;
 
-                var msg = "You were healed by ";
+                var msg = "You were healed";
+
                 if (by != null)
+                {
                     msg += $" by {by}";
+                } else if (byPlayer != null)
+                {
+                    byPlayer.SendGameEvent($"You healed [{this}].");
+                    msg += $" by [{byPlayer}]. You really got some friends here.";
+                }
 
                 SendGameEventWithState(msg);
+                return true;
+            } else
+            {
+                SendGameEvent("You need no healing.");
+                return false;
             }
         }
     }

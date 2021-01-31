@@ -32,7 +32,6 @@ namespace LostAndFound.Game.FindLosty
             {
                 case "open": return FrontDoorHasBeenSeen;
                 case "knock": return FrontDoorHasBeenSeen;
-                case "kick": return FrontDoorHasBeenSeen;
 
                 default: return base.IsCommandVisible(cmd);
             }
@@ -49,7 +48,11 @@ namespace LostAndFound.Game.FindLosty
         {
             FrontDoorHasBeenSeen = true;
 
-            string friends = string.Join(", ", Players.Where(p => p != cmd.Player).Select(p => $"[{p}]"));
+            var friends = Players.Where(p => p != cmd.Player);
+            var friendsNames = string.Join(", ", friends.Select(p => $"[{p}]"));
+            var friendsText = friends.Any()
+                ? $"Your friends {friendsNames} are here."
+                : "You are alone.";
 
             return $@"
                 You're looking at the beautiful front yard of 404 Foundleroy Road.
@@ -59,13 +62,13 @@ namespace LostAndFound.Game.FindLosty
 
                 You hear barking.
 
-                Your friends {friends} are here.
+                {friendsText}
             ".FormatMultiline();
         }
 
         protected override string DescribeThing(string thing, GameCommand cmd) => thing switch
         {
-            "door" => "A sturdy wooden door.",
+            "door" => "A sturdy wooden [door].",
             _ => null
         };
         #endregion
@@ -87,18 +90,24 @@ namespace LostAndFound.Game.FindLosty
         #region KICK
         protected override string KickThing(string thing, GameCommand cmd)
         {
+            var msg = $"You want to kick what?";
+
             switch (thing.ToLowerInvariant())
             {
                 case "door":
-                    if (Game.State.FrontDoorOpen)
-                        return "The open door hits the back wall and then swings back and hits your face.";
-                    else
+                    if (FrontDoorHasBeenSeen)
                     {
-                        return "As the old saying goes: 'This will hurt you a lot more than it will the door.' The door shakes. You hurt.";
+                        if (Game.State.FrontDoorOpen)
+                            msg = "The open [door] hits the back wall and then swings back and hits your face.";
+                        else
+                        {
+                            cmd.Player.Hit("door");
+                            msg = "As the old saying goes: 'This will hurt you a lot more than it will the [door].' The [door] shakes. You hurt.";
+                        }
                     }
-                default:
-                    return $"You open [{thing}]. Throw it in the air and put it back.";
+                    break;
             }
+            return msg;
         }
         #endregion
 
@@ -110,12 +119,12 @@ namespace LostAndFound.Game.FindLosty
                 case "door":
                     if (Game.State.FrontDoorOpen)
                     {
-                        return (true, "You open the door as much as possible.");
+                        return (true, "You open the [door] as much as possible.");
                     }
                     else
                     {
                         Game.State.FrontDoorOpen = true;
-                        return (true, "The door swings open. Who doesn't lock their front door?");
+                        return (true, "The [door] swings open. Who doesn't lock their front [door]?");
                     }
                 default:
                     return (false, "Open what?");
@@ -129,28 +138,27 @@ namespace LostAndFound.Game.FindLosty
         public void KnockCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
-            string message = "I SEE ERROR";
 
             if (cmd.Args.Count == 0)
             {
-                message = "Knock what?";
+                player.SendGameEvent("Knock what?");
             }
-            else if (cmd.Args.Count == 1 && cmd.Args[0] == "door")
+            else if (cmd.Args.Count > 0 && cmd.Args[0] == "door")
             {
                 if (Game.State.FrontDoorOpen)
                 {
-                    message = "You knock on an open door. Still no one answers.";
+                    player.SendGameEvent("You knock on an open [door]. Still no one answers.");
                 } else
                 {
-                    message = "You knock on the door. No one answers.";
+                    player.SendGameEvent("You knock on the [door]. No one answers.");
                 }
             }
             else
             {
-                message = $"You knock {cmd.Args[0]} really hard.... Nothing happens.";
+                player.SendGameEvent($"You knock {cmd.Args[0]} really hard.... Nothing happens.");
+                var other = Players.FirstOrDefault(p => p.Name.ToLowerInvariant().Equals(cmd.Args[0].ToLowerInvariant()));
+                other?.SendGameEvent($"You were knocked really hard by [{player}].");
             }
-
-             player.SendGameEvent(message);
         }
         #endregion
     }

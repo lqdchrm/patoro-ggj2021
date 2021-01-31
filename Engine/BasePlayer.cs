@@ -22,7 +22,6 @@ namespace LostAndFound.Engine
             this.Name = name;
             this.Game = game;
         }
-        public virtual Task InitAsync() => Task.CompletedTask;
 
         public void SendGameEvent(string msg)
         {

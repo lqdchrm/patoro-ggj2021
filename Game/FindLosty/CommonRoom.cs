@@ -186,27 +186,67 @@ namespace LostAndFound.Game.FindLosty
 
             var playersKicked = Players
                 .Where(p => p != player)
-                .Where(p => cmd.Message.Contains(p.Name)).ToList();
+                .Where(p => cmd.Message.ToLowerInvariant().Contains(p.Name.ToLowerInvariant())).ToList();
 
             if (playersKicked.Any())
             {
-                playersKicked.ForEach(p => p.Hit(player.Name));
+                playersKicked.ForEach(p => p.Hit(byPlayer: player));
             }
             else
             {
                 var thing = cmd.Args.FirstOrDefault();
                 if (thing != null)
                 {
-                    var msg = KickThing(thing, new GameCommand(cmd));
-                    if (msg != null)
-                        SendGameEvent(msg);
+                    if (player.Inventory.ContainsKey(thing))
+                    {
+                        var msg = $"You kicked [{thing}] into the air, catch it, and put it back.";
+                        SendGameEvent($"{player} kicked [{thing}]", player);
+                        player.SendGameEvent(msg);
+                    }
                     else
-                        player.SendGameEvent("You kicked into thin air.");
+                    {
+                        var msg = KickThing(thing, new GameCommand(cmd));
+                        if (msg != null)
+                        {
+                            player.SendGameEvent(msg);
+                            SendGameEvent($"{player} kicked [{thing}]", player);
+                        }
+                        else
+                            player.SendGameEvent("You kicked into thin air.");
+                    }
                 }
                 else
                 {
                     player.SendGameEvent("You kicked into thin air.");
                 }
+            }
+        }
+        #endregion
+
+        #region HEAL
+        [Command("HEAL", "heal somebody or yourself")]
+        public void HealCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            var msg = "You want to heal whom?";
+
+            var other = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
+            if (other != null)
+            {
+                var otherPlayer = Players.FirstOrDefault(p => p.Name.ToLowerInvariant().Equals(other));
+                if (otherPlayer != null)
+                {
+                    if (otherPlayer.Heal(byPlayer: player))
+                        SendGameEvent($"[{otherPlayer}] was healed by [{player}]", otherPlayer, player);
+                } else
+                {
+                    player.SendGameEvent(msg);
+                }
+            } else
+            {
+                if (player.Heal())
+                    SendGameEvent($"[{player}] self-healed.", player);
             }
         }
         #endregion

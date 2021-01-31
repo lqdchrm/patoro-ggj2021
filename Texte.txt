@@ -8,7 +8,7 @@ One second she was here the next she was gone. Your dog losty just ran away.
    
    You're looking at the beautiful front yard of 404 Foundleroy Road.
    A picket fence surrounds the mansion in front of you.
-   There seems to be only one way into the building. A large oak door.
+   There seems to be only one way into the building. A large oak [door].
    This looks like some kind of maniac lives here.
    
    You here barking.
@@ -23,32 +23,32 @@ One second she was here the next she was gone. Your dog losty just ran away.
 
    Look door
    ---------
-   A sturdy wooden door.
+   A sturdy wooden [door].
 
 
    Knock door (open)
    -----------------
-   You knock on an open door. Still no one answers.
+   You knock on an open [door]. Still no one answers.
    
    Knock door (closed)
    -------------------
-   You knock on the door. No one answers.
+   You knock on the [door]. No one answers.
 
    Kick door (open)
    ----------------
-   The open door hits the back wall and then swings back and hits your face.
+   The open [door] hits the back wall and then swings back and hits your face.
    
    Kick door (closed)
    ------------------
-   As the old saying goes: 'This will hurt you a lot more than it will the door.'
+   As the old saying goes: 'This will hurt you a lot more than it will the [door].'
 
    Open door (closed)  ->  door open, unlock entry hall
    ----------------------------------------------------
-   The door swings open. Who doesn't lock their front door?
+   The [door] swings open. Who doesn't lock their front [door]?
    
    Open door (open)
    ----------------
-   You open the door as much as possible.
+   You open the [door] as much as possible.
 
 
 ======================================================================================================

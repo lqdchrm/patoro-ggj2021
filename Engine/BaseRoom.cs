@@ -68,10 +68,10 @@ namespace LostAndFound.Engine
             BuildCommands();
         }
 
-        public void SendGameEvent(string msg, BasePlayer excludePlayer = null)
+        public void SendGameEvent(string msg, params BasePlayer[] excludePlayer)
         {
             msg = $"```css\n{msg}\n```";
-            foreach(var player in Players.Where(p => excludePlayer != p))
+            foreach(var player in Players.Where(p => !excludePlayer.Contains(p)))
             {
                 player.Channel?.SendMessageAsync(msg);
             }

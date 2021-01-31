@@ -215,8 +215,6 @@ namespace LostAndFound.Engine
 
                 player.User = member;
 
-                await player.InitAsync();
-
                 Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
                 _ = NewPlayer(player).ContinueWith(t =>
                   {
