@@ -30,6 +30,8 @@ namespace LostAndFound.Engine
             BuildCommands();
         }
 
+        public IEnumerable<BasePlayer> Players => Game.Players.Values.Where(p => p.Room == this);
+
         public async Task SendMessageAsync(BasePlayer fromPlayer, string msg)
         {
             var tasks = Game.Players.Values

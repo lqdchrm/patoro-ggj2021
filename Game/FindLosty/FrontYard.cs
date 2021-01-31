@@ -23,7 +23,7 @@ namespace LostAndFound.Game.FindLosty
         {
             return itemKey switch
             {
-                "keys" => "better not",
+                "keys" => null,
                 _ => null
             };
         }

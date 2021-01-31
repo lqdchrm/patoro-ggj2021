@@ -12,6 +12,7 @@ namespace LostAndFound.Game.FindLosty
     public abstract class CommonRoom : BaseRoom
     {
         public new FindLostyGame Game => base.Game as FindLostyGame;
+        public new IEnumerable<Player> Players => base.Players.Cast<Player>();
 
         public virtual Task Show() => Game.SetRoomVisibilityAsync(this, true);
         public virtual Task Hide() => Game.SetRoomVisibilityAsync(this, false);
@@ -43,9 +44,19 @@ namespace LostAndFound.Game.FindLosty
         {
             if (cmd.Player is not Player player) return;
 
-            // TODO
-            await player.SendGameEventAsync("NOT IMPLEMENTED");
+            var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
+            var roomText = await Describe(cmd);
+
+            var msg = roomText;
+            if (items.Any())
+            {
+                msg = $"You can see some things: {string.Join(", ", items)}\n\n{roomText}";
+            }
+
+            await player.SendGameEventAsync(msg);
         }
+        protected virtual async Task<string> Describe(PlayerCommand cmd) => "NOT implemented";
+        protected virtual bool IsItemVisible(string itemKey) => true;
 
 
         [Command("LISTEN", "Listen")]
@@ -77,7 +88,7 @@ namespace LostAndFound.Game.FindLosty
                 var item = Inventory.Transfer(itemKey, player.Inventory);
                 if (item != null)
                 {
-                    await SendGameEventAsync($"{player} now owns {item}", player);
+                    await SendGameEventAsync($"[{player}] now owns {item}", player);
                     await player.SendGameEventWithStateAsync($"You now own {item}");
                 } else
                 {
@@ -85,10 +96,32 @@ namespace LostAndFound.Game.FindLosty
                 }
             } else
             {
-                await player.SendGameEventAsync($"{itemKey} can't be take: {reason}");
+                await player.SendGameEventAsync($"{itemKey} can't be taken: {reason}");
             }
         }
         protected virtual string WhyIsItemNotTakeable(string itemKey) => null;
+
+
+        [Command("DROP", "a [thing], eg DROP keys")]
+        public virtual async Task Drop(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            var itemKey = cmd.Args.FirstOrDefault();
+            if (itemKey == null)
+                return;
+
+            var item = player.Inventory.Transfer(itemKey, Inventory);
+            if (item != null)
+            {
+                await SendGameEventAsync($"[{player}] dropped {item}", player);
+                await player.SendGameEventWithStateAsync($"You dropped {item}");
+            }
+            else
+            {
+                await player.SendGameEventAsync($"You can't {itemKey} not found");
+            }
+        }
 
         [Command("HIT", "Hits an opponent")]
         public async Task HitCommand(PlayerCommand cmd)
