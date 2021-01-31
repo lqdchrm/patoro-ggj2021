@@ -179,13 +179,13 @@ No Just no!
 
 use Tofo croc
 --------------
-Carfully holding the tofo you come closer. The croc bites the tofo.
+Carefully holding the tofu you come closer. The croc bites the tofu.
 
 You assure your hand is still there...
 And it is.
 
 `Other Players`
-${player} goes near the croc and puts the tofo in the mouth of the croc.
+${player} goes near the croc and puts the tofu in the mouth of the croc.
 
 
 `then all`
