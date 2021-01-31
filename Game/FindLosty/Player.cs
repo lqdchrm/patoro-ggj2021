@@ -21,17 +21,18 @@ namespace LostAndFound.Game.FindLosty
             {
                 if (User != null)
                 {
-                    if (value == 0 && health > 0)
+                    var old = health;
+                    health = value;
+                    if (value == 0 && old > 0)
                     {
                         SendGameEventWithState($"You health has depleted and you are now muted. Try to heal yourself to be able to speak again (or ask the server admin to unmute you).");
                         User.ModifyAsync(x => x.Muted = true);
-                    } else if (health == 0 && value > 0)
+                    } else if (old == 0 && value > 0)
                     {
                         SendGameEventWithState($"You health was restored and you are now unmuted.");
                         User.ModifyAsync(x => x.Muted = false);
                     }
                 }
-                health = value;
             }
         }
 
