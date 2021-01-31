@@ -18,6 +18,7 @@ namespace LostAndFound.Game.FindLosty
         bool FridgeDoorOpen = false;
         bool ShelvesDoorOpen = false;
         string ThingInMicroWave = null;
+        string ThingInMicroWaveIcon = null;
 
         #endregion
 
@@ -171,7 +172,7 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         [Command("PUT", "put [something] in [something], eg put door in microwave")]
-        public void KickCommand(PlayerCommand cmd)
+        public void PutCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
 
@@ -181,9 +182,17 @@ namespace LostAndFound.Game.FindLosty
                 {
                     if (cmd.Args[2] == "microwave")
                     {
-                        player.SendGameEvent($"You put the {cmd.Args[0]} in the micowave");
-                        ThingInMicroWave = cmd.Args[0];
-                        player.Inventory.Remove(cmd.Args[0]);
+                        if (ThingInMicroWave != null)
+                        {
+                            player.SendGameEvent($"There is already {ThingInMicroWave} inside");
+                        }
+                        else
+                        {
+                            player.SendGameEvent($"You put the {cmd.Args[0]} in the micowave");
+                            ThingInMicroWave = cmd.Args[0];
+                            ThingInMicroWaveIcon = player.Inventory[cmd.Args[0]];
+                            player.Inventory.Remove(cmd.Args[0]);
+                        }
                     }
                     else
                     {
@@ -199,6 +208,38 @@ namespace LostAndFound.Game.FindLosty
             else
             {
                 player.SendGameEvent($"You need to 'put <something> in <something>'");
+            }
+        }
+
+        [Command("GET", "get [something] from [something], eg get door from microwave")]
+        public void GetCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            if (cmd.Args.Count == 3 && cmd.Args[1] == "from")
+            {
+                    if (cmd.Args[2] == "microwave")
+                    {
+                        if (ThingInMicroWave == cmd.Args[0])
+                        {
+                            ThingInMicroWave = null;
+                            player.Inventory.Add(cmd.Args[0], ThingInMicroWaveIcon);
+                            player.SendGameEvent($"You took {cmd.Args[0]}.");
+                        }
+                        else
+                        {
+                            player.SendGameEvent($"There is no {cmd.Args[0]} in the microwave.");
+                        }
+                    }
+                    else
+                    {
+                        player.SendGameEvent($"I don't see a {cmd.Args[2]}");
+                    }
+
+            }
+            else
+            {
+                player.SendGameEvent($"You need to 'get <something> from <something>'");
             }
         }
     }
