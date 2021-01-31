@@ -63,7 +63,7 @@ To your left is the [wardrobe] and to your right a small table with a [phone]
 
 In the middle of the hall, on both sides in the wall, you'll find two doors.
 
-Both the <kitchen door state(open)>[kitchen door]<kitchen door state(closed)>[left door]</> and the <kitchen door state(open)>[living room door]<kitchen door state(closed)>[right door]</> are made of a massive dark wood.
+Both the <kitchen door state(open)>[dining room door]<kitchen door state(closed)>[left door]</> and the <kitchen door state(open)>[living room door]<kitchen door state(closed)>[right door]</> are made of a massive dark wood.
 
 In the back of the hall is a wide [staircase]. You can also see a [window] on the back of the room if you look past the [staircase].
 
@@ -118,9 +118,114 @@ Listen phone
 ------
 Tuuuuuuuuuuut...
 
+Listen right door
+------
+Something is moving behind the door...
+
+open left door
+--------------
+The door is jammed.
+
+open right door
+--------------
+You open the door. 
+
+And look in the eyes of an An hungry [croc].
+_______________________
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |            .-._ | |            
+| |  .-''-.__.-'00 /| |                
+| | '.___ '    .  /.| |                  
+| |  V: V 'vv-' / '_| |                    
+| |   '=.____.=/.--'| |                   
+| |----------/(((___| |                   
+| |                 | |                  
+| |                 | |                 
+| |                 | |             
+| |                 | |    
+
+
+`Other Players`
+${PLAYER} opens the right door. He startles.
 
 
 
+look croc
+--------------
+The [croc] looks hungry. But luckily its chained on a table..
+
+      _____________________                .-._   _ _ _ _ _ _ _ _                    
+     /                    /|     .-''-.__.-'00 /'-' ' ' ' ' ' ' ' '-.                    
+    /                    / |    '.___ '    .  /.--_'-' '-' '-' _'-' '._                    
+   /____________________/ /      V: V 'vv-' / '_   '.       .'  _..' '.'.                    
+  |_____________________|/|       '=.____.=/.--'   :_.__.__:_   '.   : :                    
+   || ||              || || -------------/(((____.-'        '-.  /   : :                    
+   || ||              || ||     snd                         (((-'\ .' /                    
+   || ||              || ||                               _____..'  .'                    
+   ||                 ||                               '-._____.-'                    
+   ||                 ||    
+
+
+
+open croc
+----------
+
+No Just no!
+
+
+use Tofo croc
+--------------
+Carfully holding the tofo you come closer. The croc bites the tofo.
+
+You assure your hand is still there...
+And it is.
+
+`Other Players`
+${player} goes near the croc and puts the tofo in the mouth of the croc.
+
+
+`then all`
+The croc leaves happily and full its guarding position.
+
+
+use hamster croc
+--------------
+
+The croc looks angry at you. It seems to be vegetarian.
+
+
+`Other Players`
+${player} try's to stuff the hamster in the moth of the croc.
+But the croc is not persuaded.
+
+
+use poop croc
+--------------
+
+The croc stares at you. And snaps for your leg.
+
+`Other Players`
+${player} holds poop in front of the croc. It snaps after the leg.
+
+kick croc
+--------------
+
+You like your leg as it is now.
+
+kick right door
+--------------
+
+The door creak. You need more force.
+
+`after 3 times`
+Maybe with more man power.
+
+`with 2 people`
+It cracks open. You can now enter the dining room.
 
 
 ======================================================================================================
