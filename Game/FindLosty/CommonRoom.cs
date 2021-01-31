@@ -32,7 +32,10 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region HELP
-        protected override bool IsCommandVisible(string cmd) => true;
+        protected override bool IsCommandVisible(string cmd)
+        {
+            return true;
+        }
 
         [Command("HELP", "Lists all available commands for this room")]
         public void HelpCommand(PlayerCommand cmd)
@@ -42,6 +45,7 @@ namespace LostAndFound.Game.FindLosty
             var intro = $"You are currently at {player.Room.Name}.\n";
 
             var commands = string.Join("\n", Commands
+                .Where(cmd => cmd.Name.ToLowerInvariant() != "cheat")
                 .OrderBy(cmd => cmd.Name)
                 .Select(cmd => $"{cmd.Name} - {cmd.Description}")
             );
