@@ -52,6 +52,66 @@ One second she was here the next she was gone. Your dog losty just ran away.
 
 
 ======================================================================================================
+Entry Hall
+======================================================================================================
+
+Look
+----
+
+You are in a great hall. The floor has a black and white checker pattern.
+To your left is the [wardrobe] and to your right a small table with a [phone]
+
+In the middle of the hall, on both sides in the wall, you'll find two doors.
+
+Both the <kitchen door state(open)>[kitchen door]<kitchen door state(closed)>[left door]</> and the <kitchen door state(open)>[living room door]<kitchen door state(closed)>[right door]</> are made of a massive dark wood.
+
+In the back of the hall is a wide [staircase]. You can also see a [window] on the back of the room if you look past the [staircase].
+
+The barking gets loader.
+
+Look wardrobe
+-------------
+The wardrobe can hold many coats and cloaks. But it is empty.
+
+Look phone
+-------------
+An old dark phone with an dialplate. The decorative numbers are written on a white circle.
+
+The 6 looks very used.
+
+Look left|kitchen door
+----------------------
+The massive door from dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.
+
+Look right|living room door
+----------------------
+The massive door from dark wood is still in good condition.
+
+
+Look staircase
+----------------------
+Like many elements in this room the stair is made of a dark wood. But it looks old and not in a good way. It could be a hazard.
+
+In the side of the staircase is a [metal door].
+
+
+Look window
+----------------------
+You look in the garden at the back of the hose.
+
+It could need some care...
+
+Look metal door
+----------------------
+A very study door. It would be blast to open it.
+
+
+
+
+
+
+
+======================================================================================================
 Kitchen
 ======================================================================================================
 <fire pit state(burning)>
