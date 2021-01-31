@@ -55,14 +55,20 @@ namespace LostAndFound.Game.FindLosty
 
         #region LOOK
         private static Regex extractionRegex = new Regex(@"\[\s*(?<key>([\w\s-])+)\s*\]", RegexOptions.Compiled);
-        private void ExtractThings(string text)
+        private string ExtractThings(string text)
         {
-            if (text == null) return;
+            if (text == null) return null;
 
+            string newText = text;
             var matches = extractionRegex.Matches(text).OfType<Match>();
 
             foreach (var item in matches.Select(x => x.Groups["key"]?.Value).Where(x => !string.IsNullOrWhiteSpace(x)))
-                this.KnownThings.Add(item.ToLower());
+            {
+                var normalizedItem = item.Replace(" ", "-").ToLowerInvariant();
+                this.KnownThings.Add(normalizedItem);
+                newText = newText.Replace($"[{item}]", $"[{normalizedItem}]");
+            }
+            return newText;
         }
 
         protected virtual bool IsItemVisible(string itemKey) => true;
@@ -96,7 +102,7 @@ namespace LostAndFound.Game.FindLosty
                 else if (KnownThings.Contains(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
-                    ExtractThings(itemText);
+                    itemText = ExtractThings(itemText);
                 }
 
                 msg = itemText ?? "Hmm, nothing to see.";
@@ -105,7 +111,7 @@ namespace LostAndFound.Game.FindLosty
             {
                 var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
                 var roomText = DescribeRoom(new GameCommand(cmd));
-                ExtractThings(roomText);
+                roomText = ExtractThings(roomText);
 
                 if (items.Any())
                 {

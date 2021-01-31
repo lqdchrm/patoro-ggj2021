@@ -39,12 +39,51 @@ namespace LostAndFound.Game.FindLosty
 
         protected override string DescribeRoom(GameCommand cmd)
         {
-            return base.DescribeRoom(cmd);
+            return $@"
+                You are in a great hall. The floor has a black and white checker pattern.
+                To your left is the [wardrobe] and to your right a small table with a [phone].
+
+                In the middle of the hall, on both sides in the wall, you'll find two doors.
+
+                Both the [left door] and the [right door] are made of a massive dark wood.
+
+                In the back of the hall is a wide [staircase]. You can also see a [window] on the back of the room if you look past the [staircase].
+
+                The barking gets loader.
+            ".FormatMultiline();
         }
 
         protected override string DescribeThing(string thing, GameCommand cmd)
         {
-            return base.DescribeThing(thing, cmd);
+            switch (thing.ToLowerInvariant())
+            {
+
+                case "wardrobe":
+                    return $"The [wardrobe] can hold many coats and cloaks.But it is empty.";
+                
+                case "phone":
+                    return $"An old dark [phone] with an dialplate. The decorative numbers are written on a white circle.\nThe 6 looks very used.";
+                
+                case "left-door":
+                    return $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
+                
+                case "right-door":
+                    return $"The massive door made of dark wood is still in good condition.";
+                
+                case "staircase":
+                    return @$"Like many elements in this room the stairs are made of a dark wood.
+                              But it looks old and ... not in a good way. It could be a hazard.
+                              In the side of the staircase is a [metal door].".FormatMultiline();
+
+                case "windows":
+                    return $"You look into the garden at the back of the house. It could need some care...";
+
+                case "metal-door":
+                    return @$"A very study door. It would be blast to open it.";
+                
+                default:
+                    return base.DescribeThing(thing, cmd);
+            }
         }
         #endregion
 
