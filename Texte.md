@@ -249,6 +249,46 @@ It cracks open. You can now enter the dining room.
 `Other Players`
 ${player} kicks against the door.
 
+
+
+use dynamite metal-door
+-----------------------
+
+You put the dynamite next to the door. Its now [door-dynamite]!
+`remove dynamite item from game`
+`Other Players`
+${player} puts the dynamite next to the door. Its now [door-dynamite]!
+
+
+use door-dynamite matches
+-----------------------
+
+You ignite the fuse cord of the [door-dynamite]!
+`remove dynamite item from game`
+`Other Players`
+${player} knees next to the dynamite
+
+`broadcast to all in the room`
+You learnd the command RUN.
+
+`Start delayed task`
+`broadcast to everyone NOT in frontyard`
+you hear a loud boom after which the hose collapses.
+
+`broadcast to everyone in frontyard`
+The hose collapses in a loud explosion.
+
+Only a the studdy metal door of the basement stil stands.
+Slowly it swings open and Losty runs to you.
+
+RUN
+---
+
+You run out of the house.
+`move player to frontYard`
+
+
+
 ======================================================================================================
 Kitchen
 ======================================================================================================
