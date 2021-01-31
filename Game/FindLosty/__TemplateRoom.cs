@@ -50,6 +50,10 @@ namespace LostAndFound.Game.FindLosty
         {
             return base.MakeSounds(cmd);
         }
+        protected override string ListenAtThing(string thing, GameCommand cmd)
+        {
+            return base.ListenAtThing(thing, cmd);
+        }
         #endregion
 
         #region TAKE

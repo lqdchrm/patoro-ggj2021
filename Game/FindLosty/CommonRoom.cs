@@ -145,13 +145,33 @@ namespace LostAndFound.Game.FindLosty
             return texts.TakeOneRandom();
         }
 
+        protected virtual string ListenAtThing(string thing, GameCommand cmd) => null;
+
         [Command("LISTEN", "Listen")]
         public void ListenCommand(PlayerCommand cmd)
         {
             if (cmd.Player is not Player player) return;
 
-            player.SendGameEvent(MakeSounds(new GameCommand(cmd)));
-            SendGameEvent($"[{player}] is listening.", player);
+            var thing = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
+            if (thing != null)
+            {
+                var msg = ListenAtThing(thing, new GameCommand(cmd));
+                if (msg != null)
+                {
+                    player.SendGameEvent(msg);
+                    SendGameEvent($"[{player}] is listening at [{thing}].", player);
+                }
+                else
+                {
+                    player.SendGameEvent("You can hear nothing.");
+                    SendGameEvent($"[{player}] is listening at [{thing}].", player);
+                }
+            }
+            else
+            {
+                player.SendGameEvent(MakeSounds(new GameCommand(cmd)));
+                SendGameEvent($"[{player}] is listening.", player);
+            }
         }
         #endregion
 

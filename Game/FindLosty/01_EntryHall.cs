@@ -75,7 +75,7 @@ namespace LostAndFound.Game.FindLosty
                               But it looks old and ... not in a good way. It could be a hazard.
                               In the side of the staircase is a [metal door].".FormatMultiline();
 
-                case "windows":
+                case "window":
                     return $"You look into the garden at the back of the house. It could need some care...";
 
                 case "metal-door":
@@ -90,8 +90,19 @@ namespace LostAndFound.Game.FindLosty
         #region LISTEN
         protected override string MakeSounds(GameCommand cmd)
         {
-            return base.MakeSounds(cmd);
+            return "You hear a barking from the back of the room.";
         }
+
+        protected override string ListenAtThing(string thing, GameCommand cmd)
+        {
+            switch (thing)
+            {
+                case "metal-door": return $"You hear scratching on the other side of the very massive door.";
+                case "phone": return $"Beeeeeeeeeeeeeeeeeeeeeeeeeeeeeep.....";
+                default: return base.ListenAtThing(thing, cmd);
+            }
+        }
+
         #endregion
 
         #region TAKE

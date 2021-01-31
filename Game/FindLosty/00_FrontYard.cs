@@ -77,6 +77,11 @@ namespace LostAndFound.Game.FindLosty
         {
             return "You here distant barking. It definitely comes from the mansion in front of you.";
         }
+
+        protected override string ListenAtThing(string thing, GameCommand cmd)
+        {
+            return base.ListenAtThing(thing, cmd);
+        }
         #endregion
 
         #region TAKE
