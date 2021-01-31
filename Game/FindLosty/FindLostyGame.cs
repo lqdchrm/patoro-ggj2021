@@ -40,16 +40,76 @@ namespace LostAndFound.Game.FindLosty
             PlayerCommandSent += OnPlayerCommandSent;
         }
 
+        protected override async Task ShowOpening(Func<string, Task> post)
+        {
+            await post("#Find Losty#");
+            await post(@"
+               *         .              *            _.---._      
+                             ___   .            ___.'       '.   *
+        .              _____[LLL]______________[LLL]_____     \
+                      /     [LLL]              [LLL]     \     |
+                     /____________________________________\    |    .
+                      )==================================(    /
+     .      *         '|I .-. I .-. I .--. I .-. I .-. I|'  .'
+                  *    |I |+| I |+| I |. | I |+| I |+| I|-'`       *
+                       |I_|+|_I_|+|_I_|__|_I_|+|_I_|+|_I|      .
+              .       /_I_____I_____I______I_____I_____I_\
+                       )================================(   *
+       *         _     |I .-. I .-. I .--. I .-. I .-. I|          *
+                |u|  __|I |+| I |+| I |<>| I |+| I |+| I|    _         .
+           __   |u|_|uu|I |+| I |+| I |~ | I |+| I |+| I| _ |U|     _
+       .  |uu|__|u|u|u,|I_|+|_I_|+|_I_|__|_I_|+|_I_|+|_I||n|| |____|u|
+          |uu|uu|_,.-' /I_____I_____I______I_____I_____I\`'-. |uu u|u|__
+          |uu.-'`      #############(______)#############    `'-. u|u|uu|
+         _.'`              ~""^""~   (________)   ~""^""^~           `'-.|uu|
+");
+            await post(@"
+      ,''          .'    _                             _ `'-.        `'-.
+  ~""^""~    _,'~""^""~    _( )_                         _( )_   `'-.        ~""^""~
+      _  .'            |___|                         |___|      ~""^""~     _
+    _( )_              |_|_|          () ()          |_|_|              _( )_
+    |___|/\/\/\/\/\/\/\|___|/\/\/\/\/\|| ||/\/\/\/\/\|___|/\/\/\/\/\/\/\|___|
+    |_|_|\/\/\/\/\/\/\/|_|_|\/\/\/\/\/|| ||\/\/\/\/\/|_|_|\/\/\/\/\/\/\/|_|_|
+    |___|/\/\/\/\/\/\/\|___|/\/\/\/\/\|| ||/\/\/\/\/\|___|/\/\/\/\/\/\/\|___|
+    |_|_|\/\/\/\/\/\/\/|_|_|\/\/\/\/\/[===]\/\/\/\/\/|_|_|\/\/\/\/\/\/\/|_|_|
+    |___|/\/\/\/\/\/\/\|___|/\/\/\/\/\|| ||/\/\/\/\/\|___|/\/\/\/\/\/\/\|___|
+    |_|_|\/\/\/\/\/\/\/|_|_|\/\/\/\/\/|| ||\/\/\/\/\/|_|_|\/\/\/\/\/\/\/|_|_|
+    |___|/\/\/\/\/\/\/\|___|/\/\/\/\/\|| ||/\/\/\/\/\|___|/\/\/\/\/\/\/\|___|
+~""""~|_|_|\/\/\/\/\/\/\/|_|_|\/\/\/\/\/|| ||\/\/\/\/\/|_|_|\/\/\/\/\/\/\/|_lc|~""""~
+   [_____]            [_____]                       [_____]            [_____]
+");
+
+            await post(@"
+This is a cooperative textbase adventure.
+
+When you enter the first Voice chat of this game,
+a text channel only accessable for you will be created.
+
+This channel will tell you everything that happesn in the game
+and your textinput will controle your character.
+
+While progressing the game you will unlock new rooms.
+You can navigate between the rooms by switching the voice channels.
+
+Happy gaming :)
+".FormatMultiline());
+
+
+        }
+
+
+
         private void OnPlayerCommandSent(object sender, PlayerCommand e)
         {
             if (e.Player.Room is CommonRoom room)
             {
                 room.HandleCommand(e);
-            } else if (e.Player is Player player)
+            }
+            else if (e.Player is Player player)
             {
                 player.SendGameEvent("Command ignored, Please join a Game Voice-Channel.");
             }
-        
+
         }
 
         private void OnPlayerChangedRoom(object sender, PlayerRoomChange e)

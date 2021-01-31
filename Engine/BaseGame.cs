@@ -12,7 +12,7 @@ using System.Collections.Concurrent;
 using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
-{ 
+{
     public abstract class BaseGame : IDisposable
     {
         private DiscordClient client;
@@ -91,8 +91,17 @@ namespace LostAndFound.Engine
             Console.Error.WriteLine("[ENGINE] Adding default channels ...");
             parentChannel = await this.guild.CreateChannelAsync(this.Name, ChannelType.Category);
             helpChannel = await this.guild.CreateChannelAsync("Help", ChannelType.Text, parentChannel);
+
+            await ShowOpening(message => this.helpChannel.SendMessageAsync(message));
+
             Console.Error.WriteLine("[ENGINE] ... default channels added");
         }
+
+        protected virtual Task ShowOpening(Func<string, Task> post)
+        {
+            return Task.CompletedTask;
+        }
+
 
         private Task VoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs e)
         {
@@ -168,7 +177,7 @@ namespace LostAndFound.Engine
         {
             rooms.Add(room.Name, room);
             room.Game = this;
-                        
+
             room.VoiceChannel = await guild.CreateChannelAsync(room.Name, ChannelType.Voice, parentChannel);
 
             _ = SetRoomVisibility(room, visible);
