@@ -177,39 +177,39 @@ open croc
 No Just no!
 
 
-use Tofo croc
+use Tofu croc
 --------------
-Carefully holding the tofu you come closer. The croc bites the tofu.
+Carefully holding the tofu you come closer. The [croc] bites the tofu.
 
 You assure your hand is still there...
 And it is.
 
 `Other Players`
-${player} goes near the croc and puts the tofu in the mouth of the croc.
+${player} goes near the [croc] and puts the tofu in the mouth of the [croc].
 
 
 `then all`
-The croc leaves happily and full its guarding position.
+The [croc] leaves happily and full its guarding position.
 
 
 use hamster croc
 --------------
 
-The croc looks angry at you. It seems to be vegetarian.
+The [croc] looks angry at you. It seems to be vegetarian.
 
 
 `Other Players`
-${player} try's to stuff the hamster in the moth of the croc.
-But the croc is not persuaded.
+${player} try's to stuff the hamster in the moth of the [croc].
+But the [croc] is not persuaded.
 
 
 use poop croc
 --------------
 
-The croc stares at you. And snaps for your leg.
+The [croc] stares at you. And snaps for your leg.
 
 `Other Players`
-${player} holds poop in front of the croc. It snaps after the leg.
+${player} holds poop in front of the [croc]. It snaps after the leg.
 
 kick croc
 --------------
