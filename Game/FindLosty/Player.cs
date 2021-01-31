@@ -45,7 +45,7 @@ namespace LostAndFound.Game.FindLosty
         {
             var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
             var items = string.Join("", Inventory.Values);
-            return $"{Name} {health} {items}";
+            return $"{Emojis.Player} {Name} {health} {items}";
         }
 
         public void SendGameEventWithState(string msg)

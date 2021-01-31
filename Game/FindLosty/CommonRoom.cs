@@ -334,6 +334,7 @@ namespace LostAndFound.Game.FindLosty
             if (thing != null)
             {
                 var (success, msg) = OpenThing(thing, new GameCommand(cmd));
+                msg = ExtractThings(msg);
 
                 if (success)
                 {
