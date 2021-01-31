@@ -156,6 +156,12 @@ namespace LostAndFound.Game.FindLosty
             var reason = WhyIsItemNotTakeable(itemKey);
             if (reason is null)
             {
+                if (KnownThings.Contains(itemKey))
+                {
+                    player.SendGameEvent("You can't take [{itemKey}].");
+                    return;
+                }
+
                 var item = Inventory.Transfer(itemKey, player.Inventory);
                 if (item != null)
                 {
@@ -216,7 +222,7 @@ namespace LostAndFound.Game.FindLosty
             }
             else
             {
-                var thing = cmd.Args.FirstOrDefault();
+                var thing = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
                 if (thing != null)
                 {
                     if (player.Inventory.ContainsKey(thing))
@@ -232,9 +238,13 @@ namespace LostAndFound.Game.FindLosty
                         {
                             player.SendGameEvent(msg);
                             SendGameEvent($"{player} kicked [{thing}]", player);
+                        } else if (KnownThings.Contains(thing))
+                        {
+                            player.SendGameEvent($"You kicked [{thing}]. Nothing happened..");
+                            SendGameEvent($"{player} kicked [{thing}]", player);
                         }
                         else
-                            player.SendGameEvent("You kicked into thin air.");
+                            player.SendGameEvent($"You kicked into thin air.");
                     }
                 }
                 else
@@ -260,7 +270,6 @@ namespace LostAndFound.Game.FindLosty
             }
             else
             {
-
                 var other = cmd.GetTextMentions().FirstOrDefault();
                 if (other != null)
                 {
