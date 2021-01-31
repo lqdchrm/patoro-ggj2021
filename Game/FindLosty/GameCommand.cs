@@ -13,7 +13,7 @@ namespace LostAndFound.Game.FindLosty
         public GameCommand(PlayerCommand inner) => this.inner = inner;
         public string Message => inner?.Message;
         public Player Player => inner?.Player as Player;
-        public IList<Player> Mentions => inner?.Mentions.Cast<Player>().ToList();
+        public IList<Player> Mentions => this.inner.GetTextMentions();
         public string Command => inner?.Command;
         public IList<string> Args => inner?.Args;
     }

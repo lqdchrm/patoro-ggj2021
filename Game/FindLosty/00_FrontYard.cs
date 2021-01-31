@@ -15,12 +15,14 @@ namespace LostAndFound.Game.FindLosty
         public override string Name => "FrontYard";
 
         #region LocalState
+        //TODO: Only for player that has seen it?
         bool FrontDoorHasBeenSeen = false;
         #endregion
 
         #region Inventory
         protected override IEnumerable<(string, string)> InitialInventory =>
-            new List<(string, string)> {
+            new List<(string, string)>
+            {
                 // ("keys", Emojis.Keys),
             };
         #endregion
@@ -28,7 +30,7 @@ namespace LostAndFound.Game.FindLosty
         #region HELP
         protected override bool IsCommandVisible(string cmd)
         {
-            switch(cmd.ToLowerInvariant())
+            switch (cmd.ToLowerInvariant())
             {
                 case "open": return FrontDoorHasBeenSeen;
                 case "knock": return FrontDoorHasBeenSeen;
@@ -114,7 +116,7 @@ namespace LostAndFound.Game.FindLosty
         #region OPEN
         protected override (bool succes, string msg) OpenThing(string thing, GameCommand cmd)
         {
-            switch(thing.ToLowerInvariant())
+            switch (thing.ToLowerInvariant())
             {
                 case "door":
                     if (Game.State.FrontDoorOpen)
@@ -148,15 +150,16 @@ namespace LostAndFound.Game.FindLosty
                 if (Game.State.FrontDoorOpen)
                 {
                     player.SendGameEvent("You knock on an open [door]. Still no one answers.");
-                } else
+                }
+                else
                 {
                     player.SendGameEvent("You knock on the [door]. No one answers.");
                 }
             }
             else
             {
-                player.SendGameEvent($"You knock {cmd.Args[0]} really hard.... Nothing happens.");
-                var other = Players.FirstOrDefault(p => p.Name.ToLowerInvariant().Equals(cmd.Args[0].ToLowerInvariant()));
+                var other = cmd.GetTextMentions().Intersect(this.Players).FirstOrDefault();
+                player.SendGameEvent($"You knock {other?.Name ?? cmd.Args[0]} really hard.... Nothing happens.");
                 other?.SendGameEvent($"You were knocked really hard by [{player}].");
             }
         }
