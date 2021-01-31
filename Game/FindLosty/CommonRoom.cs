@@ -160,7 +160,10 @@ namespace LostAndFound.Game.FindLosty
 
             var itemKey = cmd.Args.FirstOrDefault();
             if (itemKey == null)
+            {
+                player.SendGameEvent("Drop what?");
                 return;
+            }
 
             var item = player.Inventory.Transfer(itemKey, Inventory);
             if (item != null)
@@ -170,7 +173,7 @@ namespace LostAndFound.Game.FindLosty
             }
             else
             {
-                player.SendGameEvent($"You can't drop this. {itemKey} not found");
+                player.SendGameEvent($"You could drop this ... but you don't have [{itemKey}]");
             }
         }
         #endregion
