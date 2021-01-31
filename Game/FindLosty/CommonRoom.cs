@@ -330,7 +330,7 @@ namespace LostAndFound.Game.FindLosty
         {
             if (cmd.Player is not Player player) return;
 
-            var thing = cmd.Args.FirstOrDefault();
+            var thing = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
             if (thing != null)
             {
                 var (success, msg) = OpenThing(thing, new GameCommand(cmd));
