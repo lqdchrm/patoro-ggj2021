@@ -33,8 +33,8 @@ namespace LostAndFound.Game.FindLosty
         #region Inventory
         protected override IEnumerable<(string, string)> InitialInventory =>
             new List<(string, string)> {
-                // ("keys", Emojis.Keys),
-            };
+            // ("keys", Emojis.Keys),
+        };
         #endregion
 
         #region HELP
@@ -75,7 +75,7 @@ namespace LostAndFound.Game.FindLosty
                     return $"The [wardrobe] can hold many coats and cloaks.But it is empty.";
                 
                 case "phone":
-                    return $"An old dark [phone] with an dialplate. The decorative numbers are written on a white circle.\nThe 6 looks very used.";
+                    return $"An old dark [phone] with a dialplate. The decorative numbers are written on a white circle.\nThe 6 looks very used.";
                 
                 case "left-door":
                     return $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
@@ -85,14 +85,14 @@ namespace LostAndFound.Game.FindLosty
                 
                 case "staircase":
                     return @$"Like many elements in this room the stairs are made of a dark wood.
-                              But it looks old and ... not in a good way. It could be a hazard.
-                              In the side of the staircase is a [metal door].".FormatMultiline();
+                        But it looks old and ... not in a good way. It could be a hazard.
+                        In the side of the staircase is a [metal door].".FormatMultiline();
 
                 case "window":
                     return $"You look into the garden at the back of the house. It could need some care...";
 
                 case "metal-door":
-                    return @$"A very study door. It would be blast to open it.";
+                    return @$"A very study door. It would be a blast to open it.";
                 
                 default:
                     return base.DescribeThing(thing, cmd);
@@ -103,7 +103,7 @@ namespace LostAndFound.Game.FindLosty
         #region LISTEN
         protected override string MakeSounds(GameCommand cmd)
         {
-            return "You hear a barking from the back of the room.";
+            return "You hear barking from the back of the room.";
         }
 
         protected override string ListenAtThing(string thing, GameCommand cmd)

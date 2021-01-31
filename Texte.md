@@ -1,4 +1,11 @@
 ======================================================================================================
+game manual
+======================================================================================================
+- how to move between rooms
+- you can't interact with things without seeing them
+
+
+======================================================================================================
 Front yard
 ======================================================================================================
 One second she was here the next she was gone. Your dog losty just ran away.
@@ -278,6 +285,7 @@ A large stand-alone refigerator. <power cord state>
 
 Look fire pit / Look pit
 ------------------------
+<fire pit state>
 
 Look fire
 ---------

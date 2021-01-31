@@ -353,6 +353,47 @@ namespace LostAndFound.Game.FindLosty
                 SendGameEvent($"[{player}] failed to open {thing}", player);
             }
         }
+
+        [Command("CHEAT", "super secret command")]
+        public void CheatCommand(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            if (cmd.Args.Count == 2 && cmd.Args[0] == "open")
+            {
+                switch (cmd.Args[1])
+                {
+                    case "00":
+                        {
+                        Game.FrontYard.Show();
+                        } break;
+                    case "01":
+                        {
+                        Game.EntryHall.Show();
+                        } break;
+                    case "02":
+                        {
+                        Game.DiningRoom.Show();
+                        } break;
+                    case "03":
+                        {
+                        Game.Kitchen.Show();
+                        } break;
+                    case "04":
+                        {
+                        Game.LivingRoom.Show();
+                        } break;
+                    case "05":
+                        {
+                        Game.Cellar.Show();
+                        } break;
+                    default:
+                        {
+                        } break;
+                }
+                SendGameEvent($"[{player}] opened {cmd.Args[1]}", player);
+            }
+        }
         #endregion
     }
 }
