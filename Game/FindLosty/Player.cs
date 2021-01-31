@@ -26,7 +26,8 @@ namespace LostAndFound.Game.FindLosty
             }
         }
 
-        public readonly Dictionary<string, string> Inventory = new Dictionary<string, string>();
+        public readonly Inventory Inventory = new Inventory();
+        public new CommonRoom Room => (base.Room as CommonRoom);
 
         public Player(string name, FindLostyGame game) : base(game, name) { }
 
@@ -64,7 +65,7 @@ namespace LostAndFound.Game.FindLosty
                 await Channel.SendMessageAsync(msg);
         }
 
-        public async Task HitAsync( string by = null)
+        public async Task HitAsync(string by = null)
         {
             if (this.Health > 0)
             {

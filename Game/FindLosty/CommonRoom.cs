@@ -16,6 +16,7 @@ namespace LostAndFound.Game.FindLosty
         public virtual Task Show() => Game.SetRoomVisibilityAsync(this, true);
         public virtual Task Hide() => Game.SetRoomVisibilityAsync(this, false);
 
+        public Inventory Inventory { get; } = new Inventory();
 
         protected override bool IsCommandVisible(string cmd) => true;
 
@@ -60,6 +61,34 @@ namespace LostAndFound.Game.FindLosty
 
             await player.SendGameEventAsync(texts.TakeOneRandom());
         }
+
+        [Command("TAKE", "pick up or take a [thing], eg TAKE keys")]
+        public virtual async Task Take(PlayerCommand cmd)
+        {
+            if (cmd.Player is not Player player) return;
+
+            var itemKey = cmd.Args.FirstOrDefault();
+            if (itemKey == null)
+                return;
+
+            var reason = WhyIsItemNotTakeable(itemKey);
+            if (reason is null)
+            {
+                var item = Inventory.Transfer(itemKey, player.Inventory);
+                if (item != null)
+                {
+                    await SendGameEventAsync($"{player} now owns {item}", player);
+                    await player.SendGameEventWithStateAsync($"You now own {item}");
+                } else
+                {
+                    await player.SendGameEventAsync($"{itemKey} not found");
+                }
+            } else
+            {
+                await player.SendGameEventAsync($"{itemKey} can't be take: {reason}");
+            }
+        }
+        protected virtual string WhyIsItemNotTakeable(string itemKey) => null;
 
         [Command("HIT", "Hits an opponent")]
         public async Task HitCommand(PlayerCommand cmd)

@@ -14,6 +14,20 @@ namespace LostAndFound.Game.FindLosty
     {
         public override string Name => "FrontYard";
 
+        public FrontYard() : base()
+        {
+            Inventory.Add("keys", Emojis.Keys);
+        }
+
+        protected override string WhyIsItemNotTakeable(string itemKey)
+        {
+            return itemKey switch
+            {
+                "keys" => "better not",
+                _ => null
+            };
+        }
+
         protected override bool IsCommandVisible(string cmd)
         {
             switch (cmd)

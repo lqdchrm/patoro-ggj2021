@@ -38,11 +38,12 @@ namespace LostAndFound.Engine
             await Task.WhenAll(tasks);
         }
 
-        public async Task SendGameEventAsync(string msg)
+        public async Task SendGameEventAsync(string msg, BasePlayer excludePlayer = null)
         {
             msg = $"```css\n{msg}\n```";
             var tasks = Game.Players.Values
                 .Where(p => p.Room == this)
+                .Where(p => excludePlayer != p)
                 .Select(player => player.Channel?.SendMessageAsync(msg));
             await Task.WhenAll(tasks);
         }
