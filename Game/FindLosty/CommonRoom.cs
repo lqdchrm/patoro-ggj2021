@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LostAndFound.Game.FindLosty
@@ -16,7 +17,7 @@ namespace LostAndFound.Game.FindLosty
 
         public CommonRoom()
         {
-            foreach(var item in InitialInventory)
+            foreach (var item in InitialInventory)
             {
                 Inventory.Add(item.key, item.icon);
             }
@@ -53,9 +54,12 @@ namespace LostAndFound.Game.FindLosty
 
 
         #region LOOK
+        private static Regex extractionRegex = new Regex(@"\[\s*(?<key>(\w|\s)+)\s*\]", RegexOptions.Compiled);
         private void ExtractThings(string text)
         {
-            // TODO: extract [things] and add to KnownThings
+            var matches = extractionRegex.Matches(text).OfType<Match>();
+            foreach (var item in matches.Select(x => x.Groups["key"]?.Value).Where(x => !string.IsNullOrWhiteSpace(x)))
+                this.KnownThings.Add(item);
         }
 
         protected virtual bool IsItemVisible(string itemKey) => true;
@@ -85,14 +89,16 @@ namespace LostAndFound.Game.FindLosty
                 else if (Inventory.ContainsKey(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
-                } else if (KnownThings.Contains(thing))
+                }
+                else if (KnownThings.Contains(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
                     ExtractThings(itemText);
                 }
 
                 msg = itemText ?? "Hmm, nothing to see.";
-            } else
+            }
+            else
             {
                 var items = Inventory.Where(kvp => IsItemVisible(kvp.Key)).Select(kvp => $"[{kvp.Value}{kvp.Key}]");
                 var roomText = DescribeRoom(new GameCommand(cmd));
@@ -101,7 +107,8 @@ namespace LostAndFound.Game.FindLosty
                 if (items.Any())
                 {
                     msg = $"You can see some things: {string.Join(", ", items)}\n\n{roomText}";
-                } else
+                }
+                else
                 {
                     msg = roomText;
                 }
@@ -161,11 +168,13 @@ namespace LostAndFound.Game.FindLosty
                 {
                     SendGameEvent($"[{player}] now owns {item}", player);
                     player.SendGameEventWithState($"You now own {item}");
-                } else
+                }
+                else
                 {
                     player.SendGameEvent($"{itemKey} not found");
                 }
-            } else
+            }
+            else
             {
                 player.SendGameEvent($"{itemKey} can't be taken: {reason}");
             }
@@ -291,12 +300,14 @@ namespace LostAndFound.Game.FindLosty
                 {
                     SendGameEvent($"[{player}] opened [{thing}]", player);
                     SendGameEvent(msg);
-                } else
+                }
+                else
                 {
                     player.SendGameEvent(msg);
                     SendGameEvent($"[{player}] failed to open {thing}", player);
                 }
-            } else
+            }
+            else
             {
                 player.SendGameEvent("You want to open what?");
                 SendGameEvent($"[{player}] failed to open {thing}", player);
