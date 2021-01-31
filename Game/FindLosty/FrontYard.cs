@@ -24,9 +24,9 @@ namespace LostAndFound.Game.FindLosty
         {
             return itemKey switch
             {
-                "keys" => "better not",
-                    _ => null
-                    };
+                "keys" => null,
+                _ => null
+            };
         }
 
         protected override bool IsCommandVisible(string cmd)

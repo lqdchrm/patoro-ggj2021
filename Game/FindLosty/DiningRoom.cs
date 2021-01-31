@@ -14,6 +14,11 @@ namespace LostAndFound.Game.FindLosty
     {
         public override string Name => "DiningRoom";
 
+        public DiningRoom()
+        {
+            Inventory.Add("hamster", Emojis.Hamster);
+        }
+
         protected override bool IsCommandVisible(string cmd)
         {
             switch (cmd)

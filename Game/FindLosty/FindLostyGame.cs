@@ -31,7 +31,7 @@ namespace LostAndFound.Game.FindLosty
 
             await AddRoomAsync(FrontYard, true);
             await AddRoomAsync(EntryHall, false);
-            await AddRoomAsync(DiningRoom, false);
+            await AddRoomAsync(DiningRoom, true);
             await AddRoomAsync(Kitchen, false);
             await AddRoomAsync(LivingRoom, false);
             await AddRoomAsync(Cellar, false);
