@@ -66,7 +66,15 @@ namespace LostAndFound.Game.FindLosty
             if (thing != null)
             {
                 string itemText = null;
-                if (Inventory.ContainsKey(thing) || IsItemVisible(thing))
+                if (cmd.GetTextMentions().Any())
+                {
+                    var other = cmd.GetTextMentions().FirstOrDefault();
+                    var attribs = new string[] { "beautiful", "scary", "ugly", "marvelous" };
+                    player.SendGameEvent($"[{other}] looks {attribs.TakeOneRandom()}.");
+                    other.SendGameEvent($"[{player}] is staring at you.");
+                    return;
+                }
+                else if (Inventory.ContainsKey(thing) || IsItemVisible(thing))
                 {
                     itemText = DescribeThing(thing, new GameCommand(cmd));
                 }
@@ -187,9 +195,7 @@ namespace LostAndFound.Game.FindLosty
         {
             if (cmd.Player is not Player player) return;
 
-            var playersKicked = Players
-                .Where(p => p != player)
-                .Where(p => cmd.Message.ToLowerInvariant().Contains(p.Name.ToLowerInvariant())).ToList();
+            var playersKicked = cmd.GetTextMentions().ToList();
 
             if (playersKicked.Any())
             {
@@ -234,22 +240,24 @@ namespace LostAndFound.Game.FindLosty
 
             var msg = "You want to heal whom?";
 
-            var other = cmd.Args.FirstOrDefault()?.ToLowerInvariant();
-            if (other != null)
-            {
-                var otherPlayer = Players.FirstOrDefault(p => p.Name.ToLowerInvariant().Equals(other));
-                if (otherPlayer != null)
-                {
-                    if (otherPlayer.Heal(byPlayer: player))
-                        SendGameEvent($"[{otherPlayer}] was healed by [{player}]", otherPlayer, player);
-                } else
-                {
-                    player.SendGameEvent(msg);
-                }
-            } else
+            if (cmd.Args.Count == 0)
             {
                 if (player.Heal())
                     SendGameEvent($"[{player}] self-healed.", player);
+            }
+            else
+            {
+
+                var other = cmd.GetTextMentions().FirstOrDefault();
+                if (other != null)
+                {
+                    if (other.Heal(byPlayer: player))
+                        SendGameEvent($"[{other}] was healed by [{player}]", other, player);
+                }
+                else
+                {
+                    player.SendGameEvent(msg);
+                }
             }
         }
         #endregion
