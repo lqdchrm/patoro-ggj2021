@@ -11,6 +11,9 @@ namespace LostAndFound.Game.FindLosty
     {
         public override string Name => throw new NotImplementedException();
 
+        #region LocalState
+        #endregion
+
         #region Inventory
         protected override IEnumerable<(string, string)> InitialInventory =>
             new List<(string, string)> {
@@ -54,9 +57,6 @@ namespace LostAndFound.Game.FindLosty
         {
             return base.WhyIsItemNotTakeable(itemKey);
         }
-        #endregion
-
-        #region DROP
         #endregion
 
         #region KICK

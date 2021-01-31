@@ -23,7 +23,7 @@ namespace LostAndFound.Game.FindLosty
         protected override IEnumerable<(string, string)> InitialInventory =>
             new List<(string, string)>
             {
-                // ("keys", Emojis.Keys),
+                ("poo", Emojis.Poo),
             };
         #endregion
 
