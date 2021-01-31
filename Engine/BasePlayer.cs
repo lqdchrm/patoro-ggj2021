@@ -23,9 +23,16 @@ namespace LostAndFound.Engine
             this.Game = game;
         }
 
-        public void SendGameEvent(string msg)
+        public void SendGameEvent(string msg, bool isImage = false)
         {
-            msg = $"```css\n{msg}\n```";
+            if (isImage)
+            {
+                msg = $"```\n{msg}\n```";
+            }
+            else
+            {
+                msg = $"```css\n{msg}\n```";
+            }
             Channel?.SendMessageAsync(msg);
         }
 

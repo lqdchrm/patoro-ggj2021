@@ -24,7 +24,7 @@ namespace LostAndFound.Engine
         internal void HandleCommand(PlayerCommand cmd)
         {
             MethodInfo method;
-            if (IsCommandVisible(cmd.Command) && CommandMethods.TryGetValue(cmd.Command, out method))
+            if (IsCommandVisible(cmd.Command.ToUpperInvariant()) && CommandMethods.TryGetValue(cmd.Command.ToUpperInvariant(), out method))
             {
                 method.Invoke(this, new object[] { cmd });
             }
@@ -43,8 +43,8 @@ namespace LostAndFound.Engine
             foreach (var method in methods)
             {
                 var attrib = method.GetCustomAttribute<CommandAttribute>();
-                CommandMethods.Add(attrib.Name, method);
-                CommandDefs.Add(attrib.Name, attrib);
+                CommandMethods.Add(attrib.Name.ToUpperInvariant(), method);
+                CommandDefs.Add(attrib.Name.ToUpperInvariant(), attrib);
             }
         }
         #endregion
