@@ -1,7 +1,6 @@
-﻿using LostAndFound.Game.FindLosty;
-using LostAndFound.Game.LostAndFound;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using LostAndFound.Game.FindLosty;
 
 namespace LostAndFound
 {

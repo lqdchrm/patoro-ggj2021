@@ -21,9 +21,6 @@ namespace LostAndFound.Game.Mansion
         internal LivvingRoom LivingRoom { get; private set; }
         internal Hall Hall { get; private set; }
 
-        public override bool IsEverythingCommand => true;
-
-
         private Characters.John John = new Characters.John();
         private Characters.Kathrin Kathrin = new Characters.Kathrin();
         private Characters.Maria Maria = new Characters.Maria();
