@@ -422,7 +422,7 @@ Opposite the seating area is an old [chimney]. Beneath a [lion-head], that hangs
 
 Look sopha
 ----------
-The sopha is made of a dark lether. It looks comfortable.
+The sopha is made of a dark lather. It looks comfortable.
 
 Look chimney
 ----------
@@ -433,6 +433,9 @@ use chimney
 ----------
 You open the gas but nothing streams out. Either it is empty or clogged.
 You close valve again. Better safe then sorry...
+`other players`
+${player} is poking in the chimney
+
 
 look lion-head
 --------------
@@ -441,14 +444,25 @@ The lion look majestic, epically from so close. But its sleeping. You hear it sn
 look gun-locker
 --------------
 A heavy metal locker. There is now way to force your way in and it is secured in the wall.
-A [pinnpad] is mounted under the handle.
+A [pin pad] is mounted under the handle.
+`Locker opend`
+A heavy metal locker. The door is opened widely.
+
 
 look pin-pad
 ------------
-The pinpad is a nine number 
+The pin pad is a 10 number pad with additional keys for # and *.
 
-`Enable Command 'Enter PIN'`
 
+
+enter pin [number] `Command available if pin-pad in hasSeen`
+---------
+You enter [number] in the pin pad.
+`other players`
+${player} types on the pin pad.
+`On success`
+The [gun-locker] swings open and a pack of dynamite is rolling on the floor.
+`Add Dynamite to room inventory` 
 
 
 open gun-locker
@@ -457,8 +471,3 @@ It is locked.
 `Gunlocker open`
 It's already open.
 
-open gun-locker
---------------
-It is locked.
-`Gunlocker open`
-It's already open.
