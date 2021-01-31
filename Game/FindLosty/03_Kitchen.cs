@@ -24,9 +24,10 @@ namespace LostAndFound.Game.FindLosty
 
         #region Inventory
         protected override IEnumerable<(string, string, string)> InitialInventory =>
-            new List<(string, string, string)> {
-            // ("keys", Emojis.Keys, "Some Keys"),
-        };
+            new List<(string, string, string)>
+            {
+                // ("keys", Emojis.Keys, "Some Keys"),
+            };
         #endregion
 
         #region HELP
@@ -68,7 +69,7 @@ namespace LostAndFound.Game.FindLosty
                 case "roast":
                     {
                         return "On the fire pit there is a tasty pork [roast]. It's well done.";
-                    } break;
+                    }
                 case "fire_pit":
                 case "pit":
                     {
@@ -76,7 +77,7 @@ namespace LostAndFound.Game.FindLosty
                             return $"The fire is roaring.";
                         else
                             return $"There is no fire. Some logs are still smoldering.";
-                    } break;
+                    }
                 case "refrigerator":
                     {
                         string message = "A large fridge.";
@@ -85,7 +86,7 @@ namespace LostAndFound.Game.FindLosty
                         if (Inventory.ContainsKey("tofu"))
                             message += " There is a box of [tofu] inside.";
                         return message;
-                    } break;
+                    }
                 case "microwave":
                     {
                         string message = "A [microwave].";
@@ -94,7 +95,7 @@ namespace LostAndFound.Game.FindLosty
                         else
                             message += $" There is {ThingInMicroWave} inside.";
                         return message;
-                    } break;
+                    }
                 default:
                     return base.DescribeThing(thing, cmd);
             }
@@ -138,7 +139,7 @@ namespace LostAndFound.Game.FindLosty
         #region OPEN
         protected override (bool succes, string msg) OpenThing(string thing, GameCommand cmd)
         {
-            switch(thing)
+            switch (thing)
             {
                 case "shelves":
                 case "shelf":
@@ -152,7 +153,7 @@ namespace LostAndFound.Game.FindLosty
                         else
                             return (false, "It's already open.");
 
-                    } break;
+                    }
                 case "fridge":
                 case "refrigerator":
                     {
@@ -164,7 +165,7 @@ namespace LostAndFound.Game.FindLosty
                         }
                         else
                             return (false, "It's already open.");
-                    } break;
+                    }
                 default:
                     return base.OpenThing(thing, cmd);
             }
@@ -218,23 +219,23 @@ namespace LostAndFound.Game.FindLosty
 
             if (cmd.Args.Count == 3 && cmd.Args[1] == "from")
             {
-                    if (cmd.Args[2] == "microwave")
+                if (cmd.Args[2] == "microwave")
+                {
+                    if (ThingInMicroWave == cmd.Args[0])
                     {
-                        if (ThingInMicroWave == cmd.Args[0])
-                        {
-                            ThingInMicroWave = null;
-                            player.Inventory.Create(cmd.Args[0], ThingInMicroWaveIcon, $"It's a {cmd.Args[0]}");
-                            player.SendGameEvent($"You took {cmd.Args[0]}.");
-                        }
-                        else
-                        {
-                            player.SendGameEvent($"There is no {cmd.Args[0]} in the microwave.");
-                        }
+                        ThingInMicroWave = null;
+                        player.Inventory.Create(cmd.Args[0], ThingInMicroWaveIcon, $"It's a {cmd.Args[0]}");
+                        player.SendGameEvent($"You took {cmd.Args[0]}.");
                     }
                     else
                     {
-                        player.SendGameEvent($"I don't see a {cmd.Args[2]}");
+                        player.SendGameEvent($"There is no {cmd.Args[0]} in the microwave.");
                     }
+                }
+                else
+                {
+                    player.SendGameEvent($"I don't see a {cmd.Args[2]}");
+                }
 
             }
             else
