@@ -1,0 +1,12 @@
+<> nicht optional
+[] optional
+help,
+look [a],
+listen [a],
+kick [a],
+use <a> [with] [b],
+open <a>,
+close <a>,
+take <a> [from] [b],
+put <a> [in|on] [b],
+shout <msg>
