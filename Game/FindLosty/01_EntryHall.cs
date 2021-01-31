@@ -30,6 +30,52 @@ namespace LostAndFound.Game.FindLosty
         }
         #endregion
 
+        #region Images
+        private const string croc = @"
+_______________________
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |
+| |            .-._ | |
+| |  .-''-.__.-'00 /| |
+| | '.___ '    .  /.| |
+| |  V: V 'vv-' / '_| |
+| |   '=.____.=/.--'| |
+| |----------/(((___| |
+| |                 | |
+| |                 | |
+| |                 | |
+| |                 | |";
+
+        private const string crocChained = @"
+The [croc] looks hungry. But luckily it is chained to a table.
+
+      _____________________
+     /                    /|
+    /                    / |
+   /____________________/ / 
+  |_____________________|/| 
+   || ||              || || 
+   || ||              || || 
+   || ||              || || 
+  _||                 ||    
+ | ||                 ||    
+ |
+ |
+ |               .-._   _ _ _ _ _ _ _ _  
+ |     .-''-.__.-'00 /'-' ' ' ' ' ' ' ' '-.
+ |    '.___ '    .  /.--_'-' '-' '-' _'-' '._
+ |     V: V 'vv-' / '_   '.       .'  _..' '.'.
+  \     '=.____.=/.--'   :_.__.__:_   '.   : :
+   \____________/(((____.-'        '-.  /   : :
+                                (((-'\ .' /
+                              _____..'  .'
+                           '-._____.-'
+";
+        #endregion
+
         #region Inventory
         protected override IEnumerable<(string, string)> InitialInventory =>
             new List<(string, string)> {
@@ -93,7 +139,10 @@ namespace LostAndFound.Game.FindLosty
 
                 case "metal-door":
                     return @$"A very study door. It would be a blast to open it.";
-                
+
+                case "croc":
+                    return crocChained;
+
                 default:
                     return base.DescribeThing(thing, cmd);
             }
@@ -186,6 +235,20 @@ namespace LostAndFound.Game.FindLosty
         #region OPEN
         protected override (bool succes, string msg) OpenThing(string thing, GameCommand cmd)
         {
+            switch(thing)
+            {
+                case "left-door":
+                    return (false, "The door is jammed. It might need united force to break open");
+
+                case "right-door":
+                    cmd.Player.SendGameEvent(croc, true);
+                    cmd.Player.Room.SendGameEvent($"[{cmd.Player}] opens the right door...startling.", cmd.Player);
+                    return (true, $"You open the door.\nAnd look in the eyes of an An hungry [croc].");
+
+                case "croc":
+                    return (false, "No! Just NO!");
+            }
+
             return base.OpenThing(thing, cmd);
         }
         #endregion
