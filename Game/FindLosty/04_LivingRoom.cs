@@ -21,11 +21,7 @@ namespace LostAndFound.Game.FindLosty
         #endregion
 
         #region Inventory
-        protected override IEnumerable<(string, string)> InitialInventory =>
-            new List<(string, string)>
-            {
-                //("keys", Emojis.Dynamite),
-            };
+     
         #endregion
 
         #region HELP
@@ -131,7 +127,7 @@ namespace LostAndFound.Game.FindLosty
                     cmd.Player.SendGameEvent($"You hear an pleasant Bing.");
                     this.SendGameEvent($"You hear Bing [gun-locker].", cmd.Player);
                     this.gunlockerOpen = true;
-                    this.Inventory.Add("dynamite", Emojis.Dynamite);
+                    this.Inventory.Add("dynamite", new Item("dynamite",  Emojis.Dynamite, "It will explode when lit."));
                     this.SendGameEvent($"The door of the [gun-locker] swings open and a pack of [dynamite{Emojis.Dynamite}]is rolling on the floor.");
                 }
                 else
