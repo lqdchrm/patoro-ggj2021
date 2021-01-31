@@ -294,6 +294,7 @@ You hear something squeak.
 Look
 ----
 There is a [table] with four chairs in one corner.
+Next to one of the chairs is a red [button].
 On the other side of the room is a [ergometer].
 
 A [door] in the right wall leads to the kitchen. 
@@ -302,19 +303,47 @@ Look door
 ----
 The seems to be in good shape. But does not have any handle. Next to it is a machine that looks like some kind of [scanner].
 
+kick door
+---------
+You kick against the door and a panful feeling rises from feet to your hip. The same trick will not work twice.
+`Other Players`
+${player} Kicks against the door. It hurts but he tries to hide it...
+
+
 Look ergometer
 ----
-Someone seems to like to ride a bike while breakfasting. 
+Someone seems to like to ride a bike while breakfasting. A strange [socket] is on fitted to the side.
 
 use ergometer
 -----------
+You sit down and start to cycle. You hear something crackle.
+`player riding`
+Its not a tandem.
+`Other Players`
+${player} starts cycling.
 
-You sit down and start to 
+
+`stop cycleing (any other command)` 
+You step down from the ergometer and wipe the sweet from your forehead.
+`stop cycleing for other players` 
+${player} steps down.
+
+
+
+Look socket
+----
+Two metal rods a stuck in the side with two wires connected to them. A rad and a blue one.
+`player riding`
+Two metal rods a stuck in the side with two wires connected to them. A rad and a blue one. Sparks jumping regularly from one to the other.
 
 
 Look scanner
 ----
 A green pulsing light is emitted from the scanner and shines on everything you hold in front of it.
+
+open scanner
+-----------
+You can't open it without tools.
 
 Look Table
 ----
@@ -346,3 +375,36 @@ use hamster scanner
 You hold the hamster in front of the scanner. A short beep. and the door jumps open.
 `Other Players`
 ${player} holds the hamster in front of the scanner. A short beep. and the door jumps open.
+
+use poop scanner
+-------------------
+
+You hold the poop in the green light. It shimmers green.
+`Other Players`
+${player} does something strange with the scanner. Maybe leave him alone for now?
+
+look button
+-----------
+Its a big red button...
+
+use button
+-----------
+
+You push the button, a buzzer from the hall is hearable.
+`other players in dining room`
+You hear a a buzzer from the hall.
+
+`other players in kitchen room`
+You hear a a faint buzzer from the dining room.
+
+`other players in hall room`
+You're spooked by a buzzer from the right door.
+
+`other players in dining`
+A loud buzzer sounds from the wall. You look around and can see barely a signs showing the numbers 39820.
+
+
+======================================================================================================
+Livving room
+======================================================================================================
+
