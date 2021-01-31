@@ -52,6 +52,7 @@ _______________________
         private const string crocChained = @"
 The [croc] looks hungry. But luckily it is chained to a table.
 
+      _____________________
      /                    /|
     /                    / |
    /____________________/ / 
@@ -69,7 +70,7 @@ The [croc] looks hungry. But luckily it is chained to a table.
  |     V: V 'vv-' / '_   '.       .'  _..' '.'.
   \     '=.____.=/.--'   :_.__.__:_   '.   : :
    \____________/(((____.-'        '-.  /   : :
-    ...                         (((-'\ .' /
+                                (((-'\ .' /
                               _____..'  .'
                            '-._____.-'
 ";
