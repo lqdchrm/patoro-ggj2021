@@ -58,6 +58,10 @@ namespace LostAndFound.Game.FindLosty
         {
             switch (thing.ToLowerInvariant())
             {
+                case "roast":
+                    {
+                        return "On the fire pit there is a tasty pork [roast]. It's well done.";
+                    } break;
                 case "fire_pit":
                 case "pit":
                     {
