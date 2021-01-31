@@ -194,7 +194,7 @@ namespace LostAndFound.Game.FindLosty
             {
                 if (KnownThings.Contains(itemKey))
                 {
-                    player.SendGameEvent("You can't take [{itemKey}].");
+                    player.SendGameEvent($"You can't take [{itemKey}].");
                     return;
                 }
 
