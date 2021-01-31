@@ -145,7 +145,7 @@ namespace LostAndFound.Game.FindLosty
                     {
                         if (!ShelvesDoorOpen)
                         {
-                            Inventory.Add("matches", Emojis.Heart);
+                            Inventory.Create("matches", Emojis.Heart, "Some matches.");
                             ShelvesDoorOpen = true;
                             return (true, "The shelf door opens.");
                         }
@@ -190,7 +190,7 @@ namespace LostAndFound.Game.FindLosty
                         {
                             player.SendGameEvent($"You put the {cmd.Args[0]} in the micowave");
                             ThingInMicroWave = cmd.Args[0];
-                            ThingInMicroWaveIcon = player.Inventory[cmd.Args[0]];
+                            ThingInMicroWaveIcon = player.Inventory[cmd.Args[0]].Emoji;
                             player.Inventory.Remove(cmd.Args[0]);
                         }
                     }
@@ -223,7 +223,7 @@ namespace LostAndFound.Game.FindLosty
                         if (ThingInMicroWave == cmd.Args[0])
                         {
                             ThingInMicroWave = null;
-                            player.Inventory.Add(cmd.Args[0], ThingInMicroWaveIcon);
+                            player.Inventory.Create(cmd.Args[0], ThingInMicroWaveIcon, $"It's a {cmd.Args[0]}");
                             player.SendGameEvent($"You took {cmd.Args[0]}.");
                         }
                         else
