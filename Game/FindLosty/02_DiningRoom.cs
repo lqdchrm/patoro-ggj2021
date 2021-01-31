@@ -64,7 +64,7 @@ namespace LostAndFound.Game.FindLosty
 
                 case "cage":
                     if (Inventory.Create("hamster", Emojis.Hamster, "The hamster has some barcode printed on its belly."))
-                        return "There's a hamster. Damn...you released it. Now it's running all across the room.";
+                        return "There's a hamster. Ahhh ... you released it. Now it's running all across the room.";
                     else
                         return "There used to be a hamster in here.";
             }

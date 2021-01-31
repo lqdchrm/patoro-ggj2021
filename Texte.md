@@ -352,9 +352,9 @@ Look door
 
 kick door
 ---------
-You kick against the door and a panful feeling rises from feet to your hip. The same trick will not work twice.
-`Other Players`
-${player} Kicks against the door. It hurts but he tries to hide it...
+    You kick against the door and a panful feeling rises from feet to your hip. The same trick will not work twice.
+    `Other Players`
+    ${player} Kicks against the door. It hurts but he tries to hide it...
 
 
 Look ergometer
@@ -394,7 +394,7 @@ open scanner
 
 Look Table
 ----
-A big table is in the center of the room. Under [table] hidden by the tablecloth there is a [cage] with an hamster.
+    A big table is in the center of the room. Under [table] hidden by the tablecloth there is a [cage] with an hamster.
 
 
 Look cage
