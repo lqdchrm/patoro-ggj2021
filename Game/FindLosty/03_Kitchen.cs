@@ -138,8 +138,6 @@ namespace LostAndFound.Game.FindLosty
         #region OPEN
         protected override (bool succes, string msg) OpenThing(string thing, GameCommand cmd)
         {
-            return base.OpenThing(thing, cmd);
-                /*
             switch(thing)
             {
                 case "shelves":
@@ -170,14 +168,12 @@ namespace LostAndFound.Game.FindLosty
                 default:
                     return base.OpenThing(thing, cmd);
             }
-                */
         }
         #endregion
 
         [Command("PUT", "put [something] in [something], eg put door in microwave")]
         public void PutCommand(PlayerCommand cmd)
         {
-            /*
             if (cmd.Player is not Player player) return;
 
             if (cmd.Args.Count == 3 && cmd.Args[1] == "in")
@@ -213,13 +209,11 @@ namespace LostAndFound.Game.FindLosty
             {
                 player.SendGameEvent($"You need to 'put <something> in <something>'");
             }
-            */
         }
 
         [Command("GET", "get [something] from [something], eg get door from microwave")]
         public void GetCommand(PlayerCommand cmd)
         {
-            /*
             if (cmd.Player is not Player player) return;
 
             if (cmd.Args.Count == 3 && cmd.Args[1] == "from")
@@ -247,7 +241,6 @@ namespace LostAndFound.Game.FindLosty
             {
                 player.SendGameEvent($"You need to 'get <something> from <something>'");
             }
-            */
         }
     }
 }
