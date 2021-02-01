@@ -68,7 +68,7 @@ namespace LostAndFound.Game.FindLosty
                 case "roast":
                     {
                         return "On the fire pit there is a tasty pork [roast]. It's well done.";
-                    } break;
+                    }
                 case "fire_pit":
                 case "pit":
                     {
@@ -76,7 +76,7 @@ namespace LostAndFound.Game.FindLosty
                             return $"The fire is roaring.";
                         else
                             return $"There is no fire. Some logs are still smoldering.";
-                    } break;
+                    }
                 case "refrigerator":
                     {
                         string message = "A large fridge.";
@@ -85,7 +85,7 @@ namespace LostAndFound.Game.FindLosty
                         if (Inventory.ContainsKey("tofu"))
                             message += " There is a box of [tofu] inside.";
                         return message;
-                    } break;
+                    }
                 case "microwave":
                     {
                         string message = "A [microwave].";
@@ -94,7 +94,7 @@ namespace LostAndFound.Game.FindLosty
                         else
                             message += $" There is {ThingInMicroWave} inside.";
                         return message;
-                    } break;
+                    }
                 default:
                     return base.DescribeThing(thing, cmd);
             }
@@ -158,9 +158,9 @@ namespace LostAndFound.Game.FindLosty
                     {
                         if (!FridgeDoorOpen)
                         {
-                            Inventory.Create("tofu", Emojis.Heart, "Some delicios tofu. Consumable by humans and animals.");
+                            Inventory.Create("tofu", Emojis.Heart, "Some delicious tofu. Consumable by humans and animals.");
                             FridgeDoorOpen = true;
-                            return (true, "The refigerator door opens.");
+                            return (true, "The refrigerator door opens.");
                         }
                         else
                             return (false, "It's already open.");

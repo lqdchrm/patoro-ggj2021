@@ -7,28 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Game\LostAndFound\CommonRoom.cs" />
-    <Compile Remove="Game\LostAndFound\CozyHut.cs" />
-    <Compile Remove="Game\LostAndFound\LokisWorld.cs" />
-    <Compile Remove="Game\LostAndFound\LostAndFoundGame.cs" />
-    <Compile Remove="Game\LostAndFound\Player.cs" />
-    <Compile Remove="Game\LostAndFound\RobsWorld.cs" />
-    <Compile Remove="Game\LostAndFound\TheWoods.cs" />
-    <Compile Remove="Game\LostAndFound\TobisWorld.cs" />
-    <Compile Remove="Game\Mansion\Characters\BaseCharacter.cs" />
-    <Compile Remove="Game\Mansion\Characters\John.cs" />
-    <Compile Remove="Game\Mansion\Characters\Kathrin.cs" />
-    <Compile Remove="Game\Mansion\Characters\Maria.cs" />
-    <Compile Remove="Game\Mansion\Characters\Paul.cs" />
-    <Compile Remove="Game\Mansion\MansionGame.cs" />
-    <Compile Remove="Game\Mansion\MansionPlayer.cs" />
-    <Compile Remove="Game\Mansion\MansionRoom.cs" />
-    <Compile Remove="Game\Mansion\Rooms\Laboratory.cs" />
-    <Compile Remove="Game\Mansion\Rooms\Void.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove=".env" />
+    <Compile Remove="Game\LostAndFound\**" />
+    <Compile Remove="Game\Mansion\**" />
+    <EmbeddedResource Remove="Game\LostAndFound\**" />
+    <EmbeddedResource Remove="Game\Mansion\**" />
+    <None Remove="Game\LostAndFound\**" />
+    <None Remove="Game\Mansion\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,26 +21,6 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Game\LostAndFound\CommonRoom.cs" />
-    <None Include="Game\LostAndFound\CozyHut.cs" />
-    <None Include="Game\LostAndFound\LokisWorld.cs" />
-    <None Include="Game\LostAndFound\LostAndFoundGame.cs" />
-    <None Include="Game\LostAndFound\Player.cs" />
-    <None Include="Game\LostAndFound\RobsWorld.cs" />
-    <None Include="Game\LostAndFound\TheWoods.cs" />
-    <None Include="Game\LostAndFound\TobisWorld.cs" />
-    <None Include="Game\Mansion\Characters\BaseCharacter.cs" />
-    <None Include="Game\Mansion\Characters\John.cs" />
-    <None Include="Game\Mansion\Characters\Kathrin.cs" />
-    <None Include="Game\Mansion\Characters\Maria.cs" />
-    <None Include="Game\Mansion\Characters\Paul.cs" />
-    <None Include="Game\Mansion\MansionGame.cs" />
-    <None Include="Game\Mansion\MansionPlayer.cs" />
-    <None Include="Game\Mansion\MansionRoom.cs" />
-    <None Include="Game\Mansion\Rooms\Laboratory.cs" />
-    <None Include="Game\Mansion\Rooms\Void.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="2.0.0" />
