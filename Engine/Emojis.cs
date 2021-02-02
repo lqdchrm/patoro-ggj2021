@@ -16,5 +16,6 @@ namespace LostAndFound.Engine
         public const string Dynamite = "🧨";
         public const string Scroll = "📜";
         public const string Box = "📦";
+        public const string Door = "🚪";
     }
 }

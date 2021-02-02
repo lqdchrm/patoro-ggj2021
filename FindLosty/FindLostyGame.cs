@@ -162,14 +162,14 @@ namespace LostAndFound.FindLosty
         {
             if (e.OldRoom != null)
             {
-                e.Player?.Reply($"You left {e.OldRoom.Name}");
-                e.OldRoom.SendText($"{e.Player} left {e.OldRoom.Name}", e.Player);
+                e.Player?.Reply($"You left {e.OldRoom}");
+                e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
             }
 
             if (e.Player.Room != null)
             {
-                e.Player?.ReplyWithState($"You entered {e.Player.Room.Name}");
-                e.Player.Room.SendText($"[{e.Player}] entered {e.Player.Room.Name}", e.Player);
+                e.Player?.ReplyWithState($"You entered {e.Player.Room}");
+                e.Player.Room.SendText($"{e.Player} entered {e.Player.Room}", e.Player);
             }
         }
     }

@@ -13,7 +13,7 @@ namespace LostAndFound.FindLosty
     {
         public Player(string name, FindLostyGame game) : base(game, name) { }
 
-        public string NormalizedName => Name.Substring(0, Math.Min(5, Name.Length)).ToLowerInvariant();
+        public override string Emoji => Emojis.Player;
 
         public override string StatusText
         {
@@ -65,7 +65,7 @@ namespace LostAndFound.FindLosty
         ██║  ██║██║   ██║   
         ╚═╝  ╚═╝╚═╝   ╚═╝   
         */
-        public bool Hit(string by = null, Player byPlayer = null)
+        public bool HitCommand(string by = null, Player byPlayer = null)
         {
             if (this.Health > 0)
             {
@@ -105,7 +105,7 @@ namespace LostAndFound.FindLosty
         ██║  ██║███████╗██║  ██║███████╗
         ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
         */
-        public bool Heal(string by = null, Player byPlayer = null)
+        public bool HealCommand(string by = null, Player byPlayer = null)
         {
             if (this.Health < PLAYER_MAX_HEALTH)
             {

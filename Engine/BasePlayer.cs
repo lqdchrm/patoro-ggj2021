@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace LostAndFound.Engine
 {
@@ -17,6 +18,8 @@ namespace LostAndFound.Engine
         public BasePlayer(TGame game, string name) : base(game, false, false, name) { }
 
         public virtual string StatusText => $"[{Name}]";
+
+        public string NormalizedName => string.Join("", Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
 
         public void Mute()
         {
