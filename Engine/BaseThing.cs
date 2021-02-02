@@ -70,7 +70,7 @@ namespace LostAndFound.Engine
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        public virtual string ListenText => OneOf($"Nothing to hear from {this}.");
+        public virtual string ListenText => OneOf($"Nothing to hear from {this}.", $"... ... ...");
         public virtual void Listen(TPlayer sender) => sender.Reply(ListenText);
 
         /*

@@ -44,7 +44,7 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        override 
+        public override string LookInventoryText => "\nBackpack:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

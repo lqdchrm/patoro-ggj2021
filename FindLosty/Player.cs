@@ -150,7 +150,7 @@ namespace LostAndFound.FindLosty
         {
             get
             {
-                var adj = new[] { "beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous" };
+                var adj = OneOf("beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous");
                 return $"{this} looks {adj}.";
             }
         }
@@ -158,7 +158,7 @@ namespace LostAndFound.FindLosty
         public override void Look(Player sender)
         {
             base.Look(sender);
-            var verb = new[] { "staring at", "looking at", "admiring", "peeping on" };
+            var verb = OneOf("staring at", "looking at", "admiring", "peeping on");
             this.Reply($"{sender} is {verb} you.");
         }
 
@@ -170,6 +170,12 @@ namespace LostAndFound.FindLosty
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
+        public override void Kick(Player sender)
+        {
+            base.Kick(sender);
+            var how = OneOf("hard", "in your butt", "with love", "and you deserved it");
+            this.Reply($"{sender} kicked you {how}");
+        }
 
 
         /*
@@ -180,6 +186,11 @@ namespace LostAndFound.FindLosty
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override void Listen(Player sender)
+        {
+            base.Listen(sender);
+            this.Reply($"{sender} is listening to you...");
+        }
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
