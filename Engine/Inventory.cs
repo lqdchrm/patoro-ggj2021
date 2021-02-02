@@ -71,7 +71,7 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        internal bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false)
+        public bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false)
         {
             var key = _BuildKey(token);
             if (!dict.TryGetValue(key, out item))
@@ -99,6 +99,12 @@ namespace LostAndFound.Engine
                 return false;
             }
             return true;
+        }
+
+        public bool Has(string token)
+        {
+            var key = _BuildKey(token);
+            return (dict.ContainsKey(key) && dict[key].WasMentioned);
         }
     }
 }
