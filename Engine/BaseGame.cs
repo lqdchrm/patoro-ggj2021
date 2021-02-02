@@ -244,7 +244,10 @@ namespace LostAndFound.Engine
                             {
                                 item = candidates.First();
                             }
-                            else
+                            else if ((item = candidates.FirstOrDefault(p => p.NormalizedName == token)) != null)
+                            {
+                                /* assignment directly in if */
+                            } else
                             {
                                 var names = string.Join(", ", candidates.Select(cand => cand.Name));
                                 sender.Reply($"Found multiple players: {names}");
