@@ -57,7 +57,8 @@ namespace LostAndFound.Engine
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
         public virtual string KickText => OneOf($"{this} was kicked.");
-        public virtual void Kick(TPlayer sender) => sender.Reply(KickText);
+        private string KickSelf => OneOf($"You kicked yourself. WFT!");
+        public virtual void Kick(TPlayer sender) => sender.Reply(this == sender ? KickSelf : KickText);
 
 
         /*

@@ -223,43 +223,41 @@ namespace LostAndFound.Engine
         /// <param name="sender"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token)
+        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token, BaseContainer<TGame, TRoom, TPlayer, TThing> other = null)
         {
             if (token is null) return null;
 
             // find in inventory
             BaseThing<TGame, TRoom, TPlayer, TThing> item = null;
-            if (!sender.Inventory.TryFind(token, out item, true))
-            {
-                // find in room
-                if (!sender.Room.Inventory.TryFind(token, out item))
-                {
-                    //search player
-                    if (token.Length > 2)
-                    {
-                        var candidates = Players.Values.Where(p => p.NormalizedName.StartsWith(token)).ToList();
-                        if (candidates.Any())
-                        {
-                            if (candidates.Count() == 1)
-                            {
-                                item = candidates.First();
-                            }
-                            else
-                            {
-                                var names = string.Join(", ", candidates.Select(cand => cand.Name));
-                                sender.Reply($"Found multiple players: {names}");
-                            }
-                        }
-                    }
+            if (sender.Inventory.TryFind(token, out item)) return item;
 
-                    // check if current room was meant
-                    if (item == null)
-                    {
-                        if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant())
-                            item = sender.Room;
-                    }
+            // find in room
+            if (sender.Room.Inventory.TryFind(token, out item)) return item;
+
+            // find in other inventory
+            if (other?.Inventory.TryFind(token, out item) ?? false) return item;
+
+            //search player
+            if (token.Length > 2)
+            {
+                var candidates = Players.Values.Where(p => p.NormalizedName.StartsWith(token)).ToList();
+
+                // only one match
+                if (candidates.Count() == 1) return candidates.First();
+
+                // only one exact match
+                if ((item = candidates.FirstOrDefault(p => p.NormalizedName == token)) != null) return item;
+
+                // multiple matches
+                if (candidates.Count() > 1)
+                {
+                    var names = string.Join(", ", candidates.Select(cand => cand.Name));
+                    sender.Reply($"Found multiple players: {names}");
                 }
             }
+
+            // check if current room was meant
+            if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant()) return sender.Room;
 
             return item;
         }
