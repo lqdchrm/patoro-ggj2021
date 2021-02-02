@@ -8,7 +8,11 @@ namespace LostAndFound.Engine
 {
     public static partial class Emojis
     {
-        public const string Player = "🕵";
+        public static readonly string[] Players = //new[] { string.Join("",
+            new[] { "👮‍", "🕵", "💂‍", "👷‍", "🧛‍", "🦸‍", "🧟‍", "🧚‍", "🦹‍" }
+            //) }
+        ;
+            
         public const string Heart = "💙";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";

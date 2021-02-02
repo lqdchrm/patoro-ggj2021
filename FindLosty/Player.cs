@@ -13,15 +13,21 @@ namespace LostAndFound.FindLosty
     {
         public Player(string name, FindLostyGame game) : base(game, name) { }
 
-        public override string Emoji => Emojis.Player;
-
+        /*
+         ███████╗████████╗ █████╗ ████████╗███████╗
+         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+         ███████╗   ██║   ███████║   ██║   █████╗  
+         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
+         ███████║   ██║   ██║  ██║   ██║   ███████╗
+         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+         */
         public override string StatusText
         {
             get
             {
                 var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
                 var items = string.Join("", Inventory.Select(i => i.Emoji));
-                return $"[{Emojis.Player}{Name}] {health} {items}";
+                return $"[{Emoji}{Name}] {health} {items}";
             }
         }
 

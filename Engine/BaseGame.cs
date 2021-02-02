@@ -198,7 +198,7 @@ namespace LostAndFound.Engine
 
                 var overwrites = new DiscordOverwriteBuilder();
 
-                player._Channel = await this._Guild.CreateChannelAsync($"{Emojis.Scroll} {player.Name}", ChannelType.Text, _ParentChannel, overwrites: new[] { overwrites.For(_Guild.EveryoneRole).Deny(Permissions.AccessChannels) });
+                player._Channel = await this._Guild.CreateChannelAsync($"{player.Emoji}{player.Name}", ChannelType.Text, _ParentChannel, overwrites: new[] { overwrites.For(_Guild.EveryoneRole).Deny(Permissions.AccessChannels) });
                 await player._Channel.AddOverwriteAsync(member, Permissions.AccessChannels);
 
                 player._User = member;

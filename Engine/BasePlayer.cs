@@ -13,13 +13,29 @@ namespace LostAndFound.Engine
         internal DiscordChannel _Channel;
         internal DiscordMember _User { get; set; }
 
-        public TRoom Room { get; set; } 
-
-        public BasePlayer(TGame game, string name) : base(game, false, false, name) { }
-
-        public virtual string StatusText => $"[{Name}]";
-
+        public TRoom Room { get; set; }
         public string NormalizedName => string.Join("", Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
+
+        public override string Emoji => emoji;
+
+
+        public BasePlayer(TGame game, string name) : base(game, false, false, name)
+        {
+            emoji = Emojis.Players.TakeOneRandom();
+        }
+
+        /*
+         ███████╗████████╗ █████╗ ████████╗███████╗
+         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+         ███████╗   ██║   ███████║   ██║   █████╗  
+         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
+         ███████║   ██║   ██║  ██║   ██║   ███████╗
+         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+         */
+        private readonly string emoji;
+
+        public virtual string StatusText => this.ToString();
+
 
         public void Mute()
         {
