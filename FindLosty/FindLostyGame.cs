@@ -67,8 +67,8 @@ namespace LostAndFound.FindLosty
             var second = e.Second;
 
             var room = player.Room;
-            var thing = GetThing(player, first);
             var other = GetThing(player, second);
+            var thing = GetThing(player, first, other as Container);
 
             Func<string, string> UnknownThing = (name) => new[]
             {
@@ -112,6 +112,7 @@ namespace LostAndFound.FindLosty
                     break;
 
                 // one or two args
+                case "drop":
                 case "take":
                     if (thing is not null)
                     {
@@ -123,6 +124,7 @@ namespace LostAndFound.FindLosty
                     else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");    // no args
                     break;
 
+                case "give":
                 case "put":
                     if (thing is not null)
                     {
@@ -146,7 +148,7 @@ namespace LostAndFound.FindLosty
                     break;
 
                 case "help":
-                    player.Reply("TODO: some help");
+                    player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
                     break;
 
                 default:
@@ -158,6 +160,22 @@ namespace LostAndFound.FindLosty
 
             }
         }
+
+        private string HelpText => $@"
+            [help]   - This help message
+            [look]   - look (something or somebody)*, eg look box
+            [listen] - listen (something or somebody)*, eg listen door
+            [open]   - open something, eg open door
+            [close]  - close something, eg close door
+            [take]   - take something (from something or somebody)*, eg take box from player
+            [put]    - put something (into something or somebody)*, eg put poo into box
+            [kick]   - kick (something or somebody)*, eg kick door
+            [use]    - use something (with something)*, eg use poo with box
+            [drop]   - drop something, eg drop box
+            [give]   - give something to somebody, eg give box to player
+
+            * these are optional
+        ".FormatMultiline();
 
         private void OnPlayerChangedRoom(object sender, PlayerRoomChange<FindLostyGame, Room, Player, Thing> e)
         {
