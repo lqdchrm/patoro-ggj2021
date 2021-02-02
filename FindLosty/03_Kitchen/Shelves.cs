@@ -12,8 +12,9 @@ namespace LostAndFound.FindLosty.Things
 
         bool DoorsOpen = false;
         
-        public Shelves(FindLostyGame game) : base(game)
+        public Shelves(FindLostyGame game) : base(game, false, "Shelves")
         {
+
         }
 
         public override string LookText

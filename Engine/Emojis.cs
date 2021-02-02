@@ -39,5 +39,6 @@ namespace LostAndFound.Engine
         public const string Scanner = "💫";
         public const string Table = "Π ";
         public const string Socket = "🐽";
+        public const string Tofu = "🥡";
     }
 }

@@ -7,17 +7,13 @@ using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty.Things
 {
-    public class Fridge : Thing
+    public class Fridge : Container
     {
         public Fridge(FindLostyGame game) : base(game)
         {
+            Inventory.InitialAdd(new Tofu(game));
         }
 
-
-        public override string UseText
-        {
-            get { return$"This is the best fridge ever"; }
-        }
 
         public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
         {

@@ -24,6 +24,7 @@ namespace LostAndFound.FindLosty
     public abstract class Container : BaseContainer<FindLostyGame, Room, Player, Thing>
     {
         public Container(FindLostyGame game) : this(game, null) { }
+        public Container(FindLostyGame game, bool transferable, string name) : base(game, false, false, name) { }
         public Container(FindLostyGame game, string name) : base(game, true, false, name) { }
     }
 

@@ -12,13 +12,17 @@ namespace LostAndFound.FindLosty._03_Kitchen
     {
         public Fridge Fridge { get; init; }
         public Shelves Shelves { get; init; }
+        public FirePit FirePit { get; init; }
+        public Microwave Microwave { get; init; }
 
         public Kitchen(FindLostyGame game) : base(game)
         {
             // Create Things in room
             Inventory.InitialAdd(
                 Fridge = new Fridge(this.Game),
-                Shelves = new Shelves(this.Game)
+                Shelves = new Shelves(this.Game),
+                FirePit = new FirePit(this.Game),
+                Microwave = new Microwave(this.Game)
             );
         }
 
@@ -42,7 +46,9 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public override string LookIntroText(Player sender) {
             return $@"
                 There are {Shelves} at one wall and a large {Fridge} on the other.
-                In the middle of the room is a large fire [pit].
+                A {Microwave} is mounted on the wall next to the {Shelves}.
+                In the middle of the room is a large fire {FirePit}.
+                {FirePit.LookText}
                 There is one [door] leading to the dining room.
                  ".FormatMultiline();
         }
