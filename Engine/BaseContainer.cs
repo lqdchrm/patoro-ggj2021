@@ -19,6 +19,12 @@ namespace LostAndFound.Engine
             Inventory = new Inventory<TGame, TRoom, TPlayer, TThing>(this, canAcceptNonTransferables);
         }
 
+        public virtual bool DoesItemFit(BaseThing<TGame, TRoom, TPlayer, TThing> thing, out string error)
+        {
+            error = "";
+            return true;
+        }
+        
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝

@@ -11,7 +11,7 @@ namespace LostAndFound.FindLosty.Things
     {
         public override string Emoji => Emojis.Tofu;
 
-        public Tofu(FindLostyGame game) : base(game) { }
+        public Tofu(FindLostyGame game) : base(game) { WasMentioned = true; }
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗

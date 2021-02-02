@@ -156,9 +156,13 @@ namespace LostAndFound.Engine
 
         public virtual void PutInto(TPlayer sender, BaseContainer<TGame, TRoom, TPlayer, TThing> container)
         {
+            string error;
             if (sender.Inventory == container.Inventory || this == container)
             {
                 sender.Reply($"Not really.");
+            } else if (!container.DoesItemFit(this, out error))
+            {
+                sender.ReplyWithState(error);
             } else if (sender.Inventory.Transfer(this.Name, container.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));

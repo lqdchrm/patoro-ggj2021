@@ -20,22 +20,24 @@ namespace LostAndFound.FindLosty.Things
             get { return$"This is the best fridge ever."; }
         }
 
-        public override void Put(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other)
+        public override bool DoesItemFit(BaseThing<FindLostyGame, Room, Player, Thing> thing, out string error)
         {
             BaseThing<FindLostyGame, Room, Player, Thing> item = null;
             bool found_tofu = Inventory.TryFind("tofu", out item);
             if (found_tofu)
             {
-                sender.Reply("You can't put that in. there is {item} inside the microwave.");
+                error = $"You can't put that in. there is {item} inside the microwave.";
+                return false;
             }
-            else if (other is Tofu tofu)
+            else if (thing is Tofu tofu)
             {
-                sender.Inventory.Transfer("tofu", Inventory);
-                sender.Reply("The {tofu} is inside the microwave now.");
+                error = "";
+                return true;
             }
             else
             {
-                sender.Reply("I don't really feel like putting {item} into the microwave.");
+                error = $"I don't really feel like putting {item} into the microwave.";
+                return false;
             }
         }
 
