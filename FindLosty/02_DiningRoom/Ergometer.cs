@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using System.Linq;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
@@ -19,6 +20,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
+
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -93,6 +95,27 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        {
+            if (other == null)
+            {
+                Player otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+                if (otherUser != null)
+                {
+                    return sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
+                }
+                else
+                {
+                    sender.ThingPlayerIsUsingAndHasToStop = this;
+                    return sender.Reply($"You sit down and start to cycle. You hear something crackle.");
+                }
+            }
+
+            if (!isFlippedCall)
+                return other.Use(sender, this, true);
+
+            return base.Use(sender, other, isFlippedCall);
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
