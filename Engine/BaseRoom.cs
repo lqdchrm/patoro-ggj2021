@@ -15,7 +15,10 @@ namespace LostAndFound.Engine
     {
         internal DiscordChannel _VoiceChannel { get; set; }
 
-        public BaseRoom(TGame game, string name = null) : base(game, false, true, name) { }
+        public BaseRoom(TGame game, string name = null) : base(game, false, true, name)
+        {
+            WasMentioned = true;
+        }
 
         public void SendText(string msg, params TPlayer[] excludedPlayers)
         {
