@@ -110,6 +110,9 @@ namespace LostAndFound.Engine
             if (!Ready)
                 return Task.CompletedTask;
 
+            if (e.Channel.Parent != _ParentChannel)
+                return Task.CompletedTask;
+
             // handle user info
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
