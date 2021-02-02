@@ -266,7 +266,7 @@ namespace LostAndFound.Engine
             //search player
             if (token.Length > 2)
             {
-                var candidates = Players.Values.Where(p => p.NormalizedName.StartsWith(token)).ToList();
+                var candidates = sender.Room.Players.Where(p => p.NormalizedName.StartsWith(token)).ToList();
 
                 // only one match
                 if (candidates.Count() == 1) return candidates.First();
@@ -292,7 +292,7 @@ namespace LostAndFound.Engine
                 if (other is not null)                                                          // other inventory
                     available = available.Merge(other.Inventory.ToDictionary(i => i.Name));
                 available = available.Merge(sender.Room.Inventory.ToDictionary(i => i.Name));   // room inventory
-                available = available.Merge(Players.ToDictionary(_ => _.Key, _ => _.Value));    // player names
+                available = available.Merge(sender.Room.Players.ToDictionary(_ => _.NormalizedName));    // player names
 
                 var distances = available.Keys.Select(key => (key, value: token.Levenshtein(key)));
                 var toShow = distances.OrderBy(dist => dist.value).Take(3);
