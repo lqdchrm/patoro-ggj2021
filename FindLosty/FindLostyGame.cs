@@ -243,9 +243,13 @@ namespace LostAndFound.FindLosty
         {
             if (e.OldRoom != null)
             {
+                // HACKY
+                var tmp = e.Player.Room;
+                e.Player.Room = e.OldRoom;
                 // stop doing things on room change
                 if (e.Player?.ThingPlayerIsUsingAndHasToStop != null)
                     e.Player.ThingPlayerIsUsingAndHasToStop = null;
+                e.Player.Room = tmp;
 
                 e.Player?.Reply($"You left {e.OldRoom}");
                 e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
