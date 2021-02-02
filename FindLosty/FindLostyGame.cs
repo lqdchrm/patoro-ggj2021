@@ -73,7 +73,7 @@ namespace LostAndFound.FindLosty
 
             // find in inventory
             BaseThing<FindLostyGame, Room, Player, Thing> item = null;
-            if (!sender.Inventory.TryFind(token, out item))
+            if (!sender.Inventory.TryFind(token, out item, true))
             {
                 // find in room
                 if (!sender.Room.Inventory.TryFind(token, out item))
@@ -94,6 +94,13 @@ namespace LostAndFound.FindLosty
                                 sender.Reply($"Found multiple players: {names}");
                             }
                         }
+                    }
+
+                    // check if current room was meant
+                    if (item == null)
+                    {
+                        if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant())
+                            item = sender.Room;
                     }
                 }
             }
@@ -146,13 +153,13 @@ namespace LostAndFound.FindLosty
                 case "open":
                     if (thing is not null) thing.Open(player);                                  // thing found
                     else if (first is not null) player.Reply(UnknownThing(first));              // thing not found => unknown arg
-                    else player.Reply("What do you want to open? Please use eg. #open #door");  // no arg
+                    else player.Reply("What do you want to open? Please use eg. open door");    // no arg
                     break;
 
                 case "close":
                     if (thing is not null) thing.Close(player);                                 // thing found
                     else if (first is not null) player.Reply(UnknownThing(first));              // thing not found => unknown arg
-                    else player.Reply("What do you want to close? Please use eg. #open #door"); // no arg
+                    else player.Reply("What do you want to close? Please use eg. open door");   // no arg
                     break;
 
                 // one or two args
@@ -164,7 +171,7 @@ namespace LostAndFound.FindLosty
                         else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
                     else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. #take #poo or #take hamster from cage");    // no args
+                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");    // no args
                     break;
 
                 case "put":
@@ -175,15 +182,15 @@ namespace LostAndFound.FindLosty
                         else thing.Put(player, room);                                           // one thing => drop to room
                     }
                     else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. #take #poo or #take hamster from cage");    // no args
+                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");    // no args
                     break;
 
                 case "use":
                     if (thing is not null)
                     {
-                        if (other is not null) thing.Put(player, other);                        // two things => put a into b
+                        if (other is not null) thing.Use(player, other);                        // two things => put a into b
                         else if (second is not null) player.Reply(UnknownThing(second));        // second thing not found
-                        else thing.Take(player, room);                                          // one thing => drop to room
+                        else thing.Use(player, room);                                          // one thing => drop to room
                     }
                     else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
                     else player.Reply("What do you want to take? Please use eg. #take #poo or #take hamster from cage");    // no args

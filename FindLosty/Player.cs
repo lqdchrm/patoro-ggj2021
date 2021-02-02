@@ -21,7 +21,7 @@ namespace LostAndFound.FindLosty
             {
                 var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
                 var items = string.Join("", Inventory.Select(i => i.Emoji));
-                return $"{Emojis.Player} {Name} {health} {items}";
+                return $"[{Emojis.Player}{Name}] {health} {items}";
             }
         }
 

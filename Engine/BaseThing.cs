@@ -24,6 +24,7 @@ namespace LostAndFound.Engine
         public TGame Game { get; }
         public string Name { get; init; }
         public virtual string Emoji => "";
+        public virtual bool IsVisible { get; set; } = true;
 
         public bool CanBeTransfered { get; init; }
 
@@ -168,7 +169,7 @@ namespace LostAndFound.Engine
          ╚═════╝ ╚══════╝╚══════╝
         */
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual void Use(TPlayer sender, TThing other) => sender.Reply(UseText);
+        public virtual void Use(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other) => sender.Reply(UseText);
 
 
         /*

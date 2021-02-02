@@ -27,16 +27,16 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText
+
+        public virtual string LookTextHeader => base.LookText;
+        public virtual string LookInventoryText => "\nInside:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
+        public override string LookText => $"{LookTextHeader}{LookInventoryText}";
+        public override void Look(TPlayer sender)
         {
-            get
-            {
-                var header = base.LookText;
+            foreach (var item in Inventory)
+                item.IsVisible = true;
 
-                var content = string.Join("\n\t", Inventory.Select(i => i.ToString()));
-
-                return $"{header}\nInside:\n\t{content}\n";
-            }
+            base.Look(sender);
         }
     }
 }

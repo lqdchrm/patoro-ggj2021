@@ -38,8 +38,24 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        //public override string LookText => OneOf($"It's {a} {this}", $"Nice, {a} {this}");
-        //public override void Look(Player sender) => sender.Reply(LookText);
+        public override string LookIntroText(Player sender) {
+            var friends = Players.Where(p => p != sender);
+            var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
+            var friendsText = friends.Any()
+                ? $"Your friends {friendsNames} are here."
+                : "You are alone.";
+
+            return $@"
+                    You're looking at the beautiful front yard of 404 Foundleroy Road.
+                    A picket fence surrounds the [mansion] in front of you.
+                    There seems to be only one way into the building. A large oak [door].
+                    This looks like some kind of maniac lives here.
+
+                    You hear barking.
+
+                    {friendsText}
+                ".FormatMultiline();
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -49,9 +65,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        //public override string KickText => OneOf($"{this} was kicked.");
-        //public override void Kick(Player sender) => sender.Reply(KickText);
-
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -62,9 +75,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        //public override string ListenText => OneOf($"Nothing to hear from {this}.");
-        //public override void Listen(Player sender) => sender.Reply(ListenText);
-
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
         ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
@@ -73,9 +83,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-
-        //public override string OpenText => OneOf($"You can't open {this}.");
-        //public override void Open(Player sender) => sender.Reply(OpenText);
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -86,9 +93,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
 
-        //public override string CloseText => OneOf($"You can't close {this}.");
-        //public override void Close(Player sender) => sender.Reply(CloseText);
-
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
         ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝
@@ -98,10 +102,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
 
-        //public override string TakeText => OneOf($"You can't TAKE THAT™.");
-        //public override void Take(Player sender) => sender.Reply(TakeText);
-
-
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
@@ -110,19 +110,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-        //public override string PutText(Thing container)
-        //{
-        //    if (container is null)
-        //        return OneOf($"Where do you want to put {this}");
-
-        //    return OneOf($"You can't put {this} into {container}");
-        //}
-
-        //public override bool Put(Player sender, Thing container)
-        //{
-        //    sender.Reply(PutText(container));
-        //    return false;
-        //}
 
         /*
         ██╗   ██╗███████╗███████╗
@@ -132,20 +119,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        //public override string UseText(Thing other)
-        //{
-        //    if (other is null)
-        //        return OneOf($"You can't use {Name}");
-
-        //    return OneOf($"You can't use {other.Name} with {Name}");
-        //}
-
-        //public override bool Use(Player sender, Thing other)
-        //{
-        //    sender.Reply(UseText(other));
-        //    return false;
-        //}
-
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
