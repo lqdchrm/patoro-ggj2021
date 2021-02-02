@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
 {
-    public class Box : Container
+    public class Door : Thing
     {
-        public override string Emoji => Emojis.Box;
+        public override string Emoji => Emojis.Door;
 
-        public Box(FindLostyGame game) : base(game)
+
+        public Door(FindLostyGame game) : base(game)
         {
         }
 

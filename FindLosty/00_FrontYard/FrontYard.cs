@@ -11,13 +11,17 @@ namespace LostAndFound.FindLosty._00_FrontYard
     {
         public Poo Poo { get; init; }
         public Box Box { get; init; }
+        public Mansion Mansion {get;init;}
+        public Door Door { get; init; }
 
         public FrontYard(FindLostyGame game) : base(game)
         {
             // Create Things in room
             Inventory.InitialAdd(
                 Poo = new Poo(this.Game),
-                Box = new Box(this.Game)
+                Box = new Box(this.Game),
+                Mansion = new Mansion(this.Game),
+                Door = new Door(this.Game)
             );
         }
 
@@ -42,7 +46,9 @@ namespace LostAndFound.FindLosty._00_FrontYard
             var friends = Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()
-                ? $"Your friends {friendsNames} are here."
+                ? friends.Count() == 1
+                ? $"Your friend {friendsNames} is here."
+                : $"Your friends {friendsNames} are here."
                 : "You are alone.";
 
             return $@"
