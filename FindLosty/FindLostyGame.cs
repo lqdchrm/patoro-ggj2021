@@ -70,44 +70,50 @@ namespace LostAndFound.FindLosty
             var other = GetThing(player, second);
             var thing = GetThing(player, first, other as Container);
 
-            Func<string, string> UnknownThing = (name) => new[]
+            Action<Player, string, BaseThing<FindLostyGame, Room, Player, Thing>>
+                ReportUnknown = (player, token, other) =>
             {
-                $"What do you mean by {name}?",
-                $"There is no {name}",
-                $"If there really was something like a {name}, you could probably do that.",
-            }.TakeOneRandom();
+                var intro = new[] {
+                    $"What do you mean by {token}?",
+                    $"There is no {token}",
+                    $"If there really was something like a {token}, you could probably do that.",
+                }.TakeOneRandom();
+
+                player.Reply(intro);
+                GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
+            };
 
             switch (cmd)
             {
                 // zero or one args
                 case "look":
-                    if (thing is not null) thing.Look(player);                              // thing found
-                    else if (first is not null) player.Reply(UnknownThing(first));          // thing not found => unknown arg
-                    else room.Look(player);                                                 // no arg => ask room
+                    if (thing is not null) thing.Look(player);                          // thing found
+                    else if (first is not null) ReportUnknown(player, first, other);    // thing not found => unknown arg
+                    else room.Look(player);                                             // no arg => ask room
                     break;
 
                 case "kick":
-                    if (thing is not null) thing.Kick(player);                              // thing found
-                    else if (first is not null) player.Reply(UnknownThing(first));          // thing not found => unknown arg
-                    else room.Kick(player);                                                 // no arg => ask room
+                    if (thing is not null) thing.Kick(player);                          // thing found
+                    else if (first is not null) ReportUnknown(player, first, other);    // thing not found => unknown arg
+                    else room.Kick(player);                                             // no arg => ask room
                     break;
 
                 case "listen":
-                    if (thing is not null) thing.Listen(player);                            // thing found
-                    else if (first is not null) player.Reply(UnknownThing(first));          // thing not found => unknown arg
-                    else room.Listen(player);                                               // no arg => ask room
+                    if (thing is not null) thing.Listen(player);                        // thing found
+                    else if (first is not null) ReportUnknown(player, first, other);    // thing not found => unknown arg
+                    else room.Listen(player);                                           // no arg => ask room
                     break;
 
                 // one arg
                 case "open":
                     if (thing is not null) thing.Open(player);                                  // thing found
-                    else if (first is not null) player.Reply(UnknownThing(first));              // thing not found => unknown arg
+                    else if (first is not null) ReportUnknown(player, first, other);            // thing not found => unknown arg
                     else player.Reply("What do you want to open? Please use eg. open door");    // no arg
                     break;
 
                 case "close":
                     if (thing is not null) thing.Close(player);                                 // thing found
-                    else if (first is not null) player.Reply(UnknownThing(first));              // thing not found => unknown arg
+                    else if (first is not null) ReportUnknown(player, first, other);            // thing not found => unknown arg
                     else player.Reply("What do you want to close? Please use eg. open door");   // no arg
                     break;
 
@@ -116,34 +122,34 @@ namespace LostAndFound.FindLosty
                 case "take":
                     if (thing is not null)
                     {
-                        if (other is not null) thing.Take(player, other);                       // two things
-                        else if (second is not null) player.Reply(UnknownThing(second));        // second thing not found
-                        else thing.Take(player, room);                                          // one thing => try to take it from room
+                        if (other is not null) thing.Take(player, other);                   // two things
+                        else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
+                        else thing.Take(player, room);                                      // one thing => try to take it from room
                     }
-                    else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");    // no args
+                    else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
+                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
                     break;
 
                 case "give":
                 case "put":
                     if (thing is not null)
                     {
-                        if (other is not null) thing.Put(player, other);                        // two things => put a into b
-                        else if (second is not null) player.Reply(UnknownThing(second));        // second thing not found
-                        else thing.Put(player, room);                                           // one thing => drop to room
+                        if (other is not null) thing.Put(player, other);                    // two things => put a into b
+                        else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
+                        else thing.Put(player, room);                                       // one thing => drop to room
                     }
-                    else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");    // no args
+                    else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
+                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
                     break;
 
                 case "use":
                     if (thing is not null)
                     {
-                        if (other is not null) thing.Use(player, other);                        // two things => put a into b
-                        else if (second is not null) player.Reply(UnknownThing(second));        // second thing not found
-                        else thing.Use(player, room);                                          // one thing => drop to room
+                        if (other is not null) thing.Use(player, other);                    // two things => put a into b
+                        else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
+                        else thing.Use(player, room);                                       // one thing => drop to room
                     }
-                    else if (first is not null) player.Reply(UnknownThing(first));              // first thing not found
+                    else if (first is not null) ReportUnknown(player, first, other);                                        // first thing not found
                     else player.Reply("What do you want to take? Please use eg. #take #poo or #take hamster from cage");    // no args
                     break;
 
@@ -152,10 +158,11 @@ namespace LostAndFound.FindLosty
                     break;
 
                 default:
-                    player.Reply(new[] {
-                        $"Unknown command {cmd}",
-                        $"You want to do what?"
-                    }.TakeOneRandom());
+                    var knownCommands = new[] { "look", "kick", "listen", "open", "close", "drop", "take", "give", "put", "use", "help" };
+                    var dists = knownCommands.Select(c => (c, d: cmd.Levenshtein(c))).OrderBy(_ => _.d).Take(3);
+                    var help = string.Join(", ", dists.Select(_ => $"[{_.c}]"));
+
+                    player.Reply($"Unknown cmd: {cmd}. Did you mean one of these: {help}");
                     break;
 
             }

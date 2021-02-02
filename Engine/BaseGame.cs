@@ -223,8 +223,9 @@ namespace LostAndFound.Engine
         /// <param name="sender"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token, BaseContainer<TGame, TRoom, TPlayer, TThing> other = null)
+        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token, BaseContainer<TGame, TRoom, TPlayer, TThing> other = null, bool showHelp = false)
         {
+            bool helpCalculated = false;
             if (token is null) return null;
 
             // find in inventory
@@ -253,11 +254,27 @@ namespace LostAndFound.Engine
                 {
                     var names = string.Join(", ", candidates.Select(cand => cand.Name));
                     sender.Reply($"Found multiple players: {names}");
+                    helpCalculated = true;
                 }
             }
 
             // check if current room was meant
             if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant()) return sender.Room;
+
+            // show possible solutions
+            if (!helpCalculated && showHelp) {
+                var available = sender.Inventory.ToDictionary(i => i.Name);                     // own inventory
+                if (other is not null)                                                          // other inventory
+                    available = available.Merge(other.Inventory.ToDictionary(i => i.Name));
+                available = available.Merge(sender.Room.Inventory.ToDictionary(i => i.Name));   // room inventory
+                available = available.Merge(Players.ToDictionary(_ => _.Key, _ => _.Value));    // player names
+
+                var distances = available.Keys.Select(key => (key, value: token.Levenshtein(key)));
+                var toShow = distances.OrderBy(dist => dist.value).Take(3);
+
+                var helpText = $"Did you mean one of these: " + string.Join(", ", toShow.Select(kvp => available[kvp.key]));
+                sender.Reply(helpText);
+            }
 
             return item;
         }
