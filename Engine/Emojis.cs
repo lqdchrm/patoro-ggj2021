@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// unicode lookup: http://www.unicode.org/emoji/charts/full-emoji-list.html
+/// emojis: https://emojipedia.org/
+/// </summary>
+
 namespace LostAndFound.Engine
 {
     public static partial class Emojis
@@ -13,7 +18,7 @@ namespace LostAndFound.Engine
             //) }
         ;
             
-        public const string Heart = "💙";
+        public const string Heart = "💖";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";
         public const string Poo = "💩";
@@ -26,7 +31,13 @@ namespace LostAndFound.Engine
         public const string Mansion = "🏡";
         public const string Stairs = "👣";
         public const string Wardrobe = "👗";
-        public const string Window = "🔲";
+        public const string Window = "🌄";
         public const string Splinters = "🥢";
+        public const string Button = "🚨";
+        public const string Cage = "🥅";
+        public const string Bike = "🚲";
+        public const string Scanner = "💫";
+        public const string Table = "Π ";
+        public const string Socket = "🐽";
     }
 }

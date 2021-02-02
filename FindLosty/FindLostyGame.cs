@@ -139,8 +139,8 @@ namespace LostAndFound.FindLosty
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
                         else thing.Put(player, room);                                       // one thing => drop to room
                     }
-                    else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
+                    else if (first is not null) ReportUnknown(player, first, other);                                        // first thing not found
+                    else player.Reply("What do you want to put/give/drop? Please use eg. drop poo or put poo into box");    // no args
                     break;
 
                 case "use":
@@ -148,10 +148,10 @@ namespace LostAndFound.FindLosty
                     {
                         if (other is not null) thing.Use(player, other);                    // two things => put a into b
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
-                        else thing.Use(player, room);                                       // one thing => drop to room
+                        else thing.Use(player, null);                                       // one thing
                     }
-                    else if (first is not null) ReportUnknown(player, first, other);                                        // first thing not found
-                    else player.Reply("What do you want to take? Please use eg. #take #poo or #take hamster from cage");    // no args
+                    else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
+                    else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
                     break;
 
                 case "help":
