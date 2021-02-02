@@ -39,7 +39,6 @@ namespace LostAndFound.Engine
         public Task Show() => this.Game._SetRoomVisibility(this, true);
         public Task Hide() => this.Game._SetRoomVisibility(this, false);
 
-
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝

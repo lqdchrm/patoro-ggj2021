@@ -7,7 +7,7 @@ using DSharpPlus.Entities;
 using LostAndFound.Engine;
 using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
-//using LostAndFound.FindLosty._01_EntryHall;
+using LostAndFound.FindLosty._01_EntryHall;
 //using LostAndFound.FindLosty._02_DiningRoom;
 //using LostAndFound.FindLosty._03_Kitchen;
 //using LostAndFound.FindLosty._04_LivingRoom;
@@ -20,7 +20,7 @@ namespace LostAndFound.FindLosty
         public readonly GameState State;
 
         public readonly FrontYard FrontYard;
-        //public readonly EntryHall EntryHall;
+        public readonly EntryHall EntryHall;
         //public readonly DiningRoom DiningRoom;
         //public readonly Kitchen Kitchen;
         //public readonly LivingRoom LivingRoom;
@@ -32,7 +32,7 @@ namespace LostAndFound.FindLosty
             
             // Rooms
             FrontYard = new FrontYard(this);
-            //EntryHall = new EntryHall(this);
+            EntryHall = new EntryHall(this);
             //DiningRoom = new DiningRoom(this);
             //Kitchen = new Kitchen(this);
             //LivingRoom = new LivingRoom(this);
@@ -46,7 +46,7 @@ namespace LostAndFound.FindLosty
             await base.StartAsync();
 
             await AddRoomAsync(FrontYard, true);
-            //await AddRoomAsync(EntryHall, false);
+            await AddRoomAsync(EntryHall, false);
             //await AddRoomAsync(DiningRoom, false);
             //await AddRoomAsync(Kitchen, false);
             //await AddRoomAsync(LivingRoom, false);
@@ -118,18 +118,19 @@ namespace LostAndFound.FindLosty
                     break;
 
                 // one or two args
-                case "drop":
                 case "take":
                     if (thing is not null)
                     {
                         if (other is not null) thing.Take(player, other);                   // two things
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
+                        else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
                         else thing.Take(player, room);                                      // one thing => try to take it from room
                     }
                     else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
                     else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
                     break;
 
+                case "drop":
                 case "give":
                 case "put":
                     if (thing is not null)

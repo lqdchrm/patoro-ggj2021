@@ -9,20 +9,13 @@ namespace LostAndFound.FindLosty._00_FrontYard
 {
     public class FrontYard : Room
     {
-        public Poo Poo { get; init; }
-        public Box Box { get; init; }
-        public Mansion Mansion {get;init;}
-        public Door Door { get; init; }
+        public Poo Poo { get; private set; }
+        public Box Box { get; private set; }
+        public Mansion Mansion {get; private set; }
+        public Door Door { get; private set; }
 
         public FrontYard(FindLostyGame game) : base(game)
         {
-            // Create Things in room
-            Inventory.InitialAdd(
-                Poo = new Poo(this.Game),
-                Box = new Box(this.Game),
-                Mansion = new Mansion(this.Game),
-                Door = new Door(this.Game)
-            );
         }
 
         /*
@@ -33,6 +26,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
+        private bool wasRoomInspected = false;
+
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -44,6 +39,18 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(Player sender)
         {
+            if (!wasRoomInspected)
+            {
+                // Create Things in room
+                Inventory.InitialAdd(
+                    Poo = new Poo(this.Game),
+                    Box = new Box(this.Game),
+                    Mansion = new Mansion(this.Game),
+                    Door = new Door(this.Game)
+                );
+                wasRoomInspected = true;
+            }
+
             Task.Run(async () =>
             {
                 sender.Reply(Mansion.House);
