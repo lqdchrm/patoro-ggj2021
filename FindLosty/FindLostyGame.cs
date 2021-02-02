@@ -44,7 +44,7 @@ namespace LostAndFound.FindLosty
                 { "01", FrontYard },
                 { "02", EntryHall },
                 { "03", DiningRoom },
-                //{ "04", Kitchen },
+                { "04", Kitchen },
                 //{ "05", LivingRoom },
                 //{ "06", Cellar }
             };
@@ -186,8 +186,6 @@ namespace LostAndFound.FindLosty
 
                 case "help":
                     player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
-                    break;
-                case "cheat":
                     break;
 
                 default:

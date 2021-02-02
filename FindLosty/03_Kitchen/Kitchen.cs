@@ -41,7 +41,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         */
         public override string LookIntroText(Player sender) {
             return $@"
-                There are [shelves] at one wall and a large [refrigerator] on the other.
+                There are {Shelves} at one wall and a large {Fridge} on the other.
                 In the middle of the room is a large fire [pit].
                 There is one [door] leading to the dining room.
                  ".FormatMultiline();
