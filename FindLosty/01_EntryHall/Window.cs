@@ -31,7 +31,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"You look into the garden at the back of the house.It could need some care...";
+        public override string LookText => $"You look into the garden at the back of the house. It could need some care...";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

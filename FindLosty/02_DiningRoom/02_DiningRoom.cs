@@ -47,13 +47,20 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(Player sender) => @$"
-            There is a {Table} with four chairs in one corner.
-            Next to one of the chairs is a red {Button}.
-            On the other side of the room is an {Ergometer}.
+        public override string LookIntroText(Player sender) {
+            var text = @$"
+                There is a {Table} with four chairs in one corner.
+                Next to one of the chairs is a red {Button}.
+                On the other side of the room is an {Ergometer}.
 
-            A {Door} in the right wall leads to the kitchen."
-            .FormatMultiline();
+                A {Door} in the right wall leads to the kitchen.";
+            if (Scanner.WasMentioned)
+            {
+                text += $" There is a {Scanner} next to the {Game.DiningRoom.Door}"; 
+            }
+        
+            return text.FormatMultiline();
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
