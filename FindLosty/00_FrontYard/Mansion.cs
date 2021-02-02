@@ -9,7 +9,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
 {
     public class Mansion : Thing
     {
-
+        public override string Emoji => Emojis.Mansion;
+        
         public Mansion(FindLostyGame game) : base(game) { }
 
         /*

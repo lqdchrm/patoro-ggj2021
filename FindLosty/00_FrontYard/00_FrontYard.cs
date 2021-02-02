@@ -16,6 +16,12 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
         public FrontYard(FindLostyGame game) : base(game)
         {
+            Poo = new Poo(game);
+            Box = new Box(game);
+            Mansion = new Mansion(game);
+            Door = new Door(game);
+
+            Inventory.InitialAdd(Poo, Box, Mansion, Door);
         }
 
         /*
@@ -26,8 +32,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        private bool wasRoomInspected = false;
-
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -39,18 +43,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(Player sender)
         {
-            if (!wasRoomInspected)
-            {
-                // Create Things in room
-                Inventory.InitialAdd(
-                    Poo = new Poo(this.Game),
-                    Box = new Box(this.Game),
-                    Mansion = new Mansion(this.Game),
-                    Door = new Door(this.Game)
-                );
-                wasRoomInspected = true;
-            }
-
             Task.Run(async () =>
             {
                 sender.Reply(Mansion.House);
@@ -99,7 +91,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => $"You here distant barking.It definitely comes from the {Mansion} in front of you.";
+        public override string ListenText => $"You here distant barking. It definitely comes from the {Mansion} in front of you.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
