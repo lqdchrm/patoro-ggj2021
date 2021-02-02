@@ -10,11 +10,15 @@ namespace LostAndFound.Engine
     {
         private static Random rng = new Random();
 
+        #region IEnumerable Extensions
         public static T TakeOneRandom<T>(this IEnumerable<T> list)
         {
             var idx = rng.Next(0, list.Count());
             return list.ElementAt(idx);
         }
+        #endregion
+
+        #region String Extensions
 
         public static string FormatMultiline(this string text)
         {
@@ -24,6 +28,64 @@ namespace LostAndFound.Engine
 
             return string.Join("\n", lines);
         }
+
+        public static int Levenshtein(this string self, string other)
+        {
+            string s = self.ToLowerInvariant();
+            string t = other.ToLowerInvariant();
+
+            int n = s.Length;
+            int m = t.Length;
+            int[,] d = new int[n + 1, m + 1];
+
+            // Verify arguments.
+            if (n == 0)
+            {
+                return m;
+            }
+
+            if (m == 0)
+            {
+                return n;
+            }
+
+            // Initialize arrays.
+            for (int i = 0; i <= n; d[i, 0] = i++)
+            {
+            }
+
+            for (int j = 0; j <= m; d[0, j] = j++)
+            {
+            }
+
+            // Begin looping.
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= m; j++)
+                {
+                    // Compute cost.
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(
+                    Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                    d[i - 1, j - 1] + cost);
+                }
+            }
+            // Return cost.
+            return d[n, m];
+        }
+        #endregion
+
+        #region IDictionary Extensions
+        public static Dictionary<K, V> Merge<K, V, V2>(this Dictionary<K, V> self, Dictionary<K, V2> other)
+            where V2: V
+        {
+            var tmp = new Dictionary<K, V>();
+            foreach(var key in other.Keys)
+                tmp.Add(key, other[key]);
+
+            return self.Union(tmp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+        #endregion
 
         //public static IList<TPlayer> GetTextMentions<TPlayer>(this Engine.Events.PlayerCommand inner)
         //{
