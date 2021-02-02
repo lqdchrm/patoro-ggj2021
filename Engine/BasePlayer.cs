@@ -22,6 +22,7 @@ namespace LostAndFound.Engine
         public BasePlayer(TGame game, string name) : base(game, false, false, name)
         {
             emoji = Emojis.Players.TakeOneRandom();
+            WasMentioned = true;
         }
 
         /*

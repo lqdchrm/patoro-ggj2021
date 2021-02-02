@@ -19,8 +19,8 @@ namespace LostAndFound.Engine
         private Dictionary<string, BaseThing<TGame, TRoom, TPlayer, TThing>> dict = new Dictionary<string, BaseThing<TGame, TRoom, TPlayer, TThing>>();
 
         #region IEnumerable
-        public IEnumerator<BaseThing<TGame, TRoom, TPlayer, TThing>> GetEnumerator() => dict.Values.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => dict.Values.GetEnumerator();
+        public IEnumerator<BaseThing<TGame, TRoom, TPlayer, TThing>> GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
         #endregion
 
         #region Helpers
@@ -61,7 +61,7 @@ namespace LostAndFound.Engine
             BaseThing<TGame, TRoom, TPlayer, TThing> item;
             if (dict.TryGetValue(key, out item))
             {
-                if (item.CanBeTransfered)
+                if (item.WasMentioned && item.CanBeTransfered)
                 {
                     dict.Remove(key);
                     target.dict.Add(key, item);
@@ -81,9 +81,21 @@ namespace LostAndFound.Engine
                     foreach (var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
                     {
                         if (container.Inventory.TryFind(token, out item))
-                            return true;
+                            return CheckItem(ref item);
                     }
                 }
+                return CheckItem(ref item);
+            }
+            return CheckItem(ref item);
+        }
+
+        private bool CheckItem(ref BaseThing<TGame, TRoom, TPlayer, TThing> item)
+        {
+            if (item is null) return false;
+
+            if (!item.WasMentioned)
+            {
+                item = null;
                 return false;
             }
             return true;
