@@ -25,9 +25,6 @@ namespace LostAndFound.Engine
             emoji = Emojis.Players.TakeOneRandom();
             WasMentioned = true;
             this._Member = member;
-
-
-
         }
 
         internal async Task _InitPlayer()
@@ -51,6 +48,8 @@ namespace LostAndFound.Engine
         private readonly string emoji;
 
         public virtual string StatusText => this.ToString();
+
+        public BaseThing<TGame, TRoom, TPlayer, TThing> ThingPlayerIsUsingAndHasToStop = null; 
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
