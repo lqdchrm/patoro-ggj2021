@@ -94,6 +94,14 @@ namespace LostAndFound.FindLosty
                 GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
             };
 
+            var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
+            
+            if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
+            {
+                player.Reply($"You are still using {player.ThingPlayerIsUsingAndHasToStop}. Please stop before doing anything else.");
+                return;
+            }
+
             switch (cmd)
             {
                 // zero or one args
@@ -165,6 +173,16 @@ namespace LostAndFound.FindLosty
                     else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
                     break;
 
+                case "stop":
+                    var inUse = player.ThingPlayerIsUsingAndHasToStop;
+                    if (inUse != null)
+                    {
+                        player.Reply($"You have stopped using {inUse}");
+
+                        player.ThingPlayerIsUsingAndHasToStop = null;
+                    }
+                    break;
+
                 case "say":
                     if (first is not null)
                     {
@@ -214,6 +232,7 @@ namespace LostAndFound.FindLosty
             [put]    - put something (into something or somebody)*, eg put poo into box
             [kick]   - kick (something or somebody)*, eg kick door
             [use]    - use something (with something)*, eg use poo with box
+            [stop]   - stops your current action
             [drop]   - drop something, eg drop box
             [give]   - give something to somebody, eg give box to player
 
@@ -224,6 +243,10 @@ namespace LostAndFound.FindLosty
         {
             if (e.OldRoom != null)
             {
+                // stop doing things on room change
+                if (e.Player?.ThingPlayerIsUsingAndHasToStop != null)
+                    e.Player.ThingPlayerIsUsingAndHasToStop = null;
+
                 e.Player?.Reply($"You left {e.OldRoom}");
                 e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
             }

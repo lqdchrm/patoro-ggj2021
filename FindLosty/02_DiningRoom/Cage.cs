@@ -9,7 +9,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 
         public Cage(FindLostyGame game) : base(game)
         {
-            Inventory.InitialAdd(new Hamster(game));
+            var hamster = new Hamster(game);
+            Inventory.InitialAdd(hamster);
         }
 
         /*
@@ -20,15 +21,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
-        public (bool hasHamster, Hamster hamster) CheckHamster
-        {
-            get
-            {
-                BaseThing<FindLostyGame, Room, Player, Thing> item;
-                var found = Inventory.TryFind("hamster", out item);
-                return (found && item is not null, item as Hamster);
-            }
-        }
+
+        private bool HasHamster => Inventory.Has("hamster", false);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -40,9 +34,18 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override string LookTextHeader {
             get {
-                var (hasHamster, hamster) = CheckHamster;
-                return hasHamster ? $"Awwwwww... there's a {hamster} in there." : $"There used to be a hamster in here.";
+                BaseThing<FindLostyGame, Room, Player, Thing> hamster;
+                if (Inventory.TryFind("hamster", out hamster, false, false))
+                {
+                    return $"Awwwwww... there's a {hamster} in there.";
+                }
+                return $"There used to be a hamster in here.";
             }
+        }
+
+        public override void Look(Player sender)
+        {
+            base.Look(sender);
         }
 
         /*
@@ -63,7 +66,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => CheckHamster.hasHamster ? $"You hear something squeak." : base.ListenText;
+        public override string ListenText => HasHamster ? $"You hear something squeak." : base.ListenText;
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

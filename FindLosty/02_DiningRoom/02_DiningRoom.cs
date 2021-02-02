@@ -13,7 +13,6 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public Cage Cage { get; init; }
         public Door Door { get; init; }
         public Ergometer Ergometer { get; init; }
-        public Hamster Hamster { get; init; }
         public Scanner Scanner { get; init; }
         public Table Table { get; init; }
         public Socket Socket { get; init; }
