@@ -179,8 +179,17 @@ namespace LostAndFound.Engine
          ╚═════╝ ╚══════╝╚══════╝
         */
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual void Use(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other) => sender.Reply(UseText);
+        public virtual bool Use(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other, bool isFlippedCall = false)
+        {
+            Func<BaseThing<TGame, TRoom, TPlayer, TThing>, string> revokeText = (thing) => OneOf(UseText, $"You can't just simply use {thing}.");
 
+            if (other is null) return !sender.Reply(revokeText(this));
+
+            if (!isFlippedCall && !other.Use(sender, this, true))
+                return !sender.Reply(revokeText(other));
+
+            return !sender.Reply(revokeText(other));
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

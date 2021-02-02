@@ -23,9 +23,20 @@ namespace LostAndFound.Engine
         public void SendText(string msg, params TPlayer[] excludedPlayers)
         {
             msg = $"```css\n{msg}\n```";
-            foreach(var player in Players.Where(p => !excludedPlayers.Contains(p)))
+            Send(msg, false, excludedPlayers);
+        }
+
+        public void Say(string msg, params TPlayer[] excludedPlayers)
+        {
+            msg = $"{msg}";
+            Send(msg, true, excludedPlayers);
+        }
+
+        private void Send(string msg, bool tts, IEnumerable<TPlayer> excludedPlayers)
+        {
+            foreach (var player in Players.Where(p => !excludedPlayers.Contains(p)))
             {
-                player._Channel?.SendMessageAsync(msg);
+                player._Channel?.SendMessageAsync(msg, tts);
             }
         }
 

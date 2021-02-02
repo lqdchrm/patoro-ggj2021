@@ -36,6 +36,8 @@ namespace LostAndFound.Engine
         /// </summary>
         public string Second { get; init; }
 
+        public IEnumerable<string> RawArgs { get; init; }
+
         public BaseCommand(TPlayer sender, string msg)
         {
             this.Sender = sender;
@@ -45,6 +47,7 @@ namespace LostAndFound.Engine
             First = tokens.Skip(1).FirstOrDefault()?.ToLowerInvariant();
             Prepo = tokens.Skip(2).FirstOrDefault()?.ToLowerInvariant();
             Second = tokens.Skip(3).FirstOrDefault()?.ToLowerInvariant();
+            RawArgs = tokens.Skip(1);
         }
     }
 }

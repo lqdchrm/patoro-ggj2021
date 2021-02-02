@@ -129,22 +129,25 @@ namespace LostAndFound.Engine
             _User?.ModifyAsync(x => x.Muted = false);
         }
 
-        public void Reply(string msg)
+        public bool Reply(string msg)
         {
             msg = $"```css\n{msg}```";
             _Channel?.SendMessageAsync(msg);
+            return true;
         }
 
-        public void ReplyWithState(string msg)
+        public bool ReplyWithState(string msg)
         {
             msg = $"```css\n{msg}\nYour Status: {StatusText}```";
             _Channel?.SendMessageAsync(msg);
+            return true;
         }
 
-        public void ReplyImage(string msg)
+        public bool ReplyImage(string msg)
         {
             msg = $"```\n{msg}\n```";
             _Channel?.SendMessageAsync(msg);
+            return true;
         }
 
         /// <summary>
