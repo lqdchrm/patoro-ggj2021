@@ -42,6 +42,18 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override void Look(Player sender)
+        {
+            Task.Run(async () =>
+            {
+                sender.Reply(Mansion.House);
+                await Task.Delay(500);
+                sender.Reply(Mansion.Fence);
+                await Task.Delay(500);
+                base.Look(sender);
+            });
+        }
+
         public override string LookIntroText(Player sender) {
             var friends = Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
@@ -53,8 +65,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
             return $@"
                     You're looking at the beautiful front yard of 404 Foundleroy Road.
-                    A picket fence surrounds the [mansion] in front of you.
-                    There seems to be only one way into the building. A large oak [door].
+                    A picket fence surrounds the {Mansion} in front of you.
+                    There seems to be only one way into the building. A large oak {Door}.
                     This looks like some kind of maniac lives here.
 
                     You hear barking.
@@ -80,6 +92,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override string ListenText => $"You here distant barking.It definitely comes from the {Mansion} in front of you.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

@@ -23,7 +23,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
          ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-         */
+        */
+        public bool IsOpen { get; private set; }
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -33,6 +34,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookText => $"A sturdy wooden {this}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -42,7 +44,19 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
+        public override void Kick(Player sender)
+        {
+            if (IsOpen)
+            {
+                sender.Reply($"The open {this} hits the back wall and then swings back and hits your face.");
+                sender.Hit("swinging door");
+            }
+            else
+            {
+                sender.Reply($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.' The {this} shakes. You took damage.");
+                sender.Hit($"massive {this}");
+            }
+        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -61,6 +75,20 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+        public override void Open(Player sender)
+        {
+            if (IsOpen)
+            {
+                sender.Reply($"You open the {this} as much as possible.");
+            }
+            else
+            {
+                IsOpen = true;
+                sender.Reply($"The {this} swings open. Who doesn't lock their front {this}?");
+                // Game.EntryHall.Show();
+            }
+        }
+
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -70,6 +98,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        public override string CloseText => $"Please keep it open for other players. Thanks a lot. --Management";
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

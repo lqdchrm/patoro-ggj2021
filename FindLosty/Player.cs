@@ -64,81 +64,6 @@ namespace LostAndFound.FindLosty
         }
 
         /*
-        ██╗  ██╗██╗████████╗
-        ██║  ██║██║╚══██╔══╝
-        ███████║██║   ██║   
-        ██╔══██║██║   ██║   
-        ██║  ██║██║   ██║   
-        ╚═╝  ╚═╝╚═╝   ╚═╝   
-        */
-        public bool HitCommand(string by = null, Player byPlayer = null)
-        {
-            if (this.Health > 0)
-            {
-                this.Health--;
-
-                var msg = "You were hit";
-
-                if (by != null)
-                {
-                    msg += $" by {by}";
-                }
-                else if (byPlayer != null)
-                {
-                    byPlayer.Reply($"You hit [{this}] really hard.");
-                    msg += $" by [{byPlayer}], but it was probably deserved";
-                }
-
-                ReplyWithState(msg);
-                return true;
-            }
-            else
-            {
-                if (byPlayer != null)
-                {
-                    byPlayer.Reply("Why are you hitting dead people?");
-                    byPlayer.Room.SendText($"[{byPlayer}] is hitting dead [{this}]. Give a big BOOOO.....", byPlayer);
-                }
-            }
-            return false;
-        }
-
-        /*
-        ██╗  ██╗███████╗ █████╗ ██╗     
-        ██║  ██║██╔════╝██╔══██╗██║     
-        ███████║█████╗  ███████║██║     
-        ██╔══██║██╔══╝  ██╔══██║██║     
-        ██║  ██║███████╗██║  ██║███████╗
-        ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
-        */
-        public bool HealCommand(string by = null, Player byPlayer = null)
-        {
-            if (this.Health < PLAYER_MAX_HEALTH)
-            {
-                this.Health++;
-
-                var msg = "You were healed";
-
-                if (by != null)
-                {
-                    msg += $" by {by}";
-                }
-                else if (byPlayer != null)
-                {
-                    byPlayer.Reply($"You healed [{this}].");
-                    msg += $" by [{byPlayer}]. You really got some friends here.";
-                }
-
-                ReplyWithState(msg);
-                return true;
-            }
-            else
-            {
-                Reply("You need no healing.");
-                return false;
-            }
-        }
-        /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
         ██║     ██║   ██║██║   ██║█████╔╝ 
@@ -245,5 +170,65 @@ namespace LostAndFound.FindLosty
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+
+        public bool Hit(string by = null, Player byPlayer = null)
+        {
+            if (this.Health > 0)
+            {
+                this.Health--;
+
+                var msg = "You were hit";
+
+                if (by != null)
+                {
+                    msg += $" by {by}";
+                }
+                else if (byPlayer != null)
+                {
+                    byPlayer.Reply($"You hit [{this}] really hard.");
+                    msg += $" by [{byPlayer}], but it was probably deserved";
+                }
+
+                ReplyWithState(msg);
+                return true;
+            }
+            else
+            {
+                if (byPlayer != null)
+                {
+                    byPlayer.Reply("Why are you hitting dead people?");
+                    byPlayer.Room.SendText($"[{byPlayer}] is hitting dead [{this}]. Give a big BOOOO.....", byPlayer);
+                }
+            }
+            return false;
+        }
+
+        public bool Heal(string by = null, Player byPlayer = null)
+        {
+            if (this.Health < PLAYER_MAX_HEALTH)
+            {
+                this.Health++;
+
+                var msg = "You were healed";
+
+                if (by != null)
+                {
+                    msg += $" by {by}";
+                }
+                else if (byPlayer != null)
+                {
+                    byPlayer.Reply($"You healed [{this}].");
+                    msg += $" by [{byPlayer}]. You really got some friends here.";
+                }
+
+                ReplyWithState(msg);
+                return true;
+            }
+            else
+            {
+                Reply("You need no healing.");
+                return false;
+            }
+        }
     }
 }
