@@ -76,12 +76,12 @@ namespace LostAndFound.Engine
             var key = _BuildKey(token);
             if (!dict.TryGetValue(key, out item) && recursive)
             {
-                
                 foreach(var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
                 {
                     if (container.Inventory.TryFind(token, out item))
                         return true;
                 }
+                return false;
             }
             return true;
         }

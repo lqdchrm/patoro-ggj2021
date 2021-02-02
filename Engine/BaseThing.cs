@@ -119,7 +119,8 @@ namespace LostAndFound.Engine
             if (!this.CanBeTransfered)
             {
                 sender.Reply(OneOf($"{this} can't be taken. How could this even work?"));
-            } else if (container.Inventory.Transfer(this.Name, sender.Inventory))
+            }
+            else if (container.Inventory.Transfer(this.Name, sender.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You took {this} from {container}", $"Taken: {this}"));
                 sender.Room.SendText($"{sender} now owns {this}");
@@ -149,7 +150,10 @@ namespace LostAndFound.Engine
 
         public virtual void PutInto(TPlayer sender, BaseContainer<TGame, TRoom, TPlayer, TThing> container)
         {
-            if (sender.Inventory.Transfer(this.Name, container.Inventory))
+            if (sender.Inventory == container.Inventory || this == container)
+            {
+                sender.Reply($"Not really.");
+            } else if (sender.Inventory.Transfer(this.Name, container.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));
                 sender.Room.SendText($"{this} is now in {container}", sender);
