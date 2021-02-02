@@ -1,4 +1,5 @@
-﻿using DSharpPlus.Entities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 namespace LostAndFound.Engine
 {
     public abstract class BaseRoom<TGame, TRoom, TPlayer, TThing> : BaseContainer<TGame, TRoom, TPlayer, TThing>
-        where TGame: BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom: BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer: BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
+        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
+        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
+        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
+        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
     {
         internal DiscordChannel _VoiceChannel { get; set; }
 
@@ -22,7 +23,6 @@ namespace LostAndFound.Engine
 
         public void SendText(string msg, params TPlayer[] excludedPlayers)
         {
-            msg = $"```css\n{msg}\n```";
             Send(msg, false, excludedPlayers);
         }
 
@@ -36,7 +36,10 @@ namespace LostAndFound.Engine
         {
             foreach (var player in Players.Where(p => !excludedPlayers.Contains(p)))
             {
-                player._Channel?.SendMessageAsync(msg, tts);
+                if (tts)
+                    player.ReplySpeach(msg);
+                else
+                    player.Reply(msg);
             }
         }
 
@@ -50,8 +53,37 @@ namespace LostAndFound.Engine
         */
         public IEnumerable<TPlayer> Players => Game.Players.Values.Where(p => p.Room == this).ToList();
 
-        public Task Show() => this.Game._SetRoomVisibility(this, true);
-        public Task Hide() => this.Game._SetRoomVisibility(this, false);
+        public Task Show(bool silent = false)
+        {
+            if (!this.IsVisible)
+            {
+                var role = this._VoiceChannel?.Guild.EveryoneRole;
+                if (role is not null)
+                {
+                    IsVisible = true;
+
+                    if (!silent)
+                        Game.Say($"The new Room {Name} has appeared. You can switch Voice channels now.");
+
+                    return _VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
+                }
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task Hide(bool silent = false)
+        {
+            if (this.IsVisible)
+            {
+                var role = this._VoiceChannel?.Guild.EveryoneRole;
+                if (role is not null)
+                {
+                    IsVisible = false;
+                    return _VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
+                }
+            }
+            return Task.CompletedTask;
+        }
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗

@@ -8,16 +8,16 @@ using System.Linq;
 using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
-{ 
+{
     public abstract class BaseGame<TGame, TRoom, TPlayer, TThing> : IGame
-        where TGame: BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom: BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer: BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
+        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
+        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
+        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
+        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
     {
         private DiscordClient _Client;
         private DiscordGuild _Guild;
-        private DiscordChannel _ParentChannel;
+        internal DiscordChannel _ParentChannel;
         private DiscordChannel _HelpChannel;
 
         private readonly Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
@@ -63,7 +63,7 @@ namespace LostAndFound.Engine
             Ready = true;
             var member = await _Guild.GetMemberAsync(_Client.CurrentUser.Id);
             if (member != null)
-                member.ModifyAsync(x => x.Nickname = "GameMaster");
+                _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
             Say("A new game has started. Please select your channel.", true);
         }
 
@@ -114,11 +114,11 @@ namespace LostAndFound.Engine
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
 
-            if (oldChannel == newChannel)
-                return Task.CompletedTask;
-
             var oldRoom = (oldChannel != null && _Rooms.ContainsKey(oldChannel.Name)) ? _Rooms[oldChannel.Name] : null;
             var newRoom = (newChannel != null && _Rooms.ContainsKey(newChannel.Name)) ? _Rooms[newChannel.Name] : null;
+
+            if (oldRoom == newRoom)
+                return Task.CompletedTask;
 
             // Do not wait for these
             Task.Run(async () =>
@@ -152,7 +152,8 @@ namespace LostAndFound.Engine
                 if (player.Room is null)
                 {
                     player.Reply("Please join a voice channel");
-                } else if (player._Channel == e.Channel)
+                }
+                else if (player._UsesChannel(e.Channel))
                 {
                     var cmd = new BaseCommand<TGame, TRoom, TPlayer, TThing>(player, e.Message.Content);
                     RaiseCommand(cmd);
@@ -183,25 +184,15 @@ namespace LostAndFound.Engine
         {
             _Rooms.Add(room.Name, room);
             room._VoiceChannel = await _Guild.CreateChannelAsync(room.Name, ChannelType.Voice, _ParentChannel);
-            _ = _SetRoomVisibility(room, visible);
-
-            return room;
-        }
-
-        internal async Task _SetRoomVisibility(BaseRoom<TGame, TRoom, TPlayer, TThing> room, bool visible)
-        {
-            var role = _Guild.EveryoneRole;
             if (visible)
             {
-                await room._VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
-                room.IsVisible = true;
-                Say($"The new Room {room.Name} has appeared. You can switch Voice channels now.");
-            }
-            else
+                await room.Hide(true);
+            } else
             {
-                await room._VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
-                room.IsVisible = false;
+                await room.Show(true);
             }
+
+            return room;
         }
 
         public IReadOnlyDictionary<string, TRoom> Rooms => _Rooms;
@@ -211,23 +202,25 @@ namespace LostAndFound.Engine
         #region Player Helpers
         public IReadOnlyDictionary<string, TPlayer> Players => _Players.Values.ToDictionary(p => p.Name);
 
-        protected abstract TPlayer CreatePlayer(string userName);
+        protected abstract TPlayer CreatePlayer(DiscordMember member);
 
+        /// <summary>
+        /// returns null, if player cannot be created or a cached player has no channel
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
         {
+
+
             if (!_Players.TryGetValue(member.Id, out var player))
             {
                 Console.Error.WriteLine($"[ENGINE] Adding player {member.DisplayName} ...");
-                player = CreatePlayer(member.DisplayName);
+                player = CreatePlayer(member);
+                await player._InitPlayer();
+
+
                 _Players.Add(member.Id, player);
-
-                var overwrites = new DiscordOverwriteBuilder();
-
-                player._Channel = await this._Guild.CreateChannelAsync($"{player.Emoji}{player.Name}", ChannelType.Text, _ParentChannel, overwrites: new[] { overwrites.For(_Guild.EveryoneRole).Deny(Permissions.AccessChannels) });
-                await player._Channel.AddOverwriteAsync(member, Permissions.AccessChannels);
-
-                player._User = member;
-
                 Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
             }
             return player;
@@ -266,7 +259,7 @@ namespace LostAndFound.Engine
             //search player
             if (token.Length > 2)
             {
-                var candidates = Players.Values.Where(p => p.NormalizedName.StartsWith(token)).ToList();
+                var candidates = sender.Room.Players.Where(p => p.NormalizedName.StartsWith(token)).ToList();
 
                 // only one match
                 if (candidates.Count() == 1) return candidates.First();
@@ -287,12 +280,13 @@ namespace LostAndFound.Engine
             if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant()) return sender.Room;
 
             // show possible solutions
-            if (!helpCalculated && showHelp) {
+            if (!helpCalculated && showHelp)
+            {
                 var available = sender.Inventory.ToDictionary(i => i.Name);                     // own inventory
                 if (other is not null)                                                          // other inventory
                     available = available.Merge(other.Inventory.ToDictionary(i => i.Name));
                 available = available.Merge(sender.Room.Inventory.ToDictionary(i => i.Name));   // room inventory
-                available = available.Merge(Players.ToDictionary(_ => _.Key, _ => _.Value));    // player names
+                available = available.Merge(sender.Room.Players.ToDictionary(_ => _.NormalizedName));    // player names
 
                 var distances = available.Keys.Select(key => (key, value: token.Levenshtein(key)));
                 var toShow = distances.OrderBy(dist => dist.value).Take(3);

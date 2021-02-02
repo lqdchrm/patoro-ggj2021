@@ -1,17 +1,18 @@
 ﻿using DSharpPlus.Entities;
 using System.Threading.Tasks;
 using System.Linq;
+using DSharpPlus;
 
 namespace LostAndFound.Engine
 {
     public abstract class BasePlayer<TGame, TRoom, TPlayer, TThing> : BaseContainer<TGame, TRoom, TPlayer, TThing>
-        where TGame: BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom: BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer: BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
+        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
+        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
+        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
+        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
     {
-        internal DiscordChannel _Channel;
-        internal DiscordMember _User { get; set; }
+        private DiscordChannel _Channel;
+        private DiscordMember _Member { get; set; }
 
         public TRoom Room { get; set; }
         public string NormalizedName => string.Join("", Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
@@ -19,11 +20,25 @@ namespace LostAndFound.Engine
         public override string Emoji => emoji;
 
 
-        public BasePlayer(TGame game, string name) : base(game, false, false, name)
+        public BasePlayer(TGame game, DiscordMember member) : base(game, false, false, member.Username)
         {
             emoji = Emojis.Players.TakeOneRandom();
             WasMentioned = true;
+            this._Member = member;
+
+
+
         }
+
+        internal async Task _InitPlayer()
+        {
+            var overwrites = new DiscordOverwriteBuilder();
+            var discordOverwriteBuilder = overwrites.For(_Member.Guild.EveryoneRole).Deny(Permissions.AccessChannels);
+            var channel = await this._Member.Guild.CreateChannelAsync($"{this.Emoji}{this.Name}", ChannelType.Text, Game._ParentChannel, overwrites: new[] { discordOverwriteBuilder });
+            await channel.AddOverwriteAsync(_Member, Permissions.AccessChannels);
+            this._Channel = channel;
+        }
+
 
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
@@ -121,12 +136,12 @@ namespace LostAndFound.Engine
         */
         public void Mute()
         {
-            _User?.ModifyAsync(x => x.Muted = true);
+            _Member?.ModifyAsync(x => x.Muted = true);
         }
 
         public void Unmute()
         {
-            _User?.ModifyAsync(x => x.Muted = false);
+            _Member?.ModifyAsync(x => x.Muted = false);
         }
 
         public bool Reply(string msg)
@@ -149,6 +164,16 @@ namespace LostAndFound.Engine
             _Channel?.SendMessageAsync(msg);
             return true;
         }
+
+        public bool ReplySpeach(string msg)
+        {
+            _Channel?.SendMessageAsync(msg, true);
+            return true;
+        }
+
+
+
+        internal bool _UsesChannel(DiscordChannel channel) => channel == this._Channel && channel is not null;
 
         /// <summary>
         /// TODO: check if needed

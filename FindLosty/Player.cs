@@ -11,7 +11,7 @@ namespace LostAndFound.FindLosty
 {
     public class Player : BasePlayer<FindLostyGame, Room, Player, Thing>
     {
-        public Player(string name, FindLostyGame game) : base(game, name) { }
+        public Player(DiscordMember name, FindLostyGame game) : base(game, name) { }
 
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
