@@ -39,7 +39,7 @@ namespace LostAndFound.FindLosty
             //Cellar = new Cellar(this);
         }
 
-        protected override Player CreatePlayer(string userName) => new Player(userName, this);
+        protected override Player CreatePlayer(DiscordMember member) => new Player(member, this);
 
         public override async Task StartAsync()
         {
