@@ -34,8 +34,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override string LookText => CrocImage;
         
-        public const string CrocImage = @"
-        The [croc] looks hungry. But luckily it is chained to a table.
+        public string CrocImage => @$"
+        The {this} looks hungry. But luckily it is chained to a table.
 
               _____________________
              /                    /|
@@ -129,6 +129,19 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        {
+            if (other == Game.DiningRoom.Hamster)
+            {
+                sender.Room.SendText($"{sender} is trying to feed the {other} to the {this}. Shame, shame, shame.", sender);
+                return sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
+            }
+
+            if (!isFlippedCall && other != null)
+                other.Use(sender, this, true);
+
+            return base.Use(sender, other, isFlippedCall);
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
