@@ -61,7 +61,9 @@ namespace LostAndFound.Engine
             await CleanupOldAsync();
             await CreateDefaultChannelsAsync();
             Ready = true;
-
+            var member = await _Guild.GetMemberAsync(_Client.CurrentUser.Id);
+            if (member != null)
+                member.ModifyAsync(x => x.Nickname = "GameMaster");
             Say("A new game has started. Please select your channel.", true);
         }
 
@@ -147,7 +149,10 @@ namespace LostAndFound.Engine
             {
                 var player = await GetOrCreatePlayer(member);
 
-                if (player._Channel == e.Channel)
+                if (player.Room is null)
+                {
+                    player.Reply("Please join a voice channel");
+                } else if (player._Channel == e.Channel)
                 {
                     var cmd = new BaseCommand<TGame, TRoom, TPlayer, TThing>(player, e.Message.Content);
                     RaiseCommand(cmd);

@@ -154,6 +154,14 @@ namespace LostAndFound.FindLosty
                     else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
                     break;
 
+                case "say":
+                    if (first is not null)
+                    {
+                        var msg = string.Join(" ", e.RawArgs);
+                        player.Room.Say(msg);
+                    }
+                    break;
+
                 case "help":
                     player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
                     break;
