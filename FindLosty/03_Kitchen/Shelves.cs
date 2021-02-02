@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LostAndFound.Engine;
 
-namespace LostAndFound.Game.FindLosty.Things
+namespace LostAndFound.FindLosty.Things
 {
     public class Shelves : Container
     {
@@ -15,24 +16,25 @@ namespace LostAndFound.Game.FindLosty.Things
         {
         }
 
-        public override string LookText(Thing other)
+        public override string LookText
         {
-            string message = "";
-            if (other == null)
-                return $"Some shelves.";
-            return $"This is the best shelf ever";
+            get {
+                return $"This is the best shelf ever";
+            }
         }
 
-        public override string UseText(Thing other)
+        public override string UseText
         {
-            return $"This is the best shelf ever";
+            get {
+                return $"This is the best shelf ever";
+            }
         }
 
-        public override bool Use(Player player, Thing other)
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
         {
-            var txt = UseText(other);
+            string txt = UseText;
 
-            player.SendTextWithState(txt);
+            sender.Reply("YOU JUST USED ME. POLICE." + txt);
             return true;
         }
     }

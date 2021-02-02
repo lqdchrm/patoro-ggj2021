@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LostAndFound.FindLosty.Things;
 
 namespace LostAndFound.FindLosty._03_Kitchen
 {
@@ -39,14 +40,9 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string LookIntroText(Player sender) {
-            var pit_string = DescribeThing("pit", cmd);
-            var roast_string = DescribeThing("roast", cmd);
-            var microwave_string = DescribeThing("microwave", cmd);
             return $@"
                 There are [shelves] at one wall and a large [refrigerator] on the other.
-                In the middle of the room is a large fire [pit]. {pit_string}
-                {roast_string}
-                {microwave_string}
+                In the middle of the room is a large fire [pit].
                 There is one [door] leading to the dining room.
                  ".FormatMultiline();
         }

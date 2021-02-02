@@ -4,6 +4,6 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup>
-    <DefaultItemExcludes>$(DefaultItemExcludes);FindLosty/04_LivingRoom/**;FindLosty/02_DiningRoom/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);FindLosty/04_LivingRoom/**</DefaultItemExcludes>
   </PropertyGroup>
 </Project>

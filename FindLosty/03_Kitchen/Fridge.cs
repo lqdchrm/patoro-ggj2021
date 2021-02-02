@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LostAndFound.Engine;
 
-namespace LostAndFound.Game.FindLosty.Things
+namespace LostAndFound.FindLosty.Things
 {
     public class Fridge : Thing
     {
@@ -13,16 +14,16 @@ namespace LostAndFound.Game.FindLosty.Things
         }
 
 
-        public override string UseText(Thing other)
+        public override string UseText
         {
-            return $"This is the best fridge ever";
+            get { return$"This is the best fridge ever"; }
         }
 
-        public override bool Use(Player player, Thing other)
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
         {
-            var txt = UseText(other);
+            var txt = UseText;
 
-            player.SendTextWithState(txt);
+            sender.Reply(txt);
             return true;
         }
     }

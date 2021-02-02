@@ -9,7 +9,7 @@ using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
 using LostAndFound.FindLosty._01_EntryHall;
 using LostAndFound.FindLosty._02_DiningRoom;
-//using LostAndFound.FindLosty._03_Kitchen;
+using LostAndFound.FindLosty._03_Kitchen;
 //using LostAndFound.FindLosty._04_LivingRoom;
 //using LostAndFound.FindLosty._05_Cellar;
 
@@ -22,7 +22,7 @@ namespace LostAndFound.FindLosty
         public readonly FrontYard FrontYard;
         public readonly EntryHall EntryHall;
         public readonly DiningRoom DiningRoom;
-        //public readonly Kitchen Kitchen;
+        public readonly Kitchen Kitchen;
         //public readonly LivingRoom LivingRoom;
         //public readonly Cellar Cellar;
 
@@ -34,7 +34,7 @@ namespace LostAndFound.FindLosty
             FrontYard = new FrontYard(this);
             EntryHall = new EntryHall(this);
             DiningRoom = new DiningRoom(this);
-            //Kitchen = new Kitchen(this);
+            Kitchen = new Kitchen(this);
             //LivingRoom = new LivingRoom(this);
             //Cellar = new Cellar(this);
         }
@@ -48,7 +48,7 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(FrontYard, true);
             await AddRoomAsync(EntryHall, false);
             await AddRoomAsync(DiningRoom, false);
-            //await AddRoomAsync(Kitchen, false);
+            await AddRoomAsync(Kitchen, false);
             //await AddRoomAsync(LivingRoom, false);
             //await AddRoomAsync(Cellar, false);
 
@@ -164,6 +164,8 @@ namespace LostAndFound.FindLosty
 
                 case "help":
                     player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
+                    break;
+                case "cheat":
                     break;
 
                 default:
