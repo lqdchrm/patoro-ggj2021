@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace LostAndFound.Engine
 {
     public abstract class BaseRoom<TGame, TRoom, TPlayer, TThing> : BaseContainer<TGame, TRoom, TPlayer, TThing>
-        where TGame: BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom: BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer: BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
+        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
+        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
+        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
+        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
     {
         internal DiscordChannel _VoiceChannel { get; set; }
 
@@ -36,7 +36,10 @@ namespace LostAndFound.Engine
         {
             foreach (var player in Players.Where(p => !excludedPlayers.Contains(p)))
             {
-                player._Channel?.SendMessageAsync(msg, tts);
+                if (tts)
+                    player.ReplySpeach(msg);
+                else
+                    player.Reply(msg);
             }
         }
 
