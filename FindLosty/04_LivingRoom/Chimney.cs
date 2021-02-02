@@ -1,35 +1,14 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class LivingRoom : Room
+    public class Chimney : Thing
     {
-
-        public Sopha Sopha { get; init; }
-        public Chimney Chimney { get; init; }
-        public LionHead LionHead { get; init; }
-        public GunLocker GunLocker { get; init; }
-        public PinPad PinPad { get; init; }
-
-
-
-
-
-        public LivingRoom(FindLostyGame game) : base(game, "LivingRoom")
+        public Chimney(FindLostyGame game) : base(game)
         {
-            this.Sopha = new Sopha(game);
-            this.Chimney = new Chimney(game);
-            this.LionHead = new LionHead(game);
-            this.GunLocker = new GunLocker(game);
-            this.PinPad = new PinPad(game);
-
-            Inventory.InitialAdd(this.Sopha, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
         }
+
+
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
@@ -49,10 +28,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookIntroText(Player sender) => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {Sopha} stands on an bright red carpet.
-            Opposite the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
-            .FormatMultiline();
+        public override string LookText => @"
+            The chimney gas powered, looks like it wasn't used in some time...
+            and could need some cleaning.
+            ".FormatMultiline();
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -118,6 +97,19 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚══════╝╚══════╝
         */
 
+
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        {
+            sender.Reply(@"
+            The chimney gas powered, looks like it wasn't used in some time...
+            and could need some cleaning.
+            ".FormatMultiline());
+
+            sender.Room.SendText($"{sender} is poking in the chimney.", sender);
+
+            return false;
+        }
+
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
         ██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -126,6 +118,9 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+
+
+
 
     }
 }

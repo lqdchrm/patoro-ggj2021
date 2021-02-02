@@ -1,34 +1,14 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class LivingRoom : Room
+    public class PinPad : Thing
     {
 
-        public Sopha Sopha { get; init; }
-        public Chimney Chimney { get; init; }
-        public LionHead LionHead { get; init; }
-        public GunLocker GunLocker { get; init; }
-        public PinPad PinPad { get; init; }
 
-
-
-
-
-        public LivingRoom(FindLostyGame game) : base(game, "LivingRoom")
+        public PinPad(FindLostyGame game) : base(game)
         {
-            this.Sopha = new Sopha(game);
-            this.Chimney = new Chimney(game);
-            this.LionHead = new LionHead(game);
-            this.GunLocker = new GunLocker(game);
-            this.PinPad = new PinPad(game);
-
-            Inventory.InitialAdd(this.Sopha, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
         }
 
         /*
@@ -39,6 +19,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
+        public const string PIN = "#39820";
+
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -48,11 +30,12 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookText => @"
+            The pin pad is a 10 number pad with additional keys for # and *.
 
-        public override string LookIntroText(Player sender) => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {Sopha} stands on an bright red carpet.
-            Opposite the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
-            .FormatMultiline();
+            Enter a Pin code with the use command.
+            USE PinPad enter <code>
+            ".FormatMultiline();
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -118,6 +101,47 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚══════╝╚══════╝
         */
 
+        public override string UseText => "You need to enter a PIN";
+
+        public bool Use(Player sender, string pin)
+        {
+            var gunLocker = this.Game.LivingRoom.GunLocker;
+            if (gunLocker.IsOpen)
+            {
+                Task.Run(async () =>
+                {
+                    var correctPinText = "It seems that the pin for closing is different...";
+                    sender.Reply($"You enter {pin}\n.An unpleasant sound informs you that this was not the correct pin.{(pin == PIN ? correctPinText : string.Empty)}");
+                    await Task.Delay(100);
+                    sender.Room.SendText($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
+                });
+                return false;
+
+            }
+            else if (pin == PIN)
+            {
+
+                Task.Run(async () =>
+                {
+                    sender.Reply($"You enter {pin}\n.You hear an pleasant Bing.");
+                    sender.Room.SendText($"You hear a Bing from the {gunLocker}.", sender);
+                    await Task.Delay(100);
+                    sender.Room.SendText($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
+                });
+
+
+                gunLocker.Unlock(sender);
+                return true;
+            }
+            else
+            {
+                sender.Reply($"You enter {pin}\n.An unpleasant sound informs you that this was not the correct pin.");
+                sender.Room.SendText($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
+                return false;
+            }
+
+        }
+
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
         ██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -126,6 +150,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+
 
     }
 }

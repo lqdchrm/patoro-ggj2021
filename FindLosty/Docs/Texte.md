@@ -432,23 +432,23 @@ ${player} does something strange with the scanner. Maybe leave him alone for now
 
 look button
 -----------
-Its a big red button...
+    Its a big red button...
 
 use button
 -----------
 
-You push the button, a buzzer from the hall is hearable.
-`other players in dining room`
-You hear a a buzzer from the hall.
+    You push the button, a buzzer from the hall is hearable.
+    `other players in dining room`
+    You hear a a buzzer from the hall.
 
-`other players in kitchen room`
-You hear a a faint buzzer from the dining room.
+    `other players in kitchen room`
+    You hear a a faint buzzer from the dining room.
 
-`other players in hall room`
-You're spooked by a buzzer from the right door.
+    `other players in hall room`
+    You're spooked by a buzzer from the right door.
 
-`other players in dining`
-A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers #39820 before they vanish.
+    `other players in living`
+    A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers #39820 before they vanish.
 
 
 ======================================================================================================
@@ -457,8 +457,8 @@ Living room
 
 Look
 -----
-    You look around in the big living room. The croc is sitting next the door. A big [sopha] stands on an bright red carpet.
-    Opposite the seating area is an old [chimney]. Beneath a [lion-head], that hangs next to the [chimney] is a metal [gun-locker].
+    You look around in the big living room. The croc is sitting next the door. A big {sopha} stands on an bright red carpet.
+    Opposite the seating area is an old {chimney}. Beneath a {lion-head}, that hangs next to the {chimney} is a metal {gun-locker}.
 
 Look sopha
 ----------
@@ -471,10 +471,10 @@ Look chimney
 
 use chimney
 ----------
-You open the gas but nothing streams out. Either it is empty or clogged.
-You close valve again. Better safe then sorry...
-`other players`
-${player} is poking in the chimney
+    You open the gas but nothing streams out. Either it is empty or clogged.
+    You close valve again. Better safe then sorry...
+    `other players`
+    ${player} is poking in the chimney
 
 
 look lion-head
@@ -483,8 +483,9 @@ look lion-head
 
 look gun-locker
 --------------
-    A heavy metal locker. There is now way to force your way in and it is secured in the wall.
-    A [pin pad] is mounted under the handle.
+    The heavy metal locker is secured in the wall.
+    There is now way to force your way in or move it.
+    A {PinPad} is mounted under the handle.
     `Locker opend`
     A heavy metal locker. The door is opened widely.
 
@@ -495,13 +496,13 @@ look pin-pad
 
 
 
-enter pin [number] `Command available if pin-pad in hasSeen`
+enter pin {number} `Command available if pin-pad in hasSeen`
 ---------
-    You enter [number] in the pin pad.
+    You enter {number} in the pin pad.
     `other players`
-    ${player} types on the pin pad.
+    {player} types on the pin pad.
     `On success`
-    The [gun-locker] swings open and a pack of dynamite is rolling on the floor.
+    The {gun-locker} swings open and a pack of dynamite is rolling on the floor.
     `Add Dynamite to room inventory` 
 
 

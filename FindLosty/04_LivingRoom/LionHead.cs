@@ -1,34 +1,11 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class LivingRoom : Room
+    public class LionHead : Thing
     {
-
-        public Sopha Sopha { get; init; }
-        public Chimney Chimney { get; init; }
-        public LionHead LionHead { get; init; }
-        public GunLocker GunLocker { get; init; }
-        public PinPad PinPad { get; init; }
-
-
-
-
-
-        public LivingRoom(FindLostyGame game) : base(game, "LivingRoom")
+        public LionHead(FindLostyGame game) : base(game)
         {
-            this.Sopha = new Sopha(game);
-            this.Chimney = new Chimney(game);
-            this.LionHead = new LionHead(game);
-            this.GunLocker = new GunLocker(game);
-            this.PinPad = new PinPad(game);
-
-            Inventory.InitialAdd(this.Sopha, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
         }
 
         /*
@@ -39,7 +16,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-
+        private bool isMoutOpen = false;
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -48,11 +25,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-
-        public override string LookIntroText(Player sender) => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {Sopha} stands on an bright red carpet.
-            Opposite the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
-            .FormatMultiline();
+        public override string LookText => "The lion look majestic, epically from so close. But its sleeping. You hear it snore." + (isMoutOpen ? "The mouth is opend." : "");
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -62,7 +35,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
+        public override string KickText => "You should not wake a sleeping Lion.";
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -73,6 +46,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
+        public override string ListenText => "Yes this lion is sleeping. Trust me.";
+
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
         ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
@@ -82,6 +57,19 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
+        public override void Open(Player sender)
+        {
+            if (this.isMoutOpen)
+            {
+                sender.Reply("The mouth is already open.");
+            }
+            else
+            {
+                sender.Reply("You open The mouth of the beast. A warm humid breath blows over your face.");
+                sender.Room.SendText($"{sender} rips open the {this} mouth. You think he maybe want to put his Head in the beast.");
+            }
+        }
+
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
         ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝
@@ -90,6 +78,18 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Close(Player sender)
+        {
+            if (this.isMoutOpen)
+            {
+                sender.Reply("The mouth is already shutt.");
+            }
+            else
+            {
+                sender.Reply("You close The mouth of the beast. This smells better.");
+                sender.Room.SendText($"{sender} smashs close the {this} mouth.");
+            }
+        }
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
@@ -99,7 +99,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-
+        public override string TakeText => $"The {this} is mounted on the Wall. You can't get it off.";
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
@@ -108,6 +108,20 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+
+        public override void Put(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other)
+        {
+            if (!this.isMoutOpen)
+                sender.Reply($"You can't put anything in a closed mouth.");
+            else if (other is _02_DiningRoom.Hamster)
+            {
+                sender.Reply($"You push the {other} in the mouth of the {this}. But it roles out. Now it is a little wet.");
+                sender.Room.SendText($"{sender} push a {other} in the mouth of the {this}. But it roles out.", sender);
+            }
+            else
+                base.Put(sender, other);
+        }
+
 
         /*
         ██╗   ██╗███████╗███████╗

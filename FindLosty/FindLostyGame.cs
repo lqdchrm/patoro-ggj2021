@@ -9,8 +9,8 @@ using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
 using LostAndFound.FindLosty._01_EntryHall;
 using LostAndFound.FindLosty._02_DiningRoom;
+using LostAndFound.FindLosty._04_LivingRoom;
 using LostAndFound.FindLosty._03_Kitchen;
-//using LostAndFound.FindLosty._04_LivingRoom;
 //using LostAndFound.FindLosty._05_Cellar;
 
 namespace LostAndFound.FindLosty
@@ -22,8 +22,8 @@ namespace LostAndFound.FindLosty
         public readonly FrontYard FrontYard;
         public readonly EntryHall EntryHall;
         public readonly DiningRoom DiningRoom;
+        public readonly LivingRoom LivingRoom;
         public readonly Kitchen Kitchen;
-        //public readonly LivingRoom LivingRoom;
         //public readonly Cellar Cellar;
 
         private IDictionary<string, Room> _RoomMap;
@@ -31,13 +31,13 @@ namespace LostAndFound.FindLosty
         public FindLostyGame(string name, DiscordClient client, DiscordGuild guild) : base(name, client, guild)
         {
             State = new GameState(this);
-            
+
             // Rooms
             FrontYard = new FrontYard(this);
             EntryHall = new EntryHall(this);
             DiningRoom = new DiningRoom(this);
             Kitchen = new Kitchen(this);
-            //LivingRoom = new LivingRoom(this);
+            LivingRoom = new LivingRoom(this);
             //Cellar = new Cellar(this);
 
             _RoomMap = new Dictionary<string, Room> {
@@ -45,8 +45,8 @@ namespace LostAndFound.FindLosty
                 { "01", EntryHall },
                 { "02", DiningRoom },
                 { "03", Kitchen },
-                //{ "05", LivingRoom },
-                //{ "06", Cellar }
+                { "04", LivingRoom },
+                //{ "05", Cellar }
             };
         }
 
@@ -59,8 +59,8 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(FrontYard, true);
             await AddRoomAsync(EntryHall, false);
             await AddRoomAsync(DiningRoom, false);
+            await AddRoomAsync(LivingRoom, false);
             await AddRoomAsync(Kitchen, false);
-            //await AddRoomAsync(LivingRoom, false);
             //await AddRoomAsync(Cellar, false);
 
             PlayerChangedRoom += OnPlayerChangedRoom;
@@ -166,6 +166,7 @@ namespace LostAndFound.FindLosty
                     if (thing is not null)
                     {
                         if (other is not null) thing.Use(player, other);                    // two things => put a into b
+                        else if (thing is PinPad pinpad && second is string) pinpad.Use(player, second);
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
                         else thing.Use(player, null);                                       // one thing
                     }

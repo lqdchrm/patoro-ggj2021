@@ -1,35 +1,20 @@
-﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LostAndFound.Engine;
+
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class LivingRoom : Room
+    public class GunLocker : Thing
     {
+        public Dynamite Dynamite { get; }
 
-        public Sopha Sopha { get; init; }
-        public Chimney Chimney { get; init; }
-        public LionHead LionHead { get; init; }
-        public GunLocker GunLocker { get; init; }
-        public PinPad PinPad { get; init; }
-
-
-
-
-
-        public LivingRoom(FindLostyGame game) : base(game, "LivingRoom")
+        public GunLocker(FindLostyGame game) : base(game)
         {
-            this.Sopha = new Sopha(game);
-            this.Chimney = new Chimney(game);
-            this.LionHead = new LionHead(game);
-            this.GunLocker = new GunLocker(game);
-            this.PinPad = new PinPad(game);
-
-            Inventory.InitialAdd(this.Sopha, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
+            this.Dynamite = new Dynamite(game);
         }
+
+
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
@@ -40,6 +25,22 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
 
+        public bool IsOpen { get; private set; }
+
+        private Player opendBy;
+        private Player[] seenWhoOpendIt = Array.Empty<Player>();
+
+        public void Unlock(Player openingPlayer)
+        {
+            if (opendBy is not null)
+                return;
+
+            this.opendBy = openingPlayer;
+            this.seenWhoOpendIt = openingPlayer.Room.Players.ToArray();
+            this.IsOpen = true;
+            this.Game.LivingRoom.Inventory.InitialAdd(this.Dynamite);
+        }
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -49,10 +50,36 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookIntroText(Player sender) => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {Sopha} stands on an bright red carpet.
-            Opposite the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
-            .FormatMultiline();
+        public override void Look(Player sender)
+        {
+
+            if (!this.IsOpen)
+                sender.Reply($@"
+                        The heavy metal locker is secured in the wall.
+                        There is now way to force your way in or move it.
+                        A {this.Game.LivingRoom.PinPad} is mounted under the handle."
+                    .FormatMultiline());
+
+            else if (sender == this.opendBy)
+                sender.Reply($@"
+                        The heavy metal locker is secured in the wall.
+                        You have opend its door."
+                        .FormatMultiline());
+
+            else if (this.seenWhoOpendIt.Contains(sender))
+                sender.Reply($@"
+                        The heavy metal locker is secured in the wall.
+                        {opendBy} was able to open it."
+                        .FormatMultiline());
+
+            else
+                sender.Reply($@"
+                        The heavy metal locker is secured in the wall.
+                        Someone was able to open it."
+                        .FormatMultiline());
+        }
+
+
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -82,6 +109,21 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
+
+
+        public override void Open(Player sender)
+        {
+            if (this.IsOpen)
+            {
+                sender.Reply("The door is already opend");
+            }
+            else
+            {
+                sender.Reply("It is locked.");
+                sender.Room.SendText($"{sender} pulls on the Handle of the {this}. But it does not open.", sender);
+            }
+        }
+
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
         ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝
@@ -90,6 +132,21 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+
+
+        public override void Close(Player sender)
+        {
+
+            if (this.IsOpen)
+            {
+                sender.Reply("You close the door, but the lock does not lock again.");
+                sender.Room.SendText($"{sender} trys to close the dore of the {this}. But it swings open again.", sender);
+            }
+            else
+            {
+                sender.Reply("The door is already shut.");
+            }
+        }
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
@@ -126,6 +183,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+
 
     }
 }
