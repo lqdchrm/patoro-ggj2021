@@ -9,8 +9,8 @@ using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
 using LostAndFound.FindLosty._01_EntryHall;
 using LostAndFound.FindLosty._02_DiningRoom;
-//using LostAndFound.FindLosty._03_Kitchen;
 using LostAndFound.FindLosty._04_LivingRoom;
+using LostAndFound.FindLosty._03_Kitchen;
 //using LostAndFound.FindLosty._05_Cellar;
 
 namespace LostAndFound.FindLosty
@@ -22,8 +22,8 @@ namespace LostAndFound.FindLosty
         public readonly FrontYard FrontYard;
         public readonly EntryHall EntryHall;
         public readonly DiningRoom DiningRoom;
-        //public readonly Kitchen Kitchen;
         public readonly LivingRoom LivingRoom;
+        public readonly Kitchen Kitchen;
         //public readonly Cellar Cellar;
 
         private IDictionary<string, Room> _RoomMap;
@@ -36,17 +36,17 @@ namespace LostAndFound.FindLosty
             FrontYard = new FrontYard(this);
             EntryHall = new EntryHall(this);
             DiningRoom = new DiningRoom(this);
-            //Kitchen = new Kitchen(this);
+            Kitchen = new Kitchen(this);
             LivingRoom = new LivingRoom(this);
             //Cellar = new Cellar(this);
 
             _RoomMap = new Dictionary<string, Room> {
-                { "01", FrontYard },
-                { "02", EntryHall },
-                { "03", DiningRoom },
-                //{ "04", Kitchen },
-                { "05", LivingRoom },
-                //{ "06", Cellar }
+                { "00", FrontYard },
+                { "01", EntryHall },
+                { "02", DiningRoom },
+                { "03", Kitchen },
+                { "04", LivingRoom },
+                //{ "05", Cellar }
             };
         }
 
@@ -59,8 +59,8 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(FrontYard, true);
             await AddRoomAsync(EntryHall, false);
             await AddRoomAsync(DiningRoom, false);
-            //await AddRoomAsync(Kitchen, false);
             await AddRoomAsync(LivingRoom, false);
+            await AddRoomAsync(Kitchen, false);
             //await AddRoomAsync(Cellar, false);
 
             PlayerChangedRoom += OnPlayerChangedRoom;
@@ -93,6 +93,14 @@ namespace LostAndFound.FindLosty
                 player.Reply(intro);
                 GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
             };
+
+            var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
+            
+            if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
+            {
+                player.Reply($"You are still using {player.ThingPlayerIsUsingAndHasToStop}. Please stop before doing anything else.");
+                return;
+            }
 
             switch (cmd)
             {
@@ -166,6 +174,16 @@ namespace LostAndFound.FindLosty
                     else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
                     break;
 
+                case "stop":
+                    var inUse = player.ThingPlayerIsUsingAndHasToStop;
+                    if (inUse != null)
+                    {
+                        player.Reply($"You have stopped using {inUse}");
+
+                        player.ThingPlayerIsUsingAndHasToStop = null;
+                    }
+                    break;
+
                 case "say":
                     if (first is not null)
                     {
@@ -180,7 +198,12 @@ namespace LostAndFound.FindLosty
                         Room roomToOpen;
                         if (_RoomMap.TryGetValue(prepo, out roomToOpen))
                         {
-                            roomToOpen.Show();
+                            roomToOpen.Show(true);
+                        }
+                        else if (prepo == "all")
+                        {
+                            foreach (var _room in _RoomMap.Values)
+                                _room.Show(true);
                         }
                     }
                     break;
@@ -210,6 +233,7 @@ namespace LostAndFound.FindLosty
             [put]    - put something (into something or somebody)*, eg put poo into box
             [kick]   - kick (something or somebody)*, eg kick door
             [use]    - use something (with something)*, eg use poo with box
+            [stop]   - stops your current action
             [drop]   - drop something, eg drop box
             [give]   - give something to somebody, eg give box to player
 
@@ -220,6 +244,14 @@ namespace LostAndFound.FindLosty
         {
             if (e.OldRoom != null)
             {
+                // HACKY
+                var tmp = e.Player.Room;
+                e.Player.Room = e.OldRoom;
+                // stop doing things on room change
+                if (e.Player?.ThingPlayerIsUsingAndHasToStop != null)
+                    e.Player.ThingPlayerIsUsingAndHasToStop = null;
+                e.Player.Room = tmp;
+
                 e.Player?.Reply($"You left {e.OldRoom}");
                 e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
             }

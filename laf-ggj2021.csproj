@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="FindLosty\03_Kitchen\**" />
     <Compile Remove="FindLosty\05_Cellar\**" />
-    <EmbeddedResource Remove="FindLosty\03_Kitchen\**" />
     <EmbeddedResource Remove="FindLosty\05_Cellar\**" />
-    <None Remove="FindLosty\03_Kitchen\**" />
     <None Remove="FindLosty\05_Cellar\**" />
   </ItemGroup>
 

@@ -3,4 +3,7 @@
   <PropertyGroup>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);FindLosty/04_LivingRoom/**</DefaultItemExcludes>
+  </PropertyGroup>
 </Project>

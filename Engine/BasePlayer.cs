@@ -20,23 +20,25 @@ namespace LostAndFound.Engine
         public override string Emoji => emoji;
 
 
-        public BasePlayer(TGame game, DiscordMember member) : base(game, false, false, member.Username)
+        public BasePlayer(TGame game, DiscordMember member) : base(game, false, false, member.DisplayName)
         {
             emoji = Emojis.Players.TakeOneRandom();
             WasMentioned = true;
             this._Member = member;
-
-
-
         }
 
         internal async Task _InitPlayer()
         {
-            var overwrites = new DiscordOverwriteBuilder();
-            var discordOverwriteBuilder = overwrites.For(_Member.Guild.EveryoneRole).Deny(Permissions.AccessChannels);
-            var channel = await this._Member.Guild.CreateChannelAsync($"{this.Emoji}{this.Name}", ChannelType.Text, Game._ParentChannel, overwrites: new[] { discordOverwriteBuilder });
-            await channel.AddOverwriteAsync(_Member, Permissions.AccessChannels);
-            this._Channel = channel;
+            var builder = new DiscordOverwriteBuilder();
+            var guild = _Member.Guild;
+            if (guild != null)
+            {
+                var discordOverwriteBuilder = builder.For(guild.EveryoneRole).Deny(Permissions.AccessChannels);
+                var overwrites = new[] { discordOverwriteBuilder };
+                var channel = await guild.CreateChannelAsync($"{this.Emoji}{this.Name}", ChannelType.Text, Game._ParentChannel, overwrites: overwrites);
+                await channel.AddOverwriteAsync(_Member, Permissions.AccessChannels);
+                this._Channel = channel;
+            }
         }
 
 
@@ -52,6 +54,30 @@ namespace LostAndFound.Engine
 
         public virtual string StatusText => this.ToString();
 
+        private BaseThing<TGame, TRoom, TPlayer, TThing> thingPlayerIsUsingAndHasToStop;
+        public BaseThing<TGame, TRoom, TPlayer, TThing> ThingPlayerIsUsingAndHasToStop
+        {
+            get
+            {
+                return thingPlayerIsUsingAndHasToStop;
+            }
+            set
+            {
+                if (this is TPlayer self)
+                {
+                    if (thingPlayerIsUsingAndHasToStop != null && value == null)
+                    {
+                        this.Room.SendText($"{this} stopped using {thingPlayerIsUsingAndHasToStop}", self);
+                    }
+                    else if (value != null && thingPlayerIsUsingAndHasToStop != value)
+                    {
+                        this.Room.SendText($"{this} started using {value}", self);
+                    }
+                    thingPlayerIsUsingAndHasToStop = value;
+                }
+            }
+        }
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -61,6 +87,8 @@ namespace LostAndFound.Engine
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string LookInventoryText => "\nBackpack:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
+        public virtual string LookStatus => this.StatusText;
+        public override string LookText => $"{LookTextHeader}{LookInventoryText}\n{LookStatus}";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

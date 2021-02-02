@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using System.Linq;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
@@ -20,6 +21,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -28,7 +30,15 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"Someone seems to like riding a bike while having breakfast. A strange {Game.DiningRoom.Socket} is fitted onto the side.";
+        public override string LookText {
+            get {
+                var msg = $"Someone seems to like riding a bike while having breakfast. A strange {Game.DiningRoom.Socket} is fitted onto the side.";
+                var usingPlayer = Game.DiningRoom.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+                if (usingPlayer != null)
+                    msg = $"{msg}\n{usingPlayer} is currently kicking the pedals.";
+                return msg;
+            }
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -93,6 +103,27 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        {
+            if (other == null)
+            {
+                Player otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+                if (otherUser != null)
+                {
+                    return sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
+                }
+                else
+                {
+                    sender.ThingPlayerIsUsingAndHasToStop = this;
+                    return sender.Reply($"You sit down and start to cycle. You hear something crackle.");
+                }
+            }
+
+            if (!isFlippedCall)
+                return other.Use(sender, this, true);
+
+            return base.Use(sender, other, isFlippedCall);
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
