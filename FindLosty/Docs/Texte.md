@@ -432,23 +432,23 @@ ${player} does something strange with the scanner. Maybe leave him alone for now
 
 look button
 -----------
-Its a big red button...
+    Its a big red button...
 
 use button
 -----------
 
-You push the button, a buzzer from the hall is hearable.
-`other players in dining room`
-You hear a a buzzer from the hall.
+    You push the button, a buzzer from the hall is hearable.
+    `other players in dining room`
+    You hear a a buzzer from the hall.
 
-`other players in kitchen room`
-You hear a a faint buzzer from the dining room.
+    `other players in kitchen room`
+    You hear a a faint buzzer from the dining room.
 
-`other players in hall room`
-You're spooked by a buzzer from the right door.
+    `other players in hall room`
+    You're spooked by a buzzer from the right door.
 
-`other players in dining`
-A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers #39820 before they vanish.
+    `other players in living`
+    A loud buzzer sounds from the wall. You look around and can see barely a sign showing the numbers #39820 before they vanish.
 
 
 ======================================================================================================

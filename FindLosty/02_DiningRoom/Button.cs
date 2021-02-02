@@ -28,6 +28,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
+        public override string LookText => $"Its a big red {this}!";
+
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝
@@ -36,6 +38,19 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
+        public override void Kick(Player sender)
+        {
+            sender.Reply($"You kick the button hard, a buzzer from the {this.Game.EntryHall} is hearable.");
+            sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
+
+            this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
+            this.Game.EntryHall.SendText($"You're spooked by a buzzer from the {this.Game.EntryHall.RightDoor}.");
+            this.Game.LivingRoom.SendText($@"
+                A loud buzzer sounds from the wall.
+                You look around and can see barely a sign showing the numbers #39820 before they vanish."
+                .FormatMultiline());
+
+        }
 
 
         /*
@@ -91,6 +106,20 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        {
+            sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
+            sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
+
+            this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
+            this.Game.EntryHall.SendText($"You're spooked by a buzzer from behind the {this.Game.EntryHall.RightDoor}.");
+            this.Game.LivingRoom.SendText($@"
+                A loud buzzer sounds from the wall.
+                You look around and can see barely a sign showing the numbers #39820 before they vanish."
+                .FormatMultiline());
+
+            return true;
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
