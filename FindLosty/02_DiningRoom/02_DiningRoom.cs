@@ -9,8 +9,26 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 {
     public class DiningRoom : Room
     {
+        public Button Button { get; init; }
+        public Cage Cage { get; init; }
+        public Door Door { get; init; }
+        public Ergometer Ergometer { get; init; }
+        public Hamster Hamster { get; init; }
+        public Scanner Scanner { get; init; }
+        public Table Table { get; init; }
+        public Socket Socket { get; init; }
+
         public DiningRoom(FindLostyGame game) : base(game, "DiningRoom")
         {
+            Button = new Button(game);
+            Cage = new Cage(game);
+            Door = new Door(game);
+            Ergometer = new Ergometer(game);
+            Scanner = new Scanner(game);
+            Table = new Table(game);
+            Socket = new Socket(game);
+
+            Inventory.InitialAdd(Button, Cage, Door, Ergometer, Scanner, Table, Socket);
         }
 
         /*
@@ -30,6 +48,13 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookIntroText(Player sender) => @$"
+            There is a {Table} with four chairs in one corner.
+            Next to one of the chairs is a red {Button}.
+            On the other side of the room is an {Ergometer}.
+
+            A {Door} in the right wall leads to the kitchen."
+            .FormatMultiline();
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
