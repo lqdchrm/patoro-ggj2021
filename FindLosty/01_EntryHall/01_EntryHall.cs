@@ -15,6 +15,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public Phone Phone { get; init; }
         public Wardrobe Wardrobe { get; init; }
         public Staircase Staircase { get; init; }
+        public Window Window { get; init; }
+        public MetalDoor MetalDoor { get; init; }
+
+        public Splinters Splinters { get; init; }
 
         public EntryHall(FindLostyGame game) : base(game)
         {
@@ -24,8 +28,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
             Phone = new Phone(game);
             Wardrobe = new Wardrobe(game);
             Staircase = new Staircase(game);
+            Window = new Window(game);
+            MetalDoor = new MetalDoor(game);
+            Splinters = new Splinters(game);
 
-            Inventory.InitialAdd(LeftDoor, RightDoor, Croc, Phone, Wardrobe, Staircase);
+            Inventory.InitialAdd(LeftDoor, RightDoor, Croc, Phone, Wardrobe, Staircase, Window, MetalDoor, Splinters);
         }
 
         /*
@@ -45,6 +52,21 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookIntroText(Player sender)
+        {
+            return $@"
+                You are in a great hall. The floor has a black and white checker pattern.
+                To your left is the {Wardrobe} and to your right a small table with a {Phone}.
+
+                In the middle of the hall, on both sides in the wall, you'll find two doors.
+
+                Both the {LeftDoor} and the {RightDoor} are made of a massive dark wood.
+
+                In the back of the hall is a wide {Staircase}. You can also see a {Window} on the back of the room if you look past the {Staircase}.
+
+                The barking gets loader.
+            ".FormatMultiline();
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -64,6 +86,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override string ListenText => $"You hear barking from the back of the room.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

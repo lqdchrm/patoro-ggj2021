@@ -43,10 +43,11 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(Player sender)
         {
+            Poo.WasMentioned = true;
+            Box.WasMentioned = true;
+
             Task.Run(async () =>
             {
-                sender.Reply(Mansion.House);
-                await Task.Delay(500);
                 sender.Reply(Mansion.Fence);
                 await Task.Delay(500);
                 base.Look(sender);
@@ -65,7 +66,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
             return $@"
                     You're looking at the beautiful front yard of 404 Foundleroy Road.
                     A picket fence surrounds the {Mansion} in front of you.
-                    There seems to be only one way into the building. A large oak {Door}.
                     This looks like some kind of maniac lives here.
 
                     You hear barking.

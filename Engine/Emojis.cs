@@ -26,5 +26,7 @@ namespace LostAndFound.Engine
         public const string Mansion = "🏡";
         public const string Stairs = "👣";
         public const string Wardrobe = "👗";
+        public const string Window = "🔲";
+        public const string Splinters = "🥢";
     }
 }

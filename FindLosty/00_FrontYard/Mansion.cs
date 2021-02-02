@@ -32,7 +32,12 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(Player sender)
         {
-            sender.Reply(House);
+            Task.Run(async () =>
+            {
+                sender.Reply(House);
+                await Task.Delay(500);
+                sender.Reply($"There seems to be only one way into the building. A large oak {Game.FrontYard.Door}.");
+            });
         }
 
         /*
