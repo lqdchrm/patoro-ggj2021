@@ -243,6 +243,10 @@ namespace LostAndFound.FindLosty
         {
             if (e.OldRoom != null)
             {
+                // stop doing things on room change
+                if (e.Player?.ThingPlayerIsUsingAndHasToStop != null)
+                    e.Player.ThingPlayerIsUsingAndHasToStop = null;
+
                 e.Player?.Reply($"You left {e.OldRoom}");
                 e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
             }
