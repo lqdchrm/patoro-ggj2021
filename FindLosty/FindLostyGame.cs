@@ -41,10 +41,10 @@ namespace LostAndFound.FindLosty
             //Cellar = new Cellar(this);
 
             _RoomMap = new Dictionary<string, Room> {
-                { "01", FrontYard },
-                { "02", EntryHall },
-                { "03", DiningRoom },
-                { "04", Kitchen },
+                { "00", FrontYard },
+                { "01", EntryHall },
+                { "02", DiningRoom },
+                { "03", Kitchen },
                 //{ "05", LivingRoom },
                 //{ "06", Cellar }
             };
