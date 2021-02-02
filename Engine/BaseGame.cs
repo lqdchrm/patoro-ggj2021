@@ -184,25 +184,15 @@ namespace LostAndFound.Engine
         {
             _Rooms.Add(room.Name, room);
             room._VoiceChannel = await _Guild.CreateChannelAsync(room.Name, ChannelType.Voice, _ParentChannel);
-            _ = _SetRoomVisibility(room, visible);
-
-            return room;
-        }
-
-        internal async Task _SetRoomVisibility(BaseRoom<TGame, TRoom, TPlayer, TThing> room, bool visible)
-        {
-            var role = _Guild.EveryoneRole;
             if (visible)
             {
-                await room._VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
-                room.IsVisible = true;
-                Say($"The new Room {room.Name} has appeared. You can switch Voice channels now.");
-            }
-            else
+                await room.Hide(true);
+            } else
             {
-                await room._VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
-                room.IsVisible = false;
+                await room.Show(true);
             }
+
+            return room;
         }
 
         public IReadOnlyDictionary<string, TRoom> Rooms => _Rooms;

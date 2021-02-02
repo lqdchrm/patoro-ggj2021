@@ -179,7 +179,12 @@ namespace LostAndFound.FindLosty
                         Room roomToOpen;
                         if (_RoomMap.TryGetValue(prepo, out roomToOpen))
                         {
-                            roomToOpen.Show();
+                            roomToOpen.Show(true);
+                        }
+                        else if (prepo == "all")
+                        {
+                            foreach (var _room in _RoomMap.Values)
+                                _room.Show(true);
                         }
                     }
                     break;
