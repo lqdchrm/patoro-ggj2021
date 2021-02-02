@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using LostAndFound.Game.FindLosty;
+using LostAndFound.Engine.Discord;
+using LostAndFound.FindLosty;
 
 namespace LostAndFound
 {
@@ -8,7 +9,7 @@ namespace LostAndFound
     {
         public static async Task Main(string[] args)
         {
-            var bot = new Bot();
+            var bot = new DiscordBot();
             
             // set arg to null for game selection
             await bot.Start(typeof(FindLostyGame));

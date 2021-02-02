@@ -7,12 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Game\LostAndFound\**" />
-    <Compile Remove="Game\Mansion\**" />
-    <EmbeddedResource Remove="Game\LostAndFound\**" />
-    <EmbeddedResource Remove="Game\Mansion\**" />
-    <None Remove="Game\LostAndFound\**" />
-    <None Remove="Game\Mansion\**" />
+    <Compile Remove="FindLosty\01_EntryHall\**" />
+    <Compile Remove="FindLosty\02_DiningRoom\**" />
+    <Compile Remove="FindLosty\03_Kitchen\**" />
+    <Compile Remove="FindLosty\04_LivingRoom\**" />
+    <Compile Remove="FindLosty\05_Cellar\**" />
+    <EmbeddedResource Remove="FindLosty\01_EntryHall\**" />
+    <EmbeddedResource Remove="FindLosty\02_DiningRoom\**" />
+    <EmbeddedResource Remove="FindLosty\03_Kitchen\**" />
+    <EmbeddedResource Remove="FindLosty\04_LivingRoom\**" />
+    <EmbeddedResource Remove="FindLosty\05_Cellar\**" />
+    <None Remove="FindLosty\01_EntryHall\**" />
+    <None Remove="FindLosty\02_DiningRoom\**" />
+    <None Remove="FindLosty\03_Kitchen\**" />
+    <None Remove="FindLosty\04_LivingRoom\**" />
+    <None Remove="FindLosty\05_Cellar\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +29,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="2.0.0" />

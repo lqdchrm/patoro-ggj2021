@@ -3,37 +3,47 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    public class BasePlayer
+    public abstract class BasePlayer<TGame, TRoom, TPlayer, TThing> : BaseContainer<TGame, TRoom, TPlayer, TThing>
+        where TGame: BaseGame<TGame, TRoom, TPlayer, TThing>
+        where TRoom: BaseRoom<TGame, TRoom, TPlayer, TThing>
+        where TPlayer: BasePlayer<TGame, TRoom, TPlayer, TThing>
+        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
     {
+        internal DiscordChannel _Channel;
+        internal DiscordMember _User { get; set; }
 
-        internal protected DiscordChannel Channel { get; set; }
-        internal protected DiscordMember User { get; set; }
-        internal protected BaseGame Game { get; }
+        public TRoom Room { get; set; } 
 
+        public BasePlayer(TGame game, string name) : base(game, false, false, name) { }
 
-        public string Name { get; }
-        public BaseRoom Room { get; internal set; }
+        public virtual string StatusText => $"[{Name}]";
 
-
-        public override string ToString() => Name;
-
-        public BasePlayer(BaseGame game, string name)
+        public void Mute()
         {
-            this.Name = name;
-            this.Game = game;
+            _User?.ModifyAsync(x => x.Muted = true);
         }
 
-        public void SendGameEvent(string msg, bool isImage = false)
+        public void Unmute()
         {
-            if (isImage)
-            {
-                msg = $"```\n{msg}\n```";
-            }
-            else
-            {
-                msg = $"```css\n{msg}\n```";
-            }
-            Channel?.SendMessageAsync(msg);
+            _User?.ModifyAsync(x => x.Muted = false);
+        }
+
+        public void Reply(string msg)
+        {
+            msg = $"```css\n{msg}```";
+            _Channel?.SendMessageAsync(msg);
+        }
+
+        public void ReplyWithState(string msg)
+        {
+            msg = $"```css\n{msg}\nYour Status: {StatusText}```";
+            _Channel?.SendMessageAsync(msg);
+        }
+
+        public void ReplyImage(string msg)
+        {
+            msg = $"```\n{msg}\n```";
+            _Channel?.SendMessageAsync(msg);
         }
 
         /// <summary>
@@ -41,13 +51,13 @@ namespace LostAndFound.Engine
         /// </summary>
         /// <param name="room"></param>
         /// <returns></returns>
-        public virtual async Task MoveTo(BaseRoom room)
-        {
-            var oldChanel = this.Room.VoiceChannel;
-            await room.VoiceChannel.AddOverwriteAsync(this.User, DSharpPlus.Permissions.AccessChannels);
-            await room.VoiceChannel.PlaceMemberAsync(this.User);
-            await oldChanel.AddOverwriteAsync(this.User, deny: DSharpPlus.Permissions.AccessChannels);
+        //public virtual async Task MoveTo(BaseRoom room)
+        //{
+        //    var oldChanel = this.Room.VoiceChannel;
+        //    await room.VoiceChannel.AddOverwriteAsync(this.User, DSharpPlus.Permissions.AccessChannels);
+        //    await room.VoiceChannel.PlaceMemberAsync(this.User);
+        //    await oldChanel.AddOverwriteAsync(this.User, deny: DSharpPlus.Permissions.AccessChannels);
 
-        }
+        //}
     }
 }
