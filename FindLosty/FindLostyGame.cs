@@ -73,7 +73,8 @@ namespace LostAndFound.FindLosty
             Func<string, string> UnknownThing = (name) => new[]
             {
                 $"What do you mean by {name}?",
-                $"I'm not sure if I understand what {name} is.",
+                $"There is no {name}",
+                $"If there really was something like a {name}, you could probably do that.",
             }.TakeOneRandom();
 
             switch (cmd)
