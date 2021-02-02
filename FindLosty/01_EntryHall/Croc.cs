@@ -140,7 +140,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (!isFlippedCall && other != null)
                 other.Use(sender, this, true);
 
-            return base.Use(sender, other, isFlippedCall);
+            return !sender.Reply(UseText);
         }
 
         /*
