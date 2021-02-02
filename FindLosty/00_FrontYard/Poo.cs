@@ -40,7 +40,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
+        public override string KickText => $"{base.KickText}\nNow your shoes are dirty and smelly.";
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗

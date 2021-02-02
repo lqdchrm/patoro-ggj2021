@@ -9,16 +9,19 @@ namespace LostAndFound.FindLosty._00_FrontYard
 {
     public class FrontYard : Room
     {
-        public Poo Poo { get; init; }
-        public Box Box { get; init; }
+        public Poo Poo { get; private set; }
+        public Box Box { get; private set; }
+        public Mansion Mansion {get; private set; }
+        public Door Door { get; private set; }
 
         public FrontYard(FindLostyGame game) : base(game)
         {
-            // Create Things in room
-            Inventory.InitialAdd(
-                Poo = new Poo(this.Game),
-                Box = new Box(this.Game)
-            );
+            Poo = new Poo(game);
+            Box = new Box(game);
+            Mansion = new Mansion(game);
+            Door = new Door(game);
+
+            Inventory.InitialAdd(Poo, Box, Mansion, Door);
         }
 
         /*
@@ -38,17 +41,31 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override void Look(Player sender)
+        {
+            Poo.WasMentioned = true;
+            Box.WasMentioned = true;
+
+            Task.Run(async () =>
+            {
+                sender.Reply(Mansion.Fence);
+                await Task.Delay(500);
+                base.Look(sender);
+            });
+        }
+
         public override string LookIntroText(Player sender) {
             var friends = Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()
-                ? $"Your friends {friendsNames} are here."
+                ? friends.Count() == 1
+                ? $"Your friend {friendsNames} is here."
+                : $"Your friends {friendsNames} are here."
                 : "You are alone.";
 
             return $@"
                     You're looking at the beautiful front yard of 404 Foundleroy Road.
-                    A picket fence surrounds the [mansion] in front of you.
-                    There seems to be only one way into the building. A large oak [door].
+                    A picket fence surrounds the {Mansion} in front of you.
                     This looks like some kind of maniac lives here.
 
                     You hear barking.
@@ -74,6 +91,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override string ListenText => $"You here distant barking. It definitely comes from the {Mansion} in front of you.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
