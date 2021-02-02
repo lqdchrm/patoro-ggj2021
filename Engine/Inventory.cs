@@ -71,7 +71,7 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        public bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false)
+        public bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
             if (!dict.TryGetValue(key, out item))
@@ -81,19 +81,18 @@ namespace LostAndFound.Engine
                     foreach (var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
                     {
                         if (container.Inventory.TryFind(token, out item))
-                            return CheckItem(ref item);
+                            break;
                     }
                 }
-                return CheckItem(ref item);
             }
-            return CheckItem(ref item);
+            return CheckItem(ref item, onlyWhenMentioned);
         }
 
-        private bool CheckItem(ref BaseThing<TGame, TRoom, TPlayer, TThing> item)
+        private bool CheckItem(ref BaseThing<TGame, TRoom, TPlayer, TThing> item, bool onlyWhenMentioned = true)
         {
             if (item is null) return false;
 
-            if (!item.WasMentioned)
+            if (onlyWhenMentioned && !item.WasMentioned)
             {
                 item = null;
                 return false;
@@ -101,10 +100,10 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        public bool Has(string token)
+        public bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
-            return (dict.ContainsKey(key) && dict[key].WasMentioned);
+            return (dict.ContainsKey(key) && (!onlyWhenMentioned || dict[key].WasMentioned));
         }
     }
 }

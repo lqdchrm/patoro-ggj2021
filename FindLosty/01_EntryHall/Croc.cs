@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._02_DiningRoom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,7 +132,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
         {
-            if (other == Game.DiningRoom.Hamster)
+            if (other is Hamster)
             {
                 sender.Room.SendText($"{sender} is trying to feed the {other} to the {this}. Shame, shame, shame.", sender);
                 return sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
