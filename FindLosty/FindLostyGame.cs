@@ -68,7 +68,7 @@ namespace LostAndFound.FindLosty
 
             var room = player.Room;
             var other = GetThing(player, second);
-            var thing = GetThing(player, first, other as Container);
+            var thing = GetThing(player, first, other as BaseContainer<FindLostyGame, Room, Player, Thing>);
 
             Action<Player, string, BaseThing<FindLostyGame, Room, Player, Thing>>
                 ReportUnknown = (player, token, other) =>
