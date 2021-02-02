@@ -54,7 +54,29 @@ namespace LostAndFound.Engine
 
         public virtual string StatusText => this.ToString();
 
-        public BaseThing<TGame, TRoom, TPlayer, TThing> ThingPlayerIsUsingAndHasToStop = null; 
+        private BaseThing<TGame, TRoom, TPlayer, TThing> thingPlayerIsUsingAndHasToStop;
+        public BaseThing<TGame, TRoom, TPlayer, TThing> ThingPlayerIsUsingAndHasToStop
+        {
+            get
+            {
+                return thingPlayerIsUsingAndHasToStop;
+            }
+            set
+            {
+                if (this is TPlayer self)
+                {
+                    if (thingPlayerIsUsingAndHasToStop != null && value == null)
+                    {
+                        this.Room.SendText($"{this} stopped using {thingPlayerIsUsingAndHasToStop}", self);
+                    }
+                    else if (value != null && thingPlayerIsUsingAndHasToStop != value)
+                    {
+                        this.Room.SendText($"{this} started using {value}", self);
+                    }
+                    thingPlayerIsUsingAndHasToStop = value;
+                }
+            }
+        }
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
