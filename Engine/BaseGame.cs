@@ -216,6 +216,11 @@ namespace LostAndFound.Engine
 
         protected abstract TPlayer CreatePlayer(string userName);
 
+        /// <summary>
+        /// returns null, if player cannot be created or a cached player has no channel
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
         {
             if (!_Players.TryGetValue(member.Id, out var player))

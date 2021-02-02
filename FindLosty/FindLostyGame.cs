@@ -26,6 +26,8 @@ namespace LostAndFound.FindLosty
         //public readonly LivingRoom LivingRoom;
         //public readonly Cellar Cellar;
 
+        private IDictionary<string, Room> _RoomMap;
+
         public FindLostyGame(string name, DiscordClient client, DiscordGuild guild) : base(name, client, guild)
         {
             State = new GameState(this);
@@ -37,6 +39,15 @@ namespace LostAndFound.FindLosty
             //Kitchen = new Kitchen(this);
             //LivingRoom = new LivingRoom(this);
             //Cellar = new Cellar(this);
+
+            _RoomMap = new Dictionary<string, Room> {
+                { "01", FrontYard },
+                { "02", EntryHall },
+                { "03", DiningRoom },
+                //{ "04", Kitchen },
+                //{ "05", LivingRoom },
+                //{ "06", Cellar }
+            };
         }
 
         protected override Player CreatePlayer(string userName) => new Player(userName, this);
@@ -159,6 +170,17 @@ namespace LostAndFound.FindLosty
                     {
                         var msg = string.Join(" ", e.RawArgs);
                         player.Room.Say(msg);
+                    }
+                    break;
+
+                case "cheat":
+                    if (first == "open")
+                    {
+                        Room roomToOpen;
+                        if (_RoomMap.TryGetValue(prepo, out roomToOpen))
+                        {
+                            roomToOpen.Show();
+                        }
                     }
                     break;
 
