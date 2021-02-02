@@ -71,15 +71,18 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        internal bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool recursive = false)
+        internal bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false)
         {
             var key = _BuildKey(token);
-            if (!dict.TryGetValue(key, out item) && recursive)
+            if (!dict.TryGetValue(key, out item))
             {
-                foreach(var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
+                if (includeNextLevel)
                 {
-                    if (container.Inventory.TryFind(token, out item))
-                        return true;
+                    foreach (var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
+                    {
+                        if (container.Inventory.TryFind(token, out item))
+                            return true;
+                    }
                 }
                 return false;
             }
