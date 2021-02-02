@@ -210,6 +210,61 @@ namespace LostAndFound.Engine
 
         #endregion
 
+        #region Thing Helpers
+
+        /// <summary>
+        /// search for a thing
+        /// 
+        /// first search in player's inventory
+        /// then search room's inventory
+        /// then search player by name
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token)
+        {
+            if (token is null) return null;
+
+            // find in inventory
+            BaseThing<TGame, TRoom, TPlayer, TThing> item = null;
+            if (!sender.Inventory.TryFind(token, out item, true))
+            {
+                // find in room
+                if (!sender.Room.Inventory.TryFind(token, out item))
+                {
+                    //search player
+                    if (token.Length > 2)
+                    {
+                        var candidates = Players.Values.Where(p => p.NormalizedName.StartsWith(token)).ToList();
+                        if (candidates.Any())
+                        {
+                            if (candidates.Count() == 1)
+                            {
+                                item = candidates.First();
+                            }
+                            else
+                            {
+                                var names = string.Join(", ", candidates.Select(cand => cand.Name));
+                                sender.Reply($"Found multiple players: {names}");
+                            }
+                        }
+                    }
+
+                    // check if current room was meant
+                    if (item == null)
+                    {
+                        if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant())
+                            item = sender.Room;
+                    }
+                }
+            }
+
+            return item;
+        }
+        #endregion
+
         #region IDisposable
 
         private bool disposedValue;
