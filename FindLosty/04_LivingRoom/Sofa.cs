@@ -1,8 +1,8 @@
 ﻿namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class Sopha : Thing
+    public class Sofa : Thing
     {
-        public Sopha(FindLostyGame game) : base(game)
+        public Sofa(FindLostyGame game) : base(game)
         {
         }
 
@@ -23,7 +23,7 @@
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => "The sopha is made of a dark lather. It looks comfortable."; 
+        public override string LookText => "The sofa is made of a dark lather. It looks comfortable."; 
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

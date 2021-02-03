@@ -363,11 +363,11 @@ Look ergometer
 
 use ergometer
 -----------
-You sit down and start to cycle. You hear something crackle.
-`player riding`
-Its not a tandem.
-`Other Players`
-${player} starts cycling.
+    You sit down and start to cycle. You hear something crackle.
+    `player riding`
+    Its not a tandem.
+    `Other Players`
+    ${player} starts cycling.
 
 
 `stop cycleing (any other command)` 
@@ -457,12 +457,12 @@ Living room
 
 Look
 -----
-    You look around in the big living room. The croc is sitting next the door. A big {sopha} stands on an bright red carpet.
+    You look around in the big living room. The croc is sitting next the door. A big {sofa} stands on an bright red carpet.
     Opposite the seating area is an old {chimney}. Beneath a {lion-head}, that hangs next to the {chimney} is a metal {gun-locker}.
 
-Look sopha
+Look sofa
 ----------
-    The sopha is made of a dark lather. It looks comfortable.
+    The sofa is made of a dark lather. It looks comfortable.
 
 Look chimney
 ----------
