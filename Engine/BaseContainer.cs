@@ -37,12 +37,5 @@ namespace LostAndFound.Engine
         public virtual string LookTextHeader => base.LookText;
         public virtual string LookInventoryText => "\nInside:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
         public override string LookText => $"{LookTextHeader}{LookInventoryText}";
-        public override void Look(TPlayer sender)
-        {
-            foreach (var item in Inventory)
-                item.IsVisible = true;
-
-            base.Look(sender);
-        }
     }
 }

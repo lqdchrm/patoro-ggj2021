@@ -24,7 +24,7 @@ namespace LostAndFound.Engine
         public TGame Game { get; }
         public string Name { get; init; }
         public virtual string Emoji => "";
-        public virtual bool IsVisible { get; set; } = true;
+        public virtual bool IsVisible { get; protected set; } = true;
         public virtual bool WasMentioned { get; set; } = false;
 
         public bool CanBeTransfered { get; init; }
