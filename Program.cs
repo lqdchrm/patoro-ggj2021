@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using LostAndFound.Engine.Discord;
 using LostAndFound.FindLosty;
@@ -9,6 +10,8 @@ namespace LostAndFound
     {
         public static async Task Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
+
             var bot = new DiscordBot();
             
             // set arg to null for game selection
