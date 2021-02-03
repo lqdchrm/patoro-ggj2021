@@ -20,6 +20,13 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
+        public bool IsOpen { get; private set; }
+        public void Unlock()
+        {
+            this.IsOpen = true;
+            this.Game.Kitchen.IsVisible = true;
+        }
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -71,6 +78,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+
+        public override string OpenText => this.IsOpen
+            ?"The door does not have a handle. Maybe you find another machanism to open it."
+            : "The door is already opend.";
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

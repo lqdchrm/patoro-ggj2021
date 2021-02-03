@@ -419,16 +419,16 @@ look hamster **INVENTAR**
 use hamster scanner
 -------------------
 
-You hold the hamster in front of the scanner. A short beep. and the door jumps open.
-`Other Players`
-${player} holds the hamster in front of the scanner. A short beep. and the door jumps open.
+    You hold the hamster in front of the scanner. A short beep. and the door jumps open.
+    `Other Players`
+    {player} holds the hamster in front of the scanner. A short beep. and the door jumps open.
 
 use poop scanner
 -------------------
 
-You hold the poop in the green light. It shimmers green.
-`Other Players`
-${player} does something strange with the scanner. Maybe leave him alone for now?
+    You hold the poop in the green light. It shimmers green.
+    `Other Players`
+    ${player} does something strange with the scanner. Maybe leave him alone for now?
 
 look button
 -----------

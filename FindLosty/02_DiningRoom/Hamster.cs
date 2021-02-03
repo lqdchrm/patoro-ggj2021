@@ -28,6 +28,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
+        public override void Look(Player sender)
+        {
+            sender.Reply("The hamster has some barcode printed on its belly.");
+        }
+
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝
@@ -37,6 +42,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
 
+        public override string KickText => $"The {this} looks at you with big sad eys. You can't kick it...";
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -46,6 +52,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override string ListenText => "Its heart beats fast.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
