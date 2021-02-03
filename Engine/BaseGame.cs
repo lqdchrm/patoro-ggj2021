@@ -18,7 +18,6 @@ namespace LostAndFound.Engine
         private DiscordClient _Client;
         private DiscordGuild _Guild;
         internal DiscordChannel _ParentChannel;
-        private DiscordChannel _HelpChannel;
 
         private readonly Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
         private readonly Dictionary<ulong, TPlayer> _Players = new Dictionary<ulong, TPlayer>();
@@ -98,7 +97,6 @@ namespace LostAndFound.Engine
         {
             Console.Error.WriteLine("[ENGINE] Adding default channels ...");
             _ParentChannel = await this._Guild.CreateChannelAsync(this.Name, ChannelType.Category);
-            _HelpChannel = await this._Guild.CreateChannelAsync("Help", ChannelType.Text, _ParentChannel);
             Console.Error.WriteLine("[ENGINE] ... default channels added");
         }
 
