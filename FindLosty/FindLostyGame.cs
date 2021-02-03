@@ -81,6 +81,18 @@ namespace LostAndFound.FindLosty
             Console.WriteLine($"[COMMAND] {e}");
         }
 
+        private void ReportUnknown(Player player, string token, BaseThing<FindLostyGame, Room, Player, Thing>  other)
+        {
+            var intro = new[] {
+                $"What do you mean by {token}?",
+                $"There is no {token}",
+                $"If there really was something like a {token}, you could probably do that.",
+            }.TakeOneRandom();
+
+            player.Reply(intro);
+            GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
+        }
+
         private void OnPlayerCommandSent(object sender, BaseCommand<FindLostyGame, Room, Player, Thing> e)
         {
             if (e.Command == null) return;
@@ -95,19 +107,7 @@ namespace LostAndFound.FindLosty
             var other = GetThing(player, second);
             var thing = GetThing(player, first, other as BaseContainer<FindLostyGame, Room, Player, Thing>);
 
-            Action<Player, string, BaseThing<FindLostyGame, Room, Player, Thing>>
-                ReportUnknown = (player, token, other) =>
-            {
-                var intro = new[] {
-                    $"What do you mean by {token}?",
-                    $"There is no {token}",
-                    $"If there really was something like a {token}, you could probably do that.",
-                }.TakeOneRandom();
-
-                player.Reply(intro);
-                GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
-            };
-
+            // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
             
             if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
@@ -116,6 +116,7 @@ namespace LostAndFound.FindLosty
                 return;
             }
 
+            // Main command selection
             switch (cmd)
             {
                 // zero or one args
@@ -154,10 +155,10 @@ namespace LostAndFound.FindLosty
                 case "take":
                     if (thing is not null)
                     {
-                        if (other is not null) thing.Take(player, other);                   // two things
-                        else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
+                        if (other is not null) thing.Take(player, other);                       // two things
+                        else if (second is not null) ReportUnknown(player, second, other);      // second thing not found
                         else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
-                        else thing.Take(player, room);                                      // one thing => try to take it from room
+                        else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
                     else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
                     else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
@@ -193,7 +194,6 @@ namespace LostAndFound.FindLosty
                     if (inUse != null)
                     {
                         player.Reply($"You have stopped using {inUse}");
-
                         player.ThingPlayerIsUsingAndHasToStop = null;
                     }
                     break;
