@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="FindLosty\05_Cellar\**" />
-    <EmbeddedResource Remove="FindLosty\05_Cellar\**" />
-    <None Remove="FindLosty\05_Cellar\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

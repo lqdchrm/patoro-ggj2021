@@ -9,9 +9,9 @@ using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
 using LostAndFound.FindLosty._01_EntryHall;
 using LostAndFound.FindLosty._02_DiningRoom;
-using LostAndFound.FindLosty._04_LivingRoom;
 using LostAndFound.FindLosty._03_Kitchen;
-//using LostAndFound.FindLosty._05_Cellar;
+using LostAndFound.FindLosty._04_LivingRoom;
+using LostAndFound.FindLosty._05_Cellar;
 
 namespace LostAndFound.FindLosty
 {
@@ -24,7 +24,7 @@ namespace LostAndFound.FindLosty
         public readonly DiningRoom DiningRoom;
         public readonly LivingRoom LivingRoom;
         public readonly Kitchen Kitchen;
-        //public readonly Cellar Cellar;
+        public readonly Cellar Cellar;
 
         private IDictionary<string, Room> _RoomMap;
 
@@ -38,7 +38,7 @@ namespace LostAndFound.FindLosty
             DiningRoom = new DiningRoom(this);
             Kitchen = new Kitchen(this);
             LivingRoom = new LivingRoom(this);
-            //Cellar = new Cellar(this);
+            Cellar = new Cellar(this);
 
             _RoomMap = new Dictionary<string, Room> {
                 { "00", FrontYard },
@@ -46,7 +46,7 @@ namespace LostAndFound.FindLosty
                 { "02", DiningRoom },
                 { "03", Kitchen },
                 { "04", LivingRoom },
-                //{ "05", Cellar }
+                { "05", Cellar }
             };
         }
 
@@ -61,7 +61,7 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(DiningRoom, false);
             await AddRoomAsync(LivingRoom, false);
             await AddRoomAsync(Kitchen, false);
-            //await AddRoomAsync(Cellar, false);
+            await AddRoomAsync(Cellar, false);
 
             PlayerChangedRoom += OnPlayerChangedRoom;
             CommandSent += OnPlayerCommandSent;
