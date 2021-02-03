@@ -63,8 +63,22 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(Kitchen, false);
             await AddRoomAsync(Cellar, false);
 
+#if DEBUG
+            PlayerChangedRoom += LogRoomChange;
+            CommandSent += LogEvent;
+#endif
             PlayerChangedRoom += OnPlayerChangedRoom;
             CommandSent += OnPlayerCommandSent;
+        }
+
+        private void LogRoomChange(object sender, PlayerRoomChange<FindLostyGame, Room, Player, Thing> e)
+        {
+            Console.WriteLine($"[ROOMS] {e}");
+        }
+
+        private void LogEvent(object sender, BaseCommand<FindLostyGame, Room, Player, Thing> e)
+        {
+            Console.WriteLine($"[COMMAND] {e}");
         }
 
         private void OnPlayerCommandSent(object sender, BaseCommand<FindLostyGame, Room, Player, Thing> e)

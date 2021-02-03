@@ -49,5 +49,10 @@ namespace LostAndFound.Engine
             Second = tokens.Skip(3).FirstOrDefault()?.ToLowerInvariant();
             RawArgs = tokens.Skip(1);
         }
+
+        public override string ToString()
+        {
+            return $"{Sender}: {Command} {string.Join(" ", RawArgs)}";
+        }
     }
 }
