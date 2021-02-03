@@ -1,17 +1,20 @@
 ﻿# Find Losty
 
+This is a checkmark: ✔️
+This is an error: ❌
+
 ## FrontYard
-- [ ] Mansion
-- [ ] Poo
-- [ ] Box
-- [ ] Door (to EntryHall)
+- [✔️] Mansion
+- [✔️] Poo
+- [✔️] Box
+- [✔️] Door (to EntryHall)
 
 ## EntryHall
 - [ ] Croc (prevents entry, needs *tofu*)
-- [ ] LeftDoor (to DiningRoom)
-- [ ] RightDoor (to LivinRoom)
+- [ ] LeftDoor (to DiningRoom, must be hit with force)
+- [ ] RightDoor (to LivinRoom, secured by *croc*)
 - [ ] MetalDoor (to Cellar)
-- [ ] Phone
+- [✔️] Phone
 - [ ] Splinters
 - [ ] Staircase
 - [ ] Wardrobe
