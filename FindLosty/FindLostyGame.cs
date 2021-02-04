@@ -273,8 +273,15 @@ namespace LostAndFound.FindLosty
                 // drop things if leaving game
                 if (newRoom is null)
                 {
-                    foreach(var item in e.Player.Inventory)
+                    var stuff = e.Player.Inventory.ToList();
+                    foreach(var item in stuff)
                         e.Player.Inventory.Transfer(item, oldRoom.Inventory);
+
+                    e.Player.Room = oldRoom;
+                    e.Player?.Reply($"You left your stuff in {oldRoom}.");
+                    e.Player.Room = newRoom;
+
+                    oldRoom.SendText($"{e.Player} dropped {string.Join(", ", stuff)}.", e.Player);
                 }
 
                 e.Player.Room = oldRoom;
