@@ -25,6 +25,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
+        public bool IsNapping { get; private set; }
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -34,7 +36,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string LookText => CrocImage;
-        
+
         public string CrocImage => @$"
         The {this} looks hungry. But luckily it is chained to a table.
 
@@ -135,7 +137,28 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (other is Hamster)
             {
                 sender.Room.SendText($"{sender} is trying to feed the {other} to the {this}. Shame, shame, shame.", sender);
-                return sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
+                sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
+                return true;
+            }
+            else if (other is Things.Tofu)
+            {
+                sender.Reply(@$"
+                    Carefully holding the {other} you come closer. The {this} leaps forward and with a giant snap it swallows {other}.
+
+                    You assure your hand is still there...
+                    It is.
+
+                    The {this} leaves happily and full its guarding position.
+                    It takes a napp right next to the door.
+                    ".FormatMultiline());
+                sender.Room.SendText(@$"
+                    {sender} goes near the {this} and puts the {other} in the mouth of the {this}.
+                    The {this} leaves happily and full its guarding position.
+                    It takes a napp right next to the door.
+                    ", sender);
+                this.IsNapping = true;
+                this.Game.DiningRoom.Show();
+                return true;
             }
 
             if (!isFlippedCall && other != null)
