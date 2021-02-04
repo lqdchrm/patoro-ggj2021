@@ -87,7 +87,7 @@ namespace LostAndFound.FindLosty
             Console.WriteLine($"[COMMAND] {e}");
         }
 
-        private void ReportUnknown(IPlayer player, string token, IThing other)
+        private void ReportUnknown(IPlayer sender, string token, IThing other)
         {
             var intro = new[] {
                 $"What do you mean by {token}?",
@@ -95,8 +95,8 @@ namespace LostAndFound.FindLosty
                 $"If there really was something like a {token}, you could probably do that.",
             }.TakeOneRandom();
 
-            player.Reply(intro);
-            GetThing(player, token, other as IContainer, true);
+            sender.Reply(intro);
+            GetThing(sender, token, other as IContainer, true);
         }
 
         private void OnPlayerCommandSent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
@@ -166,7 +166,7 @@ namespace LostAndFound.FindLosty
                         else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
                         else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
-                    else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
+                    else if (first is not null) ReportUnknown(player, first, other);            // first thing not found
                     else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
                     break;
 

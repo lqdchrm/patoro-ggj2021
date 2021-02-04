@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._01_EntryHall;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
@@ -98,6 +99,16 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is Croc croc)
+            {
+                croc.RefuseToEatHamster(sender, this);
+            } else
+            {
+                base.Use(sender, other);
+            }
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

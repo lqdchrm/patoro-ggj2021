@@ -98,16 +98,14 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         */
 
 
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override void Use(IPlayer sender, IThing other)
         {
             sender.Reply(@"
-            The chimney gas powered, looks like it wasn't used in some time...
-            and could need some cleaning.
+                The chimney gas powered, looks like it wasn't used in some time...
+                and could need some cleaning.
             ".FormatMultiline());
 
             sender.Room.SendText($"{sender} is poking in the chimney.", sender);
-
-            return false;
         }
 
         /*

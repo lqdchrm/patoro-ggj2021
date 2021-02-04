@@ -1,13 +1,14 @@
 using LostAndFound.Engine;
 using LostAndFound.FindLosty._02_DiningRoom;
+using LostAndFound.FindLosty._03_Kitchen;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
-    public class Croc : Thing
+    public class Croc : Container
     {
         public override string Emoji => Emojis.Croc;
 
-        public Croc(FindLostyGame game) : base(game)
+        public Croc(FindLostyGame game) : base(game, false, null)
         {
         }
 
@@ -20,7 +21,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        public bool IsNapping { get; private set; }
+        public bool IsNapping => this.Inventory.Has(Game.Kitchen.Fridge.Tofu);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -109,6 +110,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
+        public override void TakeFrom(IPlayer sender, IContainer container)
+        {
+            sender.Reply($"You don't really want to mess with the {this}.");
+        }
 
         /*
         ██████╗ ██╗   ██╗████████╗
@@ -127,18 +132,37 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override string UseText => $"You better not touch the {this}.";
+
+        public void RefuseToEatHamster(IPlayer sender, Hamster hamster)
         {
-            if (other is Hamster)
-            {
-                sender.Room.SendText($"{sender} is trying to feed the {other} to the {this}. Shame, shame, shame.", sender);
-                sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
-                return true;
-            }
-            else if (other is Things.Tofu)
+            sender.Room.SendText($"{sender} is trying to feed the {hamster} to the {this}. Shame, shame, shame.", sender);
+            sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {hamster} is squeeking.");
+        }
+
+        public bool TryToEatTofu(IPlayer sender, Tofu tofu)
+        {
+            if (tofu.Frozen)
             {
                 sender.Reply(@$"
-                    Carefully holding the {other} you come closer. The {this} leaps forward and with a giant snap it swallows {other}.
+                    Carefully holding the {tofu} you come closer. The {this} leaps forward and with a giant snap it swallows {tofu}.
+                    And immediately spit it into your face.
+                    It drops to the ground.
+                    The hard and icy block hurts.
+                    ".FormatMultiline());
+
+                sender.Room.SendText(@$"
+                    {sender} goes near the {this} and puts the {tofu} in the mouth of the {this}.
+                    Angry the {this} spits the block in to the face of {sender}.
+                    It lands on the ground.
+                    ", sender);
+                sender.Hit(tofu.ToString());
+                return false;
+            }
+            else
+            {
+                sender.Reply(@$"
+                    Carefully holding the {tofu} you come closer. The {this} leaps forward and with a giant snap it swallows {tofu}.
 
                     You assure your hand is still there...
                     It is.
@@ -147,19 +171,13 @@ namespace LostAndFound.FindLosty._01_EntryHall
                     It takes a napp right next to the door.
                     ".FormatMultiline());
                 sender.Room.SendText(@$"
-                    {sender} goes near the {this} and puts the {other} in the mouth of the {this}.
+                    {sender} goes near the {this} and puts the {tofu} in the mouth of the {this}.
                     The {this} leaves happily and full its guarding position.
                     It takes a napp right next to the door.
                     ", sender);
-                this.IsNapping = true;
                 this.Game.DiningRoom.Show();
                 return true;
             }
-
-            if (!isFlippedCall && other != null)
-                other.Use(sender, this, true);
-
-            return !sender.Reply(this.UseText);
         }
 
         /*
@@ -170,6 +188,5 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
-
     }
 }

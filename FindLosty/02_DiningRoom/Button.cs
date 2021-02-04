@@ -106,19 +106,24 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override void Use(IPlayer sender, IThing other)
         {
-            sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
-            sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
+            if (other is null)
+            {
+                sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
+                sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
 
-            this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
-            this.Game.EntryHall.SendText($"You're spooked by a buzzer from behind the {this.Game.EntryHall.RightDoor}.");
-            this.Game.LivingRoom.SendText($@"
-                A loud buzzer sounds from the wall.
-                You look around and can see barely a sign showing the numbers #39820 before they vanish."
-                .FormatMultiline());
-
-            return true;
+                this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
+                this.Game.EntryHall.SendText($"You're spooked by a buzzer from behind the {this.Game.EntryHall.RightDoor}.");
+                this.Game.LivingRoom.SendText($@"
+                    A loud buzzer sounds from the wall.
+                    You look around and can see barely a sign showing the numbers #39820 before they vanish."
+                    .FormatMultiline());
+            }
+            else
+            {
+                base.Use(sender, other);
+            }
         }
 
         /*

@@ -103,35 +103,32 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚═════╝ ╚══════╝╚══════╝
         */
 
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override void Use(IPlayer sender, IThing other)
         {
-            if (other is not null)
-                return base.Use(sender, other, isFlippedCall);
-            if (this.isBroken)
+            if (other is null)
             {
-                sender.Reply("There is not enogh left of the stairs to climb up.");
-            }
-            else
-            {
-                sender.Reply(@"
-You go up the stairs, but half way the stairs break and with a louad squash you fell down.
-You recive Damage.
-".FormatMultiline());
-                sender.Room.SendText(@$"You see how {sender} climbs up the stairs, when suddenly the staircase collapses and {sender} forcfully hits the ground.", sender);
-                this.Game.DiningRoom.SendText(@$"
-You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.
-");
-                this.Game.LivingRoom.SendText(@$"
-You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.
-");
-                this.Game.Kitchen.SendText(@$"
-You hear a load noise. Something seems to be collapsed in another room.
-");
-                sender.Hit();
-                this.isBroken = true;
-            }
+                if (this.isBroken)
+                {
+                    sender.Reply("There is not enogh left of the stairs to climb up.");
+                }
+                else
+                {
+                    sender.Reply(@"
+                        You go up the stairs, but half way the stairs break and with a louad squash you fell down.
+                        You recive Damage.
+                    ".FormatMultiline());
 
-            return false;
+                    sender.Room.SendText(@$"You see how {sender} climbs up the stairs, when suddenly the staircase collapses and {sender} forcfully hits the ground.", sender);
+                    this.Game.DiningRoom.SendText(@$"You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.");
+                    this.Game.LivingRoom.SendText(@$"You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.");
+                    this.Game.Kitchen.SendText(@$"You hear a load noise. Something seems to be collapsed in another room.");
+                    sender.Hit();
+                    this.isBroken = true;
+                }
+            } else
+            {
+                base.Use(sender, other);
+            }
         }
 
         /*

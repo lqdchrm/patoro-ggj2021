@@ -9,16 +9,6 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public RightDoor(FindLostyGame game) : base(game)
         {
         }
-        /*
-         ███████╗████████╗ █████╗ ████████╗███████╗
-         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
-         ███████╗   ██║   ███████║   ██║   █████╗  
-         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
-         ███████║   ██║   ██║  ██║   ██║   ███████╗
-         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-         */
-
-        public bool IsOpen = false;
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -29,6 +19,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string LookText => this.IsOpen ? DoorImage : $"The massive door made of dark wood is still in good condition.";
+
+        public bool IsOpen { get; private set; } = false;
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -59,13 +51,24 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override void Open(IPlayer sender)
         {
-            sender.Reply(DoorImage);
 
             if (!this.IsOpen)
             {
+                sender.Reply(DoorImage);
                 sender.Room.SendText($"{sender} opens the {this}...startling.", sender);
                 sender.Reply($"You open the door and look into the eyes of an hungry {this.Game.EntryHall.Croc}");
                 this.IsOpen = true;
+            }
+            else
+            {
+                var crocText = this.Game.EntryHall.Croc.IsNapping
+                    ? string.Empty
+                    : $"\nAnd the {this.Game.EntryHall.Croc} is still staring at you.";
+                sender.Reply($"The door is already opend.{crocText}");
+                if (!this.Game.EntryHall.Croc.IsNapping)
+                {
+                    sender.Reply(DoorImage);
+                }
             }
         }
 
@@ -96,7 +99,25 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Close(IPlayer sender)
+        {
+            if (this.Game.EntryHall.Croc.IsNapping)
+            {
+                sender.Reply($"The {this.Game.EntryHall.Croc} sleeps in front of the door. You can't close it.");
+            }
+            else
+            {
+                sender.Reply($@"
+                    You smash the {this}.
+                    It is safe now. Is it?"
+                    .FormatMultiline());
+                sender.Room.SendText($"{sender} closes the {this} with a smash.", sender);
+                this.Game.DiningRoom.SendText($"You hear a loud bang from the {this.Game.EntryHall}.");
+                this.IsOpen = false;
+                this.Game.EntryHall.Croc.WasMentioned = false;
+            }
 
+        }
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
         ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝

@@ -1,5 +1,4 @@
 ﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty.Things;
 
 namespace LostAndFound.FindLosty._03_Kitchen
 {

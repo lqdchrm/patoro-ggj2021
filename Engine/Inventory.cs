@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LostAndFound.FindLosty;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,9 @@ namespace LostAndFound.Engine
             }
         }
 
-        public bool Transfer(string name, Inventory<TGame, TPlayer, TRoom, TContainer, TThing> target)
+        public bool Transfer(TThing thing, Inventory<TGame, TPlayer, TRoom, TContainer, TThing> target) => Transfer(thing.Name, target);
+
+        private bool Transfer(string name, Inventory<TGame, TPlayer, TRoom, TContainer, TThing> target)
         {
             var key = _BuildKey(name);
             if (!this.dict.ContainsKey(key) || target == null) return false;
@@ -99,13 +102,15 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        public void Remove(string name)
+        public void Remove(IThing thing) => Remove(thing.Name);
+        private void Remove(string name)
         {
             var key = _BuildKey(name);
             this.dict.Remove(key);
         }
 
-        public bool Has(string token, bool onlyWhenMentioned = true)
+        public bool Has(IThing thing, bool onlyWhenMentioned = true) => Has(thing.Name, onlyWhenMentioned);
+        private bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
             return (this.dict.ContainsKey(key) && (!onlyWhenMentioned || this.dict[key].WasMentioned));

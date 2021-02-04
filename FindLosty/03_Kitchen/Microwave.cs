@@ -1,4 +1,6 @@
-﻿namespace LostAndFound.FindLosty.Things
+﻿using System.Linq;
+
+namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Microwave : Container
     {
@@ -7,47 +9,138 @@
         {
         }
 
+        /*
+         ███████╗████████╗ █████╗ ████████╗███████╗
+         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+         ███████╗   ██║   ███████║   ██║   █████╗  
+         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
+         ███████║   ██║   ██║  ██║   ██║   ███████╗
+         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+         */
 
-        public override string UseText
-        {
-            get { return $"This is the best fridge ever."; }
-        }
+        /*
+        ██╗      ██████╗  ██████╗ ██╗  ██╗
+        ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
+        ██║     ██║   ██║██║   ██║█████╔╝ 
+        ██║     ██║   ██║██║   ██║██╔═██╗ 
+        ███████╗╚██████╔╝╚██████╔╝██║  ██╗
+        ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+        */
+        public override string LookText => $"This is the best fridge ever.";
+
+        /*
+        ██╗  ██╗██╗ ██████╗██╗  ██╗
+        ██║ ██╔╝██║██╔════╝██║ ██╔╝
+        █████╔╝ ██║██║     █████╔╝ 
+        ██╔═██╗ ██║██║     ██╔═██╗ 
+        ██║  ██╗██║╚██████╗██║  ██╗
+        ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
+        */
+
+
+        /*
+        ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
+        ██║     ██║██╔════╝╚══██╔══╝██╔════╝████╗  ██║
+        ██║     ██║███████╗   ██║   █████╗  ██╔██╗ ██║
+        ██║     ██║╚════██║   ██║   ██╔══╝  ██║╚██╗██║
+        ███████╗██║███████║   ██║   ███████╗██║ ╚████║
+        ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
+        */
+
+        /*
+         ██████╗ ██████╗ ███████╗███╗   ██╗
+        ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
+        ██║   ██║██████╔╝█████╗  ██╔██╗ ██║
+        ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║
+        ╚██████╔╝██║     ███████╗██║ ╚████║
+         ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
+        */
+
+        /*
+         ██████╗██╗      ██████╗ ███████╗███████╗
+        ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝
+        ██║     ██║     ██║   ██║███████╗█████╗  
+        ██║     ██║     ██║   ██║╚════██║██╔══╝  
+        ╚██████╗███████╗╚██████╔╝███████║███████╗
+         ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
+        */
+
+        /*
+        ████████╗ █████╗ ██╗  ██╗███████╗
+        ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝
+           ██║   ███████║█████╔╝ █████╗  
+           ██║   ██╔══██║██╔═██╗ ██╔══╝  
+           ██║   ██║  ██║██║  ██╗███████╗
+           ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+        */
+
+        /*
+        ██████╗ ██╗   ██╗████████╗
+        ██╔══██╗██║   ██║╚══██╔══╝
+        ██████╔╝██║   ██║   ██║   
+        ██╔═══╝ ██║   ██║   ██║   
+        ██║     ╚██████╔╝   ██║   
+        ╚═╝      ╚═════╝    ╚═╝   
+        */
+
+        /*
+        ██╗   ██╗███████╗███████╗
+        ██║   ██║██╔════╝██╔════╝
+        ██║   ██║███████╗█████╗  
+        ██║   ██║╚════██║██╔══╝  
+        ╚██████╔╝███████║███████╗
+         ╚═════╝ ╚══════╝╚══════╝
+        */
+        public override string UseText => LookText;
 
         public override bool DoesItemFit(IThing thing, out string error)
         {
-            IThing item = null;
-            bool found_tofu = this.Inventory.TryFind("tofu", out item);
-            if (found_tofu)
+            error = "";
+            IThing maybeTofu = this.Inventory.FirstOrDefault();
+            if (maybeTofu is Tofu tofu)
             {
-                error = $"You can't put that in. there is {item} inside the microwave.";
-                return false;
-            }
-            else if (thing is Tofu tofu)
-            {
-                error = "";
                 return true;
+            }
+            else if (thing is not null)
+            {
+                error = $"You can't put that in. there is already {maybeTofu} inside the microwave.";
+                return false;
             }
             else
             {
-                error = $"I don't really feel like putting {item} into the microwave.";
+                error = $"I don't really feel like putting {thing} into the microwave.";
                 return false;
             }
         }
 
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
+        public override void Use(IPlayer sender, IThing other)
         {
-            IThing item = null;
-            bool found_tofu = this.Inventory.TryFind("tofu", out item);
-            if (found_tofu && item is Tofu tofu)
+            if (other is null)
             {
-                tofu.Frozen = false;
-                sender.Reply("The tofu immediately unfreezes.");
+                IThing maybeTofu = this.Inventory.FirstOrDefault();
+                if (maybeTofu is Tofu tofu)
+                {
+                    tofu.Frozen = false;
+                    sender.Reply("The tofu immediately unfreezes.");
+                }
+                else
+                {
+                    sender.Reply("The microwave turns on for 30 seconds. Nothing really happens. You wasted some energy. Somewhere in the rain forest a tree dies.");
+                }
             }
-            else
+            else 
             {
-                sender.Reply("The microwave turns on for 30 seconds. Nothing really happens. You wasted some energy. Somewhere in the rain forest a tree dies.");
+                base.Use(sender, other);
             }
-            return true;
         }
+
+        /*
+        ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
+        ██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗██╔════╝
+        ███████║█████╗  ██║     ██████╔╝█████╗  ██████╔╝███████╗
+        ██╔══██║██╔══╝  ██║     ██╔═══╝ ██╔══╝  ██╔══██╗╚════██║
+        ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
+        ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
+        */
     }
 }
