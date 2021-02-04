@@ -53,41 +53,41 @@ namespace LostAndFound.FindLosty._01_EntryHall
             var message = $"Nothing happened.";
             var time_of_kick = DateTimeOffset.Now;
 
-            var delta = time_of_kick - time_of_last_kick;
+            var delta = time_of_kick - this.time_of_last_kick;
             if (delta > TimeSpan.Zero && delta < TimeSpan.FromSeconds(3))
             {
-                kick_count++;
+                this.kick_count++;
             }
             else
             {
-                kick_count = 1;
+                this.kick_count = 1;
             }
-            time_of_last_kick = time_of_kick;
+            this.time_of_last_kick = time_of_kick;
 
-            if (door_life == 0)
+            if (this.door_life == 0)
             {
-                Game.EntryHall.Splinters.Kick(sender);
+                this.Game.EntryHall.Splinters.Kick(sender);
             }
-            else if (kick_count == 1)
+            else if (this.kick_count == 1)
             {
                 sender.Reply($"The door shakes and there are some cracking sounds. But it feels like you need more force.");
             }
-            else if (kick_count == 2)
+            else if (this.kick_count == 2)
             {
                 sender.Reply($"The combined force shake the door and there are cracking sounds. But it feels like you need more force.");
             }
-            else if (kick_count > 2 && door_life > 1)
+            else if (this.kick_count > 2 && this.door_life > 1)
             {
                 sender.Reply($"The combined force shake the door and you can feel it crack. You definitely destroyed it a little.");
-                door_life -= 1;
+                this.door_life -= 1;
             }
-            else if (kick_count > 2 && door_life == 1)
+            else if (this.kick_count > 2 && this.door_life == 1)
             {
-                message = $"The combined forces shatter the door into {Game.EntryHall.Splinters}. The {this} finally opened.";
+                message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}. The {this} finally opened.";
                 sender.Room.SendText(message);
-                door_life -= 1;
-                IsOpen = true;
-                Game.DiningRoom.Show();
+                this.door_life -= 1;
+                this.IsOpen = true;
+                this.Game.DiningRoom.Show();
             }
         }
 

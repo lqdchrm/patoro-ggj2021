@@ -32,7 +32,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public void Unlock(IPlayer openingPlayer)
         {
-            if (opendBy is not null)
+            if (this.opendBy is not null)
                 return;
 
             this.opendBy = openingPlayer;
@@ -69,7 +69,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             else if (this.seenWhoOpendIt.Contains(sender))
                 sender.Reply($@"
                         The heavy metal locker is secured in the wall.
-                        {opendBy} was able to open it."
+                        {this.opendBy} was able to open it."
                         .FormatMultiline());
 
             else

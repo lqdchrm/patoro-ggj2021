@@ -35,7 +35,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"It seems to be in good shape. But there's no handle. Next to it there's a machine that looks like some kind of {Game.DiningRoom.Scanner}.";
+        public override string LookText => $"It seems to be in good shape. But there's no handle. Next to it there's a machine that looks like some kind of {this.Game.DiningRoom.Scanner}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

@@ -25,7 +25,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => "The lion look majestic, epically from so close. But its sleeping. You hear it snore." + (isMoutOpen ? "The mouth is opend." : "");
+        public override string LookText => "The lion look majestic, epically from so close. But its sleeping. You hear it snore." + (this.isMoutOpen ? "The mouth is opend." : "");
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

@@ -16,12 +16,12 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
         public FrontYard(FindLostyGame game) : base(game)
         {
-            Poo = new Poo(game);
-            Box = new Box(game);
-            Mansion = new Mansion(game);
-            Door = new Door(game);
+            this.Poo = new Poo(game);
+            this.Box = new Box(game);
+            this.Mansion = new Mansion(game);
+            this.Door = new Door(game);
 
-            Inventory.InitialAdd(Poo, Box, Mansion, Door);
+            this.Inventory.InitialAdd(this.Poo, this.Box, this.Mansion, this.Door);
         }
 
         /*
@@ -43,8 +43,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(IPlayer sender)
         {
-            Poo.WasMentioned = true;
-            Box.WasMentioned = true;
+            this.Poo.WasMentioned = true;
+            this.Box.WasMentioned = true;
 
             Task.Run(async () =>
             {
@@ -55,7 +55,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         }
 
         public override string LookIntroText(IPlayer sender) {
-            var friends = Players.Where(p => p != sender);
+            var friends = this.Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()
                 ? friends.Count() == 1
@@ -65,7 +65,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
             return $@"
                     You're looking at the beautiful front yard of 404 Foundleroy Road.
-                    A picket fence surrounds the {Mansion} in front of you.
+                    A picket fence surrounds the {this.Mansion} in front of you.
                     This looks like some kind of maniac lives here.
 
                     You hear barking.
@@ -91,7 +91,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => $"You here distant barking. It definitely comes from the {Mansion} in front of you.";
+        public override string ListenText => $"You here distant barking. It definitely comes from the {this.Mansion} in front of you.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

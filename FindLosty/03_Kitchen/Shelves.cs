@@ -33,7 +33,7 @@ namespace LostAndFound.FindLosty.Things
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
-            string txt = UseText;
+            string txt = this.UseText;
 
             sender.Reply("YOU JUST USED ME. POLICE." + txt);
             return true;

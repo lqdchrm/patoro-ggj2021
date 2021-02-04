@@ -33,7 +33,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => CrocImage;
+        public override string LookText => this.CrocImage;
         
         public string CrocImage => @$"
         The {this} looks hungry. But luckily it is chained to a table.
@@ -141,7 +141,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (!isFlippedCall && other != null)
                 other.Use(sender, this, true);
 
-            return !sender.Reply(UseText);
+            return !sender.Reply(this.UseText);
         }
 
         /*

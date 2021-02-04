@@ -27,7 +27,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A big {this} is in the center of the room. Hidden under it a {Game.DiningRoom.Cage}.";
+        public override string LookText => $"A big {this} is in the center of the room. Hidden under it a {this.Game.DiningRoom.Cage}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

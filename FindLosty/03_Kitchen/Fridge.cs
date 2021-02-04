@@ -11,13 +11,13 @@ namespace LostAndFound.FindLosty.Things
     {
         public Fridge(FindLostyGame game) : base(game, false, "Fridge")
         {
-            Inventory.InitialAdd(new Tofu(game));
+            this.Inventory.InitialAdd(new Tofu(game));
         }
 
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
-            var txt = UseText;
+            var txt = this.UseText;
 
             sender.Reply(txt);
             return true;

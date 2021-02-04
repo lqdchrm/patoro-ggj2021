@@ -20,8 +20,8 @@ namespace LostAndFound.Engine
         private Dictionary<string, TThing> dict = new Dictionary<string, TThing>();
 
         #region IEnumerable
-        public IEnumerator<TThing> GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
+        public IEnumerator<TThing> GetEnumerator() => this.dict.Values.Where(i => i.WasMentioned).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.dict.Values.Where(i => i.WasMentioned).GetEnumerator();
         #endregion
 
         #region Helpers
@@ -39,17 +39,17 @@ namespace LostAndFound.Engine
         {
             foreach (var item in items)
             {
-                if (canAcceptNonTransferables || item.CanBeTransfered)
+                if (this.canAcceptNonTransferables || item.CanBeTransfered)
                 {
                     var key = _BuildKey(item);
 
-                    if (!dict.ContainsKey(key))
+                    if (!this.dict.ContainsKey(key))
                     {
-                        dict.Add(key, item);
+                        this.dict.Add(key, item);
                     }
                 } else
                 {
-                    Console.Error.WriteLine($"Item {item} cannot be put into Inventory {Owner}");
+                    Console.Error.WriteLine($"Item {item} cannot be put into Inventory {this.Owner}");
                 }
             }
         }
@@ -57,14 +57,14 @@ namespace LostAndFound.Engine
         public bool Transfer(string name, Inventory<TGame, TPlayer, TRoom, TContainer, TThing> target)
         {
             var key = _BuildKey(name);
-            if (!dict.ContainsKey(key) || target == null) return false;
+            if (!this.dict.ContainsKey(key) || target == null) return false;
 
             TThing item;
-            if (dict.TryGetValue(key, out item))
+            if (this.dict.TryGetValue(key, out item))
             {
                 if (item.WasMentioned && item.CanBeTransfered)
                 {
-                    dict.Remove(key);
+                    this.dict.Remove(key);
                     target.dict.Add(key, item);
                     return true;
                 }
@@ -75,7 +75,7 @@ namespace LostAndFound.Engine
         public bool TryFind(string token, out TThing item, bool includeNextLevel = false, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
-            if (!dict.TryGetValue(key, out item))
+            if (!this.dict.TryGetValue(key, out item))
             {
                 if (includeNextLevel)
                 {
@@ -104,13 +104,13 @@ namespace LostAndFound.Engine
         public void Remove(string name)
         {
             var key = _BuildKey(name);
-            dict.Remove(key);
+            this.dict.Remove(key);
         }
 
         public bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
-            return (dict.ContainsKey(key) && (!onlyWhenMentioned || dict[key].WasMentioned));
+            return (this.dict.ContainsKey(key) && (!onlyWhenMentioned || this.dict[key].WasMentioned));
         }
     }
 }

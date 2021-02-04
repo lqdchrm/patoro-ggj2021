@@ -10,7 +10,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public Cage(FindLostyGame game) : base(game)
         {
             var hamster = new Hamster(game);
-            Inventory.InitialAdd(hamster);
+            this.Inventory.InitialAdd(hamster);
         }
 
         /*
@@ -22,7 +22,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        private bool HasHamster => Inventory.Has("hamster", false);
+        private bool HasHamster => this.Inventory.Has("hamster", false);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -35,7 +35,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public override string LookTextHeader {
             get {
                 IThing hamster;
-                if (Inventory.TryFind("hamster", out hamster, false, false))
+                if (this.Inventory.TryFind("hamster", out hamster, false, false))
                 {
                     return $"Awwwwww... there's a {hamster} in there.";
                 }
@@ -66,7 +66,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => HasHamster ? $"You hear something squeak." : base.ListenText;
+        public override string ListenText => this.HasHamster ? $"You hear something squeak." : base.ListenText;
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

@@ -20,7 +20,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
-        public IPlayer CurrentlyInUseBy => Game.DiningRoom.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+        public IPlayer CurrentlyInUseBy => this.Game.DiningRoom.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -32,8 +32,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override string LookText {
             get {
-                var msg = $"Someone seems to like riding a bike while having breakfast. A strange {Game.DiningRoom.Socket} is fitted onto the side.";
-                var usingPlayer = CurrentlyInUseBy;
+                var msg = $"Someone seems to like riding a bike while having breakfast. A strange {this.Game.DiningRoom.Socket} is fitted onto the side.";
+                var usingPlayer = this.CurrentlyInUseBy;
                 if (usingPlayer != null)
                     msg = $"{msg}\n{usingPlayer} is currently kicking the pedals.";
                 return msg;

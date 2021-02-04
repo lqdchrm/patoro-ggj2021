@@ -81,8 +81,8 @@ namespace LostAndFound.Engine
 
         public override string ToString()
         {
-            WasMentioned = true;
-            return $"[{Emoji}{Name}]";
+            this.WasMentioned = true;
+            return $"[{this.Emoji}{this.Name}]";
         }
 
         /*
@@ -93,8 +93,8 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public virtual string LookText => OneOf($"It's {a} {this}", $"Nice, {a} {this}");
-        public virtual void Look(TPlayer sender) => sender.Reply(LookText);
+        public virtual string LookText => OneOf($"It's {this.a} {this}", $"Nice, {this.a} {this}");
+        public virtual void Look(TPlayer sender) => sender.Reply(this.LookText);
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -106,7 +106,7 @@ namespace LostAndFound.Engine
         */
         public virtual string KickText => OneOf($"{this} was kicked.");
         private string KickSelf => OneOf($"You kicked yourself. WFT!");
-        public virtual void Kick(TPlayer sender) => sender.Reply(this == sender ? KickSelf : KickText);
+        public virtual void Kick(TPlayer sender) => sender.Reply(this == sender ? this.KickSelf : this.KickText);
 
 
         /*
@@ -119,7 +119,7 @@ namespace LostAndFound.Engine
         */
 
         public virtual string ListenText => OneOf($"Nothing to hear from {this}.", $"... ... ...");
-        public virtual void Listen(TPlayer sender) => sender.Reply(ListenText);
+        public virtual void Listen(TPlayer sender) => sender.Reply(this.ListenText);
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -131,7 +131,7 @@ namespace LostAndFound.Engine
         */
 
         public virtual string OpenText => OneOf($"You can't open {this}.");
-        public virtual void Open(TPlayer sender) => sender.Reply(OpenText);
+        public virtual void Open(TPlayer sender) => sender.Reply(this.OpenText);
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -143,7 +143,7 @@ namespace LostAndFound.Engine
         */
 
         public virtual string CloseText => OneOf($"You can't close {this}.");
-        public virtual void Close(TPlayer sender) => sender.Reply(CloseText);
+        public virtual void Close(TPlayer sender) => sender.Reply(this.CloseText);
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
@@ -160,7 +160,7 @@ namespace LostAndFound.Engine
             if (other is TContainer container)
                 TakeFrom(sender, container);
             else
-                sender.Reply(TakeText);
+                sender.Reply(this.TakeText);
         }
 
         public virtual void TakeFrom(TPlayer sender, TContainer container)
@@ -194,7 +194,7 @@ namespace LostAndFound.Engine
             if (other is TContainer container)
                 PutInto(sender, container);
             else
-                sender.Reply(PutText);
+                sender.Reply(this.PutText);
         }
 
         public virtual void PutInto(TPlayer sender, TContainer container)
@@ -228,7 +228,7 @@ namespace LostAndFound.Engine
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
         public virtual bool Use(TPlayer sender, TThing other, bool isFlippedCall = false)
         {
-            Func<TThing, string> revokeText = (thing) => OneOf(UseText, $"You can't just simply use {thing}.");
+            Func<TThing, string> revokeText = (thing) => OneOf(this.UseText, $"You can't just simply use {thing}.");
 
             if (other is null) return !sender.Reply(revokeText(this as TThing));
 
@@ -248,7 +248,7 @@ namespace LostAndFound.Engine
         */
         protected static readonly string[] VOCALS = new[] { "A", "E", "I", "O", "U" };
         protected static string OneOf(params string[] texts) => texts.TakeOneRandom();
-        protected string a => VOCALS.Contains(Char.ToUpper(Name.First()).ToString()) ? "an" : "a";
+        protected string a => VOCALS.Contains(Char.ToUpper(this.Name.First()).ToString()) ? "an" : "a";
 
     }
 }

@@ -18,7 +18,7 @@ namespace LostAndFound.FindLosty.Things
         public override string LookText
         {
             get {
-                if (Burning)
+                if (this.Burning)
                     return $"The fire is blazing.";
                 else
                     return $"The fire is out. The ash is still smoldering.";
@@ -28,7 +28,7 @@ namespace LostAndFound.FindLosty.Things
         public override bool DoesItemFit(IThing thing, out string error)
         {
             error = "";
-            IThing maybeTofu = Inventory.FirstOrDefault();
+            IThing maybeTofu = this.Inventory.FirstOrDefault();
             if (maybeTofu == null)
             {
                 return true;
@@ -47,16 +47,16 @@ namespace LostAndFound.FindLosty.Things
                 sender.Reply($"You feel really warm.");
                 return true;
             }
-            else if (other == Game.EntryHall.Splinters)
+            else if (other == this.Game.EntryHall.Splinters)
             {
                 sender.Inventory.Remove(other.Name);
-                Burning = true;
+                this.Burning = true;
                 sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
                 return true;
             }
             else
             {
-                if (Burning)
+                if (this.Burning)
                 {
                     sender.Reply($"Your {other.Name} is now really warm.");
                 }

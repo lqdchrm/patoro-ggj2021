@@ -13,7 +13,7 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        public TGame Game => Sender.Game;
+        public TGame Game => this.Sender.Game;
         
         public TPlayer Sender { get; init; }
 
@@ -44,16 +44,16 @@ namespace LostAndFound.Engine
             this.Sender = sender;
 
             var tokens = msg.Split(" ");
-            Command = tokens.FirstOrDefault()?.ToLowerInvariant();
-            First = tokens.Skip(1).FirstOrDefault()?.ToLowerInvariant();
-            Prepo = tokens.Skip(2).FirstOrDefault()?.ToLowerInvariant();
-            Second = tokens.Skip(3).FirstOrDefault()?.ToLowerInvariant();
-            RawArgs = tokens.Skip(1);
+            this.Command = tokens.FirstOrDefault()?.ToLowerInvariant();
+            this.First = tokens.Skip(1).FirstOrDefault()?.ToLowerInvariant();
+            this.Prepo = tokens.Skip(2).FirstOrDefault()?.ToLowerInvariant();
+            this.Second = tokens.Skip(3).FirstOrDefault()?.ToLowerInvariant();
+            this.RawArgs = tokens.Skip(1);
         }
 
         public override string ToString()
         {
-            return $"{Sender}: {Command} {string.Join(" ", RawArgs)}";
+            return $"{this.Sender}: {this.Command} {string.Join(" ", this.RawArgs)}";
         }
     }
 }

@@ -19,15 +19,15 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 
         public DiningRoom(FindLostyGame game) : base(game, "DiningRoom")
         {
-            Button = new Button(game);
-            Cage = new Cage(game);
-            Door = new Door(game);
-            Ergometer = new Ergometer(game);
-            Scanner = new Scanner(game);
-            Table = new Table(game);
-            Socket = new Socket(game);
+            this.Button = new Button(game);
+            this.Cage = new Cage(game);
+            this.Door = new Door(game);
+            this.Ergometer = new Ergometer(game);
+            this.Scanner = new Scanner(game);
+            this.Table = new Table(game);
+            this.Socket = new Socket(game);
 
-            Inventory.InitialAdd(Button, Cage, Door, Ergometer, Scanner, Table, Socket);
+            this.Inventory.InitialAdd(this.Button, this.Cage, this.Door, this.Ergometer, this.Scanner, this.Table, this.Socket);
         }
 
         /*
@@ -49,14 +49,14 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override string LookIntroText(IPlayer sender) {
             var text = @$"
-                There is a {Table} with four chairs in one corner.
-                Next to one of the chairs is a red {Button}.
-                On the other side of the room is an {Ergometer}.
+                There is a {this.Table} with four chairs in one corner.
+                Next to one of the chairs is a red {this.Button}.
+                On the other side of the room is an {this.Ergometer}.
 
-                A {Door} in the right wall leads to the kitchen.";
-            if (Scanner.WasMentioned)
+                A {this.Door} in the right wall leads to the kitchen.";
+            if (this.Scanner.WasMentioned)
             {
-                text += $" There is a {Scanner} next to the {Game.DiningRoom.Door}"; 
+                text += $" There is a {this.Scanner} next to the {this.Game.DiningRoom.Door}"; 
             }
         
             return text.FormatMultiline();

@@ -36,7 +36,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             {
                 sender.Reply(House);
                 await Task.Delay(500);
-                sender.Reply($"There seems to be only one way into the building. A large oak {Game.FrontYard.Door}.");
+                sender.Reply($"There seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.");
             });
         }
 

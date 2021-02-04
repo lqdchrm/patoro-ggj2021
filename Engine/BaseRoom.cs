@@ -35,7 +35,7 @@ namespace LostAndFound.Engine
 
         public BaseRoomImpl(TGame game, string name = null) : base(game, false, true, name)
         {
-            WasMentioned = true;
+            this.WasMentioned = true;
         }
 
         public void SendText(string msg, params TPlayer[] excludedPlayers)
@@ -51,7 +51,7 @@ namespace LostAndFound.Engine
 
         private void Send(string msg, bool tts, IEnumerable<TPlayer> excludedPlayers)
         {
-            foreach (var player in Players.Where(p => !excludedPlayers.Contains(p)))
+            foreach (var player in this.Players.Where(p => !excludedPlayers.Contains(p)))
             {
                 if (tts)
                     player.ReplySpeach(msg);
@@ -68,7 +68,7 @@ namespace LostAndFound.Engine
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        public IEnumerable<TPlayer> Players => Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
+        public IEnumerable<TPlayer> Players => this.Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
 
         public Task Show(bool silent = false)
         {
@@ -77,12 +77,12 @@ namespace LostAndFound.Engine
                 var role = this._VoiceChannel?.Guild.EveryoneRole;
                 if (role is not null)
                 {
-                    IsVisible = true;
+                    this.IsVisible = true;
 
                     if (!silent)
-                        Game.Say($"The new Room {Name} has appeared. You can switch Voice channels now.");
+                        this.Game.Say($"The new Room {this.Name} has appeared. You can switch Voice channels now.");
 
-                    return _VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
+                    return this._VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
                 }
             }
             return Task.CompletedTask;
@@ -95,8 +95,8 @@ namespace LostAndFound.Engine
                 var role = this._VoiceChannel?.Guild.EveryoneRole;
                 if (role is not null)
                 {
-                    IsVisible = false;
-                    return _VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
+                    this.IsVisible = false;
+                    return this._VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
                 }
             }
             return Task.CompletedTask;
@@ -111,12 +111,12 @@ namespace LostAndFound.Engine
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public virtual string LookIntroText(TPlayer sender) => $"You are at {this}.";
-        public override string LookInventoryText => string.Join(", ", Inventory.Where(i => i.CanBeTransfered));
+        public override string LookInventoryText => string.Join(", ", this.Inventory.Where(i => i.CanBeTransfered));
 
         public override void Look(TPlayer sender)
         {
             var intro = LookIntroText(sender);
-            var content = LookInventoryText;
+            var content = this.LookInventoryText;
 
             sender.ReplyWithState($"{intro}\n{content}\n");
         }

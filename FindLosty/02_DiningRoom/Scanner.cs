@@ -105,7 +105,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         {
             if (other is Hamster hamster)
             {
-                if (Game.DiningRoom.Door.IsOpen)
+                if (this.Game.DiningRoom.Door.IsOpen)
                 {
                     sender.Reply($"You hold the {hamster} in front of the {this}. A short beep sounds.");
                     sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep sounds.", sender);
@@ -113,8 +113,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
                 }
                 else
                 {
-                    sender.Reply($"You hold the {hamster} in front of the {this}. A short beep. and the {Game.DiningRoom.Door} jumps open.");
-                    sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep. and the {Game.DiningRoom.Door} jumps open.", sender);
+                    sender.Reply($"You hold the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.");
+                    sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.", sender);
                     return true;
                 }
             }
