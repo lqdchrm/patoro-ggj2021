@@ -26,7 +26,6 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"This is the best fridge ever.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -82,17 +81,6 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-
-        /*
-        ██╗   ██╗███████╗███████╗
-        ██║   ██║██╔════╝██╔════╝
-        ██║   ██║███████╗█████╗  
-        ██║   ██║╚════██║██╔══╝  
-        ╚██████╔╝███████║███████╗
-         ╚═════╝ ╚══════╝╚══════╝
-        */
-        public override string UseText => LookText;
-
         public override bool DoesItemFit(IThing thing, out string error)
         {
             error = "";
@@ -112,6 +100,15 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 return false;
             }
         }
+
+        /*
+        ██╗   ██╗███████╗███████╗
+        ██║   ██║██╔════╝██╔════╝
+        ██║   ██║███████╗█████╗  
+        ██║   ██║╚════██║██╔══╝  
+        ╚██████╔╝███████║███████╗
+         ╚═════╝ ╚══════╝╚══════╝
+        */
 
         public override void Use(IPlayer sender, IThing other)
         {
