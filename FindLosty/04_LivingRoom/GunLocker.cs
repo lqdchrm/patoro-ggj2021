@@ -5,7 +5,7 @@ using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class GunLocker : Thing
+    public class GunLocker : Container
     {
         public Dynamite Dynamite { get; }
 
@@ -140,7 +140,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             if (this.IsOpen)
             {
                 sender.Reply("You close the door, but the lock does not lock again.");
-                sender.Room.SendText($"{sender} trys to close the dore of the {this}. But it swings open again.", sender);
+                sender.Room.SendText($"{sender} trys to close the door of the {this}. But it swings open again.", sender);
             }
             else
             {
@@ -165,6 +165,16 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+
+        public override bool DoesItemFit(IThing thing, out string error)
+        {
+            if (!this.IsOpen)
+            {
+                error = $"You can't put {thing} in {this} as long as it is closed.";
+                return false;
+            }
+            return base.DoesItemFit(thing, out error);
+        }
 
         /*
         ██╗   ██╗███████╗███████╗
