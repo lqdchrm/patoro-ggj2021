@@ -261,24 +261,33 @@ namespace LostAndFound.FindLosty
 
         private void OnPlayerChangedRoom(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
         {
-            if (e.OldRoom != null)
+            var oldRoom = e.OldRoom;
+            var newRoom = e.Player.Room;
+
+            if (oldRoom is not null)
             {
-                // HACKY
-                var tmp = e.Player.Room;
-                e.Player.Room = e.OldRoom;
                 // stop doing things on room change
                 if (e.Player?.ThingPlayerIsUsingAndHasToStop != null)
                     e.Player.ThingPlayerIsUsingAndHasToStop = null;
-                e.Player.Room = tmp;
 
-                e.Player?.Reply($"You left {e.OldRoom}");
-                e.OldRoom.SendText($"{e.Player} left {e.OldRoom}", e.Player);
+                // drop things if leaving game
+                if (newRoom is null)
+                {
+                    foreach(var item in e.Player.Inventory)
+                        e.Player.Inventory.Transfer(item, oldRoom.Inventory);
+                }
+
+                e.Player.Room = oldRoom;
+                e.Player?.Reply($"You left {oldRoom}");
+                e.Player.Room = newRoom;
+
+                oldRoom.SendText($"{e.Player} left {oldRoom}", e.Player);
             }
 
-            if (e.Player.Room != null)
+            if (newRoom != null)
             {
                 e.Player?.ReplyWithState($"You entered {e.Player.Room}");
-                e.Player.Room.SendText($"{e.Player} entered {e.Player.Room}", e.Player);
+                newRoom.SendText($"{e.Player} entered {e.Player.Room}", e.Player);
             }
         }
     }
