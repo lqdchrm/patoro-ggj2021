@@ -25,10 +25,10 @@ namespace LostAndFound.FindLosty.Things
             }
         }
         
-        public override bool DoesItemFit(BaseThing<FindLostyGame, Room, Player, Thing> thing, out string error)
+        public override bool DoesItemFit(IThing thing, out string error)
         {
             error = "";
-            BaseThing<FindLostyGame, Room, Player, Thing> maybeTofu = Inventory.FirstOrDefault();
+            IThing maybeTofu = Inventory.FirstOrDefault();
             if (maybeTofu == null)
             {
                 return true;

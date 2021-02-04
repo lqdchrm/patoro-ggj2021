@@ -25,7 +25,7 @@ namespace LostAndFound.FindLosty.Things
             }
         }
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             if (other is null) {
                 if (Frozen)
