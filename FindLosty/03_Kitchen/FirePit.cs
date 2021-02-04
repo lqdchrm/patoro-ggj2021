@@ -7,15 +7,13 @@ using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty.Things
 {
-    public class FirePit : Thing
+    public class FirePit : Container
     {
         bool Burning = false;
         
-        public FirePit(FindLostyGame game) : base(game)
+        public FirePit(FindLostyGame game) : base(game, false, "pit")
         {
-            Name = "pit";
         }
-
 
         public override string LookText
         {
@@ -27,6 +25,20 @@ namespace LostAndFound.FindLosty.Things
             }
         }
         
+        public override bool DoesItemFit(BaseThing<FindLostyGame, Room, Player, Thing> thing, out string error)
+        {
+            error = "";
+            BaseThing<FindLostyGame, Room, Player, Thing> maybeTofu = Inventory.FirstOrDefault();
+            if (maybeTofu == null)
+            {
+                return true;
+            }
+            else
+            {
+                error = $"There only is room for {maybeTofu}.";
+                return false;
+            }
+        }
 
         public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
         {
@@ -35,9 +47,23 @@ namespace LostAndFound.FindLosty.Things
                 sender.Reply($"You feel really warm.");
                 return true;
             }
+            else if (other == Game.EntryHall.Splinters)
+            {
+                sender.Inventory.Remove(other.Name);
+                Burning = true;
+                sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
+                return true;
+            }
             else
             {
-                sender.Reply($"You throw {other.Name} into the fire.");
+                if (Burning)
+                {
+                    sender.Reply($"Your {other.Name} is now really warm.");
+                }
+                else
+                {
+                    sender.Reply($"The fire is not warm enough to do anything.");
+                }
                 return true;
             }
         }
