@@ -1,10 +1,7 @@
-﻿using LostAndFound.FindLosty;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -47,7 +44,8 @@ namespace LostAndFound.Engine
                     {
                         this.dict.Add(key, item);
                     }
-                } else
+                }
+                else
                 {
                     Console.Error.WriteLine($"Item {item} cannot be put into Inventory {this.Owner}");
                 }

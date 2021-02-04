@@ -1,9 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
-using LostAndFound.Engine;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Discord

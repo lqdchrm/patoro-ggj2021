@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/// <summary>
+﻿/// <summary>
 /// unicode lookup: http://www.unicode.org/emoji/charts/full-emoji-list.html
 /// emojis: https://emojipedia.org/
 /// </summary>
@@ -17,7 +11,7 @@ namespace LostAndFound.Engine
             new[] { "👮‍", "🕵", "💂‍", "👷‍", "🧛‍", "🦸‍", "🧟‍", "🧚‍", "🦹‍" }
             //) }
         ;
-            
+
         public const string Heart = "💖";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";

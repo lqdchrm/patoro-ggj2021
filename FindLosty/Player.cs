@@ -1,11 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using LostAndFound.Engine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty
 {
@@ -15,7 +10,7 @@ namespace LostAndFound.FindLosty
         bool Hit(string by = null, IPlayer byPlayer = null);
         bool Heal(string by = null, IPlayer byPlayer = null);
     }
-    
+
     public class Player : BasePlayerImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IPlayer
     {
         public Player(DiscordMember name, FindLostyGame game) : base(game, name) { }

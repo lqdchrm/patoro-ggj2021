@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -77,10 +75,10 @@ namespace LostAndFound.Engine
 
         #region IDictionary Extensions
         public static Dictionary<K, V> Merge<K, V, V2>(this Dictionary<K, V> self, Dictionary<K, V2> other)
-            where V2: V
+            where V2 : V
         {
             var tmp = new Dictionary<K, V>();
-            foreach(var key in other.Keys)
+            foreach (var key in other.Keys)
                 tmp.Add(key, other[key]);
 
             return self.Union(tmp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

@@ -1,11 +1,11 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using LostAndFound.Engine.Events;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using LostAndFound.Engine.Events;
+using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -17,7 +17,7 @@ namespace LostAndFound.Engine
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public IReadOnlyDictionary<string, TPlayer> Players { get; }
-        
+
         public void Say(string msg, bool alsoInDefaultChannel = false);
     }
 
@@ -199,7 +199,8 @@ namespace LostAndFound.Engine
             if (visible)
             {
                 await room.Show(true);
-            } else
+            }
+            else
             {
                 await room.Hide(true);
             }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -14,7 +11,7 @@ namespace LostAndFound.Engine
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public TGame Game => this.Sender.Game;
-        
+
         public TPlayer Sender { get; init; }
 
         /// <summary>

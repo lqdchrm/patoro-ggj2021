@@ -34,10 +34,10 @@ namespace LostAndFound.Engine.Discord
             this.client.MessageCreated += this.Client_MessageCreated;
 
             // TODO: Find the default text channel without using hardcoded strings...
-            var defaultChanel = 
+            var defaultChanel =
                 guild.Channels.FirstOrDefault(x => x.Value.Name == "Allgemein" && x.Value.Type == ChannelType.Text).Value
                 ?? guild.Channels.FirstOrDefault(x => x.Value.Type == ChannelType.Text).Value;
-            
+
             if (defaultGame != null)
             {
                 var gameName = defaultGame.Name.Replace("Game", "");
@@ -48,7 +48,8 @@ namespace LostAndFound.Engine.Discord
                     _ = game.StartAsync();
                 }
 
-            } else
+            }
+            else
             {
                 if (defaultChanel is not null)
                     Welcome(defaultChanel);

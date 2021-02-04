@@ -1,9 +1,5 @@
-﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /*
  * ASCII HELPERS (Font used: ANSI Shadow)
@@ -203,10 +199,12 @@ namespace LostAndFound.Engine
             if (sender.Inventory == container.Inventory || this == container)
             {
                 sender.Reply($"Not really.");
-            } else if (!container.DoesItemFit(this as TThing, out error))
+            }
+            else if (!container.DoesItemFit(this as TThing, out error))
             {
                 sender.ReplyWithState(error);
-            } else if (sender.Inventory.Transfer(this.Name, container.Inventory))
+            }
+            else if (sender.Inventory.Transfer(this.Name, container.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));
                 sender.Room.SendText($"{this} is now in {container}", sender);
