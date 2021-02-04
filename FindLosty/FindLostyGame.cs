@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using LostAndFound.Engine;
@@ -12,6 +8,10 @@ using LostAndFound.FindLosty._02_DiningRoom;
 using LostAndFound.FindLosty._03_Kitchen;
 using LostAndFound.FindLosty._04_LivingRoom;
 using LostAndFound.FindLosty._05_Cellar;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty
 {
@@ -115,7 +115,7 @@ namespace LostAndFound.FindLosty
 
             // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
-            
+
             if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
             {
                 player.Reply($"You are still using {player.ThingPlayerIsUsingAndHasToStop}. Please stop before doing anything else.");

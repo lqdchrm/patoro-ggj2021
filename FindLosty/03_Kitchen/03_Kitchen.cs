@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LostAndFound.FindLosty.Things;
 
 namespace LostAndFound.FindLosty._03_Kitchen
@@ -43,7 +38,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(IPlayer sender) {
+        public override string LookIntroText(IPlayer sender)
+        {
             return $@"
                 There are {this.Shelves} at one wall and a large {this.Fridge} on the other.
                 A {this.Microwave} is mounted on the wall next to the {this.Shelves}.

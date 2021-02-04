@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
@@ -47,7 +42,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(IPlayer sender) {
+        public override string LookIntroText(IPlayer sender)
+        {
             var text = @$"
                 There is a {this.Table} with four chairs in one corner.
                 Next to one of the chairs is a red {this.Button}.
@@ -56,9 +52,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
                 A {this.Door} in the right wall leads to the kitchen.";
             if (this.Scanner.WasMentioned)
             {
-                text += $" There is a {this.Scanner} next to the {this.Game.DiningRoom.Door}"; 
+                text += $" There is a {this.Scanner} next to the {this.Game.DiningRoom.Door}";
             }
-        
+
             return text.FormatMultiline();
         }
 

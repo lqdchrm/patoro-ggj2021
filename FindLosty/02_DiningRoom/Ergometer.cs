@@ -30,8 +30,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText {
-            get {
+        public override string LookText
+        {
+            get
+            {
                 var msg = $"Someone seems to like riding a bike while having breakfast. A strange {this.Game.DiningRoom.Socket} is fitted onto the side.";
                 var usingPlayer = this.CurrentlyInUseBy;
                 if (usingPlayer != null)

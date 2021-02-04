@@ -1,8 +1,5 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
@@ -11,7 +8,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
     {
         public Poo Poo { get; private set; }
         public Box Box { get; private set; }
-        public Mansion Mansion {get; private set; }
+        public Mansion Mansion { get; private set; }
         public Door Door { get; private set; }
 
         public FrontYard(FindLostyGame game) : base(game)
@@ -54,7 +51,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
             });
         }
 
-        public override string LookIntroText(IPlayer sender) {
+        public override string LookIntroText(IPlayer sender)
+        {
             var friends = this.Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()

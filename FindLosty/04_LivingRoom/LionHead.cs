@@ -1,6 +1,4 @@
-﻿using LostAndFound.Engine;
-
-namespace LostAndFound.FindLosty._04_LivingRoom
+﻿namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class LionHead : Thing
     {

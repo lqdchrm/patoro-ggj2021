@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -65,8 +60,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public override void Open(IPlayer sender)
         {
             sender.Reply(DoorImage);
-            
-            if (!this.IsOpen) { 
+
+            if (!this.IsOpen)
+            {
                 sender.Room.SendText($"{sender} opens the {this}...startling.", sender);
                 sender.Reply($"You open the door and look into the eyes of an hungry {this.Game.EntryHall.Croc}");
                 this.IsOpen = true;

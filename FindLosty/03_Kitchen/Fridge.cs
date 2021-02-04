@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LostAndFound.Engine;
-
-namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty.Things
 {
     public class Fridge : Container
     {

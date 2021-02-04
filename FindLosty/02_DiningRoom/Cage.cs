@@ -32,8 +32,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookTextHeader {
-            get {
+        public override string LookTextHeader
+        {
+            get
+            {
                 IThing hamster;
                 if (this.Inventory.TryFind("hamster", out hamster, false, false))
                 {

@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty.Things
 {
@@ -16,8 +11,10 @@ namespace LostAndFound.FindLosty.Things
         public bool Frozen = true;
         public int UseCount = 0;
 
-        public override string LookText {
-            get {
+        public override string LookText
+        {
+            get
+            {
                 if (this.Frozen)
                     return "A box of frozen tofu.";
                 else
@@ -27,7 +24,8 @@ namespace LostAndFound.FindLosty.Things
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
-            if (other is null) {
+            if (other is null)
+            {
                 if (this.Frozen)
                 {
                     sender.Reply("You lick the frozen tofu. Besides a strange taste in your mouth nothing happens.");
