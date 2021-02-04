@@ -9,11 +9,25 @@ using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine
 {
-    public abstract class BaseGame<TGame, TRoom, TPlayer, TThing> : IGame
-        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
+    public interface BaseGame<TGame, TPlayer, TRoom, TContainer, TThing> : IGame
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+    {
+        public IReadOnlyDictionary<string, TPlayer> Players { get; }
+        
+        public void Say(string msg, bool alsoInDefaultChannel = false);
+    }
+
+    public abstract class BaseGameImpl<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         private DiscordClient _Client;
         private DiscordGuild _Guild;
@@ -27,25 +41,25 @@ namespace LostAndFound.Engine
 
         #region Events
 
-        public event EventHandler<PlayerRoomChange<TGame, TRoom, TPlayer, TThing>> PlayerChangedRoom;
+        public event EventHandler<PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing>> PlayerChangedRoom;
         public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom)
         {
-            PlayerChangedRoom?.Invoke(this, new PlayerRoomChange<TGame, TRoom, TPlayer, TThing>()
+            PlayerChangedRoom?.Invoke(this, new PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing>()
             {
                 Player = player,
                 OldRoom = oldRoom
             });
         }
 
-        public event EventHandler<BaseCommand<TGame, TRoom, TPlayer, TThing>> CommandSent;
-        public void RaiseCommand(BaseCommand<TGame, TRoom, TPlayer, TThing> cmd)
+        public event EventHandler<BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>> CommandSent;
+        public void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd)
         {
             CommandSent?.Invoke(this, cmd);
         }
 
         #endregion
 
-        public BaseGame(string name, DiscordClient client, DiscordGuild guild)
+        public BaseGameImpl(string name, DiscordClient client, DiscordGuild guild)
         {
             this.Name = name;
             this._Client = client;
@@ -112,8 +126,8 @@ namespace LostAndFound.Engine
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
 
-            var oldRoom = (oldChannel != null && _Rooms.ContainsKey(oldChannel.Name)) ? _Rooms[oldChannel.Name] : null;
-            var newRoom = (newChannel != null && _Rooms.ContainsKey(newChannel.Name)) ? _Rooms[newChannel.Name] : null;
+            var oldRoom = (oldChannel != null && _Rooms.ContainsKey(oldChannel.Name)) ? _Rooms[oldChannel.Name] : default(TRoom);
+            var newRoom = (newChannel != null && _Rooms.ContainsKey(newChannel.Name)) ? _Rooms[newChannel.Name] : default(TRoom);
 
             if (oldRoom == newRoom)
                 return Task.CompletedTask;
@@ -153,7 +167,7 @@ namespace LostAndFound.Engine
                 }
                 else if (player._UsesChannel(e.Channel))
                 {
-                    var cmd = new BaseCommand<TGame, TRoom, TPlayer, TThing>(player, e.Message.Content);
+                    var cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, e.Message.Content);
                     RaiseCommand(cmd);
                 }
             }
@@ -178,7 +192,7 @@ namespace LostAndFound.Engine
 
         #region Rooms Helpers
         public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
-            where TRoomCurrent : TRoom
+            where TRoomCurrent : BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>, TRoom
         {
             _Rooms.Add(room.Name, room);
             room._VoiceChannel = await _Guild.CreateChannelAsync(room.Name, ChannelType.Voice, _ParentChannel);
@@ -215,7 +229,7 @@ namespace LostAndFound.Engine
             {
                 Console.Error.WriteLine($"[ENGINE] Adding player {member.DisplayName} ...");
                 player = CreatePlayer(member);
-                await player._InitPlayer();
+                await player._InitPlayer(_ParentChannel);
 
 
                 _Players.Add(member.Id, player);
@@ -239,13 +253,13 @@ namespace LostAndFound.Engine
         /// <param name="sender"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public BaseThing<TGame, TRoom, TPlayer, TThing> GetThing(TPlayer sender, string token, BaseContainer<TGame, TRoom, TPlayer, TThing> other = null, bool showHelp = false)
+        public TThing GetThing(TPlayer sender, string token, TContainer other = default(TContainer), bool showHelp = false)
         {
             bool helpCalculated = false;
-            if (token is null) return null;
+            if (token is null) return default(TThing);
 
             // find in inventory
-            BaseThing<TGame, TRoom, TPlayer, TThing> item = null;
+            TThing item = default(TThing);
             if (sender.Inventory.TryFind(token, out item)) return item;
 
             // find in room

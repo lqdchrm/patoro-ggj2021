@@ -57,7 +57,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override void Open(Player sender)
+        public override void Open(IPlayer sender)
         {
             if (this.isMoutOpen)
             {
@@ -78,7 +78,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Close(Player sender)
+        public override void Close(IPlayer sender)
         {
             if (this.isMoutOpen)
             {
@@ -109,7 +109,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚═╝      ╚═════╝    ╚═╝   
         */
 
-        public override void Put(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other)
+        public override void Put(IPlayer sender, IThing other)
         {
             if (!this.isMoutOpen)
                 sender.Reply($"You can't put anything in a closed mouth.");

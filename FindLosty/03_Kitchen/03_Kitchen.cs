@@ -19,10 +19,10 @@ namespace LostAndFound.FindLosty._03_Kitchen
         {
             // Create Things in room
             Inventory.InitialAdd(
-                Fridge = new Fridge(this.Game),
-                Shelves = new Shelves(this.Game),
-                FirePit = new FirePit(this.Game),
-                Microwave = new Microwave(this.Game)
+                Fridge = new Fridge(game),
+                Shelves = new Shelves(game),
+                FirePit = new FirePit(game),
+                Microwave = new Microwave(game)
             );
         }
 
@@ -43,7 +43,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(Player sender) {
+        public override string LookIntroText(IPlayer sender) {
             return $@"
                 There are {Shelves} at one wall and a large {Fridge} on the other.
                 A {Microwave} is mounted on the wall next to the {Shelves}.

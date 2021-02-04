@@ -38,7 +38,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
 
-        public override void Kick(Player sender)
+        public override void Kick(IPlayer sender)
         {
             sender.Reply($"You Kick against {this}. But is a sturdy case.");
             sender.Room.SendText($"Raging {sender} kicks against the {this}", sender);
@@ -101,7 +101,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚═════╝ ╚══════╝╚══════╝
         */
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             if (other is Hamster hamster)
             {

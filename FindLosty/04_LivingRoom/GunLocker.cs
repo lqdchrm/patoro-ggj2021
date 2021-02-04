@@ -27,10 +27,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public bool IsOpen { get; private set; }
 
-        private Player opendBy;
-        private Player[] seenWhoOpendIt = Array.Empty<Player>();
+        private IPlayer opendBy;
+        private IPlayer[] seenWhoOpendIt = Array.Empty<Player>();
 
-        public void Unlock(Player openingPlayer)
+        public void Unlock(IPlayer openingPlayer)
         {
             if (opendBy is not null)
                 return;
@@ -50,7 +50,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override void Look(Player sender)
+        public override void Look(IPlayer sender)
         {
 
             if (!this.IsOpen)
@@ -111,7 +111,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
 
 
-        public override void Open(Player sender)
+        public override void Open(IPlayer sender)
         {
             if (this.IsOpen)
             {
@@ -134,7 +134,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         */
 
 
-        public override void Close(Player sender)
+        public override void Close(IPlayer sender)
         {
 
             if (this.IsOpen)

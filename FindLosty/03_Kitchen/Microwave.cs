@@ -20,9 +20,9 @@ namespace LostAndFound.FindLosty.Things
             get { return$"This is the best fridge ever."; }
         }
 
-        public override bool DoesItemFit(BaseThing<FindLostyGame, Room, Player, Thing> thing, out string error)
+        public override bool DoesItemFit(IThing thing, out string error)
         {
-            BaseThing<FindLostyGame, Room, Player, Thing> item = null;
+            IThing item = null;
             bool found_tofu = Inventory.TryFind("tofu", out item);
             if (found_tofu)
             {
@@ -41,9 +41,9 @@ namespace LostAndFound.FindLosty.Things
             }
         }
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
-            BaseThing<FindLostyGame, Room, Player, Thing> item = null;
+            IThing item = null;
             bool found_tofu = Inventory.TryFind("tofu", out item);
             if (found_tofu && item is Tofu tofu)
             {

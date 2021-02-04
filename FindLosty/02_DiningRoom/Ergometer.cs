@@ -20,7 +20,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
-        public Player CurrentlyInUseBy => Game.DiningRoom.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+        public IPlayer CurrentlyInUseBy => Game.DiningRoom.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -103,11 +103,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             if (other == null)
             {
-                Player otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+                IPlayer otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
                 if (otherUser != null)
                 {
                     return sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");

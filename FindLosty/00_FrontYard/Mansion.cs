@@ -30,7 +30,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override void Look(Player sender)
+        public override void Look(IPlayer sender)
         {
             Task.Run(async () =>
             {

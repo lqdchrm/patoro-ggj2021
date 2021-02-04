@@ -44,7 +44,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(Player sender)
+        public override void Kick(IPlayer sender)
         {
             if (IsOpen)
             {
@@ -75,7 +75,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override void Open(Player sender)
+        public override void Open(IPlayer sender)
         {
             if (IsOpen)
             {

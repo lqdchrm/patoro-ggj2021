@@ -15,11 +15,54 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    public abstract class BaseThing<TGame, TRoom, TPlayer, TThing>
-        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
+    public interface BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+    {
+        TGame Game { get; }
+        string Name { get; init; }
+        string Emoji { get; }
+        bool IsVisible { get; }
+        bool WasMentioned { get; set; }
+        bool CanBeTransfered { get; init; }
+
+        string LookText { get; }
+        void Look(TPlayer sender);
+
+        string KickText { get; }
+        void Kick(TPlayer sender);
+
+        string ListenText { get; }
+        void Listen(TPlayer sender);
+
+        string OpenText { get; }
+        void Open(TPlayer sender);
+
+        string CloseText { get; }
+        void Close(TPlayer sender);
+
+        string TakeText { get; }
+        void Take(TPlayer sender, TThing other);
+        void TakeFrom(TPlayer sender, TContainer container);
+
+        string PutText { get; }
+        void Put(TPlayer sender, TThing other);
+        void PutInto(TPlayer sender, TContainer container);
+
+        string UseText { get; }
+        bool Use(TPlayer sender, TThing other, bool isFlippedCall = false);
+    }
+
+    public abstract class BaseThingImpl<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public TGame Game { get; }
         public string Name { get; init; }
@@ -29,7 +72,7 @@ namespace LostAndFound.Engine
 
         public bool CanBeTransfered { get; init; }
 
-        public BaseThing(TGame game, bool transferable = false, string name = null)
+        public BaseThingImpl(TGame game, bool transferable = false, string name = null)
         {
             this.Game = game;
             this.Name = name ?? GetType().Name;
@@ -112,15 +155,15 @@ namespace LostAndFound.Engine
         */
 
         public virtual string TakeText => OneOf($"You can't TAKE THAT™.");
-        public virtual void Take(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other)
+        public virtual void Take(TPlayer sender, TThing other)
         {
-            if (other is BaseContainer<TGame, TRoom, TPlayer, TThing> container)
+            if (other is TContainer container)
                 TakeFrom(sender, container);
             else
                 sender.Reply(TakeText);
         }
 
-        public virtual void TakeFrom(TPlayer sender, BaseContainer<TGame, TRoom, TPlayer, TThing> container)
+        public virtual void TakeFrom(TPlayer sender, TContainer container)
         {
             if (!this.CanBeTransfered)
             {
@@ -146,21 +189,21 @@ namespace LostAndFound.Engine
         ╚═╝      ╚═════╝    ╚═╝   
         */
         public virtual string PutText => $"You can't put that here.";
-        public virtual void Put(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other)
+        public virtual void Put(TPlayer sender, TThing other)
         {
-            if (other is BaseContainer<TGame, TRoom, TPlayer, TThing> container)
+            if (other is TContainer container)
                 PutInto(sender, container);
             else
                 sender.Reply(PutText);
         }
 
-        public virtual void PutInto(TPlayer sender, BaseContainer<TGame, TRoom, TPlayer, TThing> container)
+        public virtual void PutInto(TPlayer sender, TContainer container)
         {
             string error;
             if (sender.Inventory == container.Inventory || this == container)
             {
                 sender.Reply($"Not really.");
-            } else if (!container.DoesItemFit(this, out error))
+            } else if (!container.DoesItemFit(this as TThing, out error))
             {
                 sender.ReplyWithState(error);
             } else if (sender.Inventory.Transfer(this.Name, container.Inventory))
@@ -183,13 +226,13 @@ namespace LostAndFound.Engine
          ╚═════╝ ╚══════╝╚══════╝
         */
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual bool Use(TPlayer sender, BaseThing<TGame, TRoom, TPlayer, TThing> other, bool isFlippedCall = false)
+        public virtual bool Use(TPlayer sender, TThing other, bool isFlippedCall = false)
         {
-            Func<BaseThing<TGame, TRoom, TPlayer, TThing>, string> revokeText = (thing) => OneOf(UseText, $"You can't just simply use {thing}.");
+            Func<TThing, string> revokeText = (thing) => OneOf(UseText, $"You can't just simply use {thing}.");
 
-            if (other is null) return !sender.Reply(revokeText(this));
+            if (other is null) return !sender.Reply(revokeText(this as TThing));
 
-            if (!isFlippedCall && !other.Use(sender, this, true))
+            if (!isFlippedCall && !other.Use(sender, this as TThing, true))
                 return !sender.Reply(revokeText(other));
 
             return !sender.Reply(revokeText(other));

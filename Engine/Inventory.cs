@@ -8,33 +8,34 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    public class Inventory<TGame, TRoom, TPlayer, TThing> : IEnumerable<BaseThing<TGame, TRoom, TPlayer, TThing>>
-        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
+    public class Inventory<TGame, TPlayer, TRoom, TContainer, TThing> : IEnumerable<TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        private readonly BaseContainer<TGame, TRoom, TPlayer, TThing> Owner;
+        private readonly TContainer Owner;
         private bool canAcceptNonTransferables;
-        private Dictionary<string, BaseThing<TGame, TRoom, TPlayer, TThing>> dict = new Dictionary<string, BaseThing<TGame, TRoom, TPlayer, TThing>>();
+        private Dictionary<string, TThing> dict = new Dictionary<string, TThing>();
 
         #region IEnumerable
-        public IEnumerator<BaseThing<TGame, TRoom, TPlayer, TThing>> GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
+        public IEnumerator<TThing> GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => dict.Values.Where(i => i.WasMentioned).GetEnumerator();
         #endregion
 
         #region Helpers
         private static string _BuildKey(string itemName) => itemName.ToLowerInvariant();
-        private static string _BuildKey(BaseThing<TGame, TRoom, TPlayer, TThing> item) => _BuildKey(item.Name);
+        private static string _BuildKey(TThing item) => _BuildKey(item.Name);
         #endregion
 
-        public Inventory(BaseContainer<TGame, TRoom, TPlayer, TThing> owner, bool canAcceptNonTransferables = true)
+        public Inventory(TContainer owner, bool canAcceptNonTransferables = true)
         {
             this.Owner = owner;
             this.canAcceptNonTransferables = canAcceptNonTransferables;
         }
 
-        public void InitialAdd(params BaseThing<TGame, TRoom, TPlayer, TThing>[] items)
+        public void InitialAdd(params TThing[] items)
         {
             foreach (var item in items)
             {
@@ -53,12 +54,12 @@ namespace LostAndFound.Engine
             }
         }
 
-        public bool Transfer(string name, Inventory<TGame, TRoom, TPlayer, TThing> target)
+        public bool Transfer(string name, Inventory<TGame, TPlayer, TRoom, TContainer, TThing> target)
         {
             var key = _BuildKey(name);
             if (!dict.ContainsKey(key) || target == null) return false;
 
-            BaseThing<TGame, TRoom, TPlayer, TThing> item;
+            TThing item;
             if (dict.TryGetValue(key, out item))
             {
                 if (item.WasMentioned && item.CanBeTransfered)
@@ -71,14 +72,14 @@ namespace LostAndFound.Engine
             return true;
         }
 
-        public bool TryFind(string token, out BaseThing<TGame, TRoom, TPlayer, TThing> item, bool includeNextLevel = false, bool onlyWhenMentioned = true)
+        public bool TryFind(string token, out TThing item, bool includeNextLevel = false, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
             if (!dict.TryGetValue(key, out item))
             {
                 if (includeNextLevel)
                 {
-                    foreach (var container in this.OfType<BaseContainer<TGame, TRoom, TPlayer, TThing>>())
+                    foreach (var container in this.OfType<TContainer>())
                     {
                         if (container.Inventory.TryFind(token, out item))
                             break;
@@ -88,13 +89,13 @@ namespace LostAndFound.Engine
             return CheckItem(ref item, onlyWhenMentioned);
         }
 
-        private bool CheckItem(ref BaseThing<TGame, TRoom, TPlayer, TThing> item, bool onlyWhenMentioned = true)
+        private bool CheckItem(ref TThing item, bool onlyWhenMentioned = true)
         {
             if (item is null) return false;
 
             if (onlyWhenMentioned && !item.WasMentioned)
             {
-                item = null;
+                item = default(TThing);
                 return false;
             }
             return true;

@@ -52,7 +52,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(Player sender)
+        public override string LookIntroText(IPlayer sender)
         {
             return $@"
                 You are in a great hall. The floor has a black and white checker pattern.

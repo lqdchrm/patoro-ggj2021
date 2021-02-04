@@ -103,7 +103,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override string UseText => "You need to enter a PIN";
 
-        public bool Use(Player sender, string pin)
+        public bool Use(IPlayer sender, string pin)
         {
             var gunLocker = this.Game.LivingRoom.GunLocker;
             if (gunLocker.IsOpen)

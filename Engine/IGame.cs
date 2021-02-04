@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    interface IGame : IDisposable
+    public interface IGame : IDisposable
     {
         Task StartAsync();
     }

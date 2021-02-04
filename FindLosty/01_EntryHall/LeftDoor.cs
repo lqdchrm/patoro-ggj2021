@@ -48,7 +48,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         private int kick_count = 0;
         private DateTimeOffset time_of_last_kick = DateTimeOffset.MaxValue;
 
-        public override void Kick(Player sender)
+        public override void Kick(IPlayer sender)
         {
             var message = $"Nothing happened.";
             var time_of_kick = DateTimeOffset.Now;

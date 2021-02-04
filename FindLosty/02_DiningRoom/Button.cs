@@ -38,7 +38,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(Player sender)
+        public override void Kick(IPlayer sender)
         {
             sender.Reply($"You kick the button hard, a buzzer from the {this.Game.EntryHall} is hearable.");
             sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
@@ -106,7 +106,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
             sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
