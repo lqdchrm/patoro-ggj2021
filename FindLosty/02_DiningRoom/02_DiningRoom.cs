@@ -47,7 +47,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(Player sender) {
+        public override string LookIntroText(IPlayer sender) {
             var text = @$"
                 There is a {Table} with four chairs in one corner.
                 Next to one of the chairs is a red {Button}.

@@ -6,20 +6,34 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    public abstract class BaseContainer<TGame, TRoom, TPlayer, TThing> : BaseThing<TGame, TRoom, TPlayer, TThing>
-        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing: BaseThing<TGame, TRoom, TPlayer, TThing>
+    public interface BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        internal Inventory<TGame, TRoom, TPlayer, TThing> Inventory { get; init; }
+        Inventory<TGame, TPlayer, TRoom, TContainer, TThing> Inventory { get; init; }
+        bool DoesItemFit(TThing thing, out string error);
+    }
 
-        public BaseContainer(TGame game, bool transferable, bool canAcceptNonTransferables = false, string name = null) : base(game, transferable, name)
+    public abstract class BaseContainerImpl<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseThingImpl<TGame, TPlayer, TRoom, TContainer, TThing>, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+    {
+        public Inventory<TGame, TPlayer, TRoom, TContainer, TThing> Inventory { get; init; }
+
+        public BaseContainerImpl(TGame game, bool transferable, bool canAcceptNonTransferables = false, string name = null) : base(game, transferable, name)
         {
-            Inventory = new Inventory<TGame, TRoom, TPlayer, TThing>(this, canAcceptNonTransferables);
+            Inventory = new Inventory<TGame, TPlayer, TRoom, TContainer, TThing>(this as TContainer, canAcceptNonTransferables);
         }
 
-        public virtual bool DoesItemFit(BaseThing<TGame, TRoom, TPlayer, TThing> thing, out string error)
+        public virtual bool DoesItemFit(TThing thing, out string error)
         {
             error = "";
             return true;

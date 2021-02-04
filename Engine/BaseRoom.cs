@@ -8,15 +8,32 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-    public abstract class BaseRoom<TGame, TRoom, TPlayer, TThing> : BaseContainer<TGame, TRoom, TPlayer, TThing>
-        where TGame : BaseGame<TGame, TRoom, TPlayer, TThing>
-        where TRoom : BaseRoom<TGame, TRoom, TPlayer, TThing>
-        where TPlayer : BasePlayer<TGame, TRoom, TPlayer, TThing>
-        where TThing : BaseThing<TGame, TRoom, TPlayer, TThing>
+    public interface BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
+    {
+        public IEnumerable<TPlayer> Players { get; }
+
+        public void SendText(string msg, params TPlayer[] excludedPlayers);
+
+        public void Say(string msg, params TPlayer[] excludedPlayers);
+    }
+
+    public abstract class BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseContainerImpl<TGame, TPlayer, TRoom, TContainer, TThing>, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
+        where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
+        where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
+        where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         internal DiscordChannel _VoiceChannel { get; set; }
 
-        public BaseRoom(TGame game, string name = null) : base(game, false, true, name)
+        public BaseRoomImpl(TGame game, string name = null) : base(game, false, true, name)
         {
             WasMentioned = true;
         }
@@ -51,7 +68,7 @@ namespace LostAndFound.Engine
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        public IEnumerable<TPlayer> Players => Game.Players.Values.Where(p => p.Room == this).ToList();
+        public IEnumerable<TPlayer> Players => Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
 
         public Task Show(bool silent = false)
         {

@@ -95,7 +95,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             if (other is null) return sender.Reply("You take a big bite .... just kidding.");
     

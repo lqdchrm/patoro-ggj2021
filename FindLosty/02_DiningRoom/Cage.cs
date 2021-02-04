@@ -34,7 +34,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override string LookTextHeader {
             get {
-                BaseThing<FindLostyGame, Room, Player, Thing> hamster;
+                IThing hamster;
                 if (Inventory.TryFind("hamster", out hamster, false, false))
                 {
                     return $"Awwwwww... there's a {hamster} in there.";
@@ -43,7 +43,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             }
         }
 
-        public override void Look(Player sender)
+        public override void Look(IPlayer sender)
         {
             base.Look(sender);
         }

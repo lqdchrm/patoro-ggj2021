@@ -15,7 +15,7 @@ namespace LostAndFound.FindLosty.Things
         }
 
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
             var txt = UseText;
 

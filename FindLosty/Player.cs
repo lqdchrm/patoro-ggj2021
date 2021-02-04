@@ -9,7 +9,14 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty
 {
-    public class Player : BasePlayer<FindLostyGame, Room, Player, Thing>
+    public interface IPlayer : BasePlayer<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IContainer
+    {
+        int Health { get; set; }
+        bool Hit(string by = null, IPlayer byPlayer = null);
+        bool Heal(string by = null, IPlayer byPlayer = null);
+    }
+    
+    public class Player : BasePlayerImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IPlayer
     {
         public Player(DiscordMember name, FindLostyGame game) : base(game, name) { }
 
@@ -45,7 +52,7 @@ namespace LostAndFound.FindLosty
 
         private int health = PLAYER_MAX_HEALTH;
 
-        int Health
+        public int Health
         {
             get => health;
             set
@@ -82,7 +89,7 @@ namespace LostAndFound.FindLosty
             }
         }
 
-        public override void Look(Player sender)
+        public override void Look(IPlayer sender)
         {
             base.Look(sender);
             var verb = OneOf("staring at", "looking at", "admiring", "peeping on");
@@ -97,7 +104,7 @@ namespace LostAndFound.FindLosty
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(Player sender)
+        public override void Kick(IPlayer sender)
         {
             base.Kick(sender);
             var how = OneOf("hard", "in your butt", "with love", "and you deserved it");
@@ -113,7 +120,7 @@ namespace LostAndFound.FindLosty
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override void Listen(Player sender)
+        public override void Listen(IPlayer sender)
         {
             base.Listen(sender);
             this.Reply($"{sender} is listening to you...");
@@ -173,7 +180,7 @@ namespace LostAndFound.FindLosty
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
 
-        public bool Hit(string by = null, Player byPlayer = null)
+        public bool Hit(string by = null, IPlayer byPlayer = null)
         {
             if (this.Health > 0)
             {
@@ -205,7 +212,7 @@ namespace LostAndFound.FindLosty
             return false;
         }
 
-        public bool Heal(string by = null, Player byPlayer = null)
+        public bool Heal(string by = null, IPlayer byPlayer = null)
         {
             if (this.Health < PLAYER_MAX_HEALTH)
             {

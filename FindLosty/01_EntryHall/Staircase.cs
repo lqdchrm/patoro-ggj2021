@@ -108,7 +108,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚═════╝ ╚══════╝╚══════╝
         */
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             if (other is not null)
                 return base.Use(sender, other, isFlippedCall);

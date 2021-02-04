@@ -49,7 +49,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookIntroText(Player sender) => @$"
+        public override string LookIntroText(IPlayer sender) => @$"
             You look around in the big living room. The croc is sitting next the door. A big {Sofa} stands on an bright red carpet.
             Opposite the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
             .FormatMultiline();

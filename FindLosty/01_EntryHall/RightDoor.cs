@@ -62,7 +62,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override void Open(Player sender)
+        public override void Open(IPlayer sender)
         {
             sender.Reply(DoorImage);
             

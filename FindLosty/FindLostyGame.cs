@@ -15,23 +15,29 @@ using LostAndFound.FindLosty._05_Cellar;
 
 namespace LostAndFound.FindLosty
 {
-    public class FindLostyGame : BaseGame<FindLostyGame, Room, Player, Thing>
+    public interface IFindLostyGame : BaseGame<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>
     {
-        public readonly GameState State;
+        FrontYard FrontYard { get; }
+        EntryHall EntryHall { get; }
+        DiningRoom DiningRoom { get; }
+        LivingRoom LivingRoom { get; }
+        Kitchen Kitchen { get; }
+        Cellar Cellar { get; }
+    }
 
-        public readonly FrontYard FrontYard;
-        public readonly EntryHall EntryHall;
-        public readonly DiningRoom DiningRoom;
-        public readonly LivingRoom LivingRoom;
-        public readonly Kitchen Kitchen;
-        public readonly Cellar Cellar;
+    public class FindLostyGame : BaseGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
+    {
+        public FrontYard FrontYard { get; init; }
+        public EntryHall EntryHall { get; init; }
+        public DiningRoom DiningRoom { get; init; }
+        public LivingRoom LivingRoom { get; init; }
+        public Kitchen Kitchen { get; init; }
+        public Cellar Cellar { get; init; }
 
         private IDictionary<string, Room> _RoomMap;
 
         public FindLostyGame(string name, DiscordClient client, DiscordGuild guild) : base(name, client, guild)
         {
-            State = new GameState(this);
-
             // Rooms
             FrontYard = new FrontYard(this);
             EntryHall = new EntryHall(this);
@@ -71,17 +77,17 @@ namespace LostAndFound.FindLosty
             CommandSent += OnPlayerCommandSent;
         }
 
-        private void LogRoomChange(object sender, PlayerRoomChange<FindLostyGame, Room, Player, Thing> e)
+        private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
         {
             Console.WriteLine($"[ROOMS] {e}");
         }
 
-        private void LogEvent(object sender, BaseCommand<FindLostyGame, Room, Player, Thing> e)
+        private void LogEvent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
         {
             Console.WriteLine($"[COMMAND] {e}");
         }
 
-        private void ReportUnknown(Player player, string token, BaseThing<FindLostyGame, Room, Player, Thing>  other)
+        private void ReportUnknown(IPlayer player, string token, IThing other)
         {
             var intro = new[] {
                 $"What do you mean by {token}?",
@@ -90,10 +96,10 @@ namespace LostAndFound.FindLosty
             }.TakeOneRandom();
 
             player.Reply(intro);
-            GetThing(player, token, other as BaseContainer<FindLostyGame, Room, Player, Thing>, true);
+            GetThing(player, token, other as IContainer, true);
         }
 
-        private void OnPlayerCommandSent(object sender, BaseCommand<FindLostyGame, Room, Player, Thing> e)
+        private void OnPlayerCommandSent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
         {
             if (e.Command == null) return;
 
@@ -105,7 +111,7 @@ namespace LostAndFound.FindLosty
 
             var room = player.Room;
             var other = GetThing(player, second);
-            var thing = GetThing(player, first, other as BaseContainer<FindLostyGame, Room, Player, Thing>);
+            var thing = GetThing(player, first, other as IContainer);
 
             // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
@@ -254,7 +260,7 @@ namespace LostAndFound.FindLosty
             * these are optional
         ".FormatMultiline();
 
-        private void OnPlayerChangedRoom(object sender, PlayerRoomChange<FindLostyGame, Room, Player, Thing> e)
+        private void OnPlayerChangedRoom(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
         {
             if (e.OldRoom != null)
             {

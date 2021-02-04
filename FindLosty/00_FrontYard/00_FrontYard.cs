@@ -41,7 +41,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override void Look(Player sender)
+        public override void Look(IPlayer sender)
         {
             Poo.WasMentioned = true;
             Box.WasMentioned = true;
@@ -54,7 +54,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             });
         }
 
-        public override string LookIntroText(Player sender) {
+        public override string LookIntroText(IPlayer sender) {
             var friends = Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()

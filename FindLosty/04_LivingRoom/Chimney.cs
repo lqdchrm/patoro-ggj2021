@@ -98,7 +98,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         */
 
 
-        public override bool Use(Player sender, BaseThing<FindLostyGame, Room, Player, Thing> other, bool isFlippedCall = false)
+        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
         {
             sender.Reply(@"
             The chimney gas powered, looks like it wasn't used in some time...
