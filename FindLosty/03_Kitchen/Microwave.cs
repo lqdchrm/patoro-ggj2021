@@ -8,11 +8,6 @@
         }
 
 
-        public override string UseText
-        {
-            get { return $"This is the best fridge ever."; }
-        }
-
         public override bool DoesItemFit(IThing thing, out string error)
         {
             IThing item = null;
