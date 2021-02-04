@@ -166,6 +166,12 @@ namespace LostAndFound.FindLosty
                         else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
                         else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
+                    else if (first is not null 
+                        && second is null 
+                        && (player.Room?.Inventory.OfType<IContainer>().Where(x => x.Inventory.Has(first)).Any() ?? false))
+                    {
+                        player.Reply($"Ther is no {first} here. Maybe you need to take it 'from' something"); // first thing not found
+                    }
                     else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
                     else player.Reply("What do you want to take? Please use eg. take poo or take hamster from cage");   // no args
                     break;

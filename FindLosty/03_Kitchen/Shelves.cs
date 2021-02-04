@@ -1,4 +1,4 @@
-﻿namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Shelves : Container
     {

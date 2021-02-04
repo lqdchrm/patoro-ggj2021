@@ -3,11 +3,11 @@ using LostAndFound.FindLosty._02_DiningRoom;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
-    public class Croc : Thing
+    public class Croc : Container
     {
         public override string Emoji => Emojis.Croc;
 
-        public Croc(FindLostyGame game) : base(game)
+        public Croc(FindLostyGame game) : base(game, false, null)
         {
         }
 
@@ -20,7 +20,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        public bool IsNapping { get; private set; }
+        public bool IsNapping => this.Inventory.Has(Game.Kitchen.Fridge.Tofu.Name);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -119,6 +119,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚═╝      ╚═════╝    ╚═╝   
         */
 
+        public override bool DoesItemFit(IThing thing, out string error) => base.DoesItemFit(thing, out error);
+
         /*
         ██╗   ██╗███████╗███████╗
         ██║   ██║██╔════╝██╔════╝
@@ -135,9 +137,28 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 sender.Reply($"The {this} looks angry at you. It seems to be vegetarian. The {other} is squeeking.");
                 return true;
             }
-            else if (other is Things.Tofu)
+            else if (other is _03_Kitchen.Tofu tofu)
             {
-                sender.Reply(@$"
+                if (tofu.Frozen)
+                {
+                    sender.Reply(@$"
+                    Carefully holding the {other} you come closer. The {this} leaps forward and with a giant snap it swallows {other}.
+                    And imidetly spit it into your face.
+                    It drops to the ground.
+                    The hard and icy block hurts.
+                    ".FormatMultiline());
+
+                    sender.Room.SendText(@$"
+                    {sender} goes near the {this} and puts the {other} in the mouth of the {this}.
+                    Angry the {this} spits the block in to the face of {sender}.
+                    It lands on the ground.
+                    ", sender);
+                    tofu.PutInto(sender, this.Game.EntryHall);
+                    sender.Hit(tofu.ToString());
+                }
+                else
+                {
+                    sender.Reply(@$"
                     Carefully holding the {other} you come closer. The {this} leaps forward and with a giant snap it swallows {other}.
 
                     You assure your hand is still there...
@@ -146,18 +167,21 @@ namespace LostAndFound.FindLosty._01_EntryHall
                     The {this} leaves happily and full its guarding position.
                     It takes a napp right next to the door.
                     ".FormatMultiline());
-                sender.Room.SendText(@$"
+                    sender.Room.SendText(@$"
                     {sender} goes near the {this} and puts the {other} in the mouth of the {this}.
                     The {this} leaves happily and full its guarding position.
                     It takes a napp right next to the door.
                     ", sender);
-                this.IsNapping = true;
-                this.Game.DiningRoom.Show();
+                    // TODO: STACKOVERFLOW
+                    //tofu.PutInto(sender, this);
+                    this.Game.DiningRoom.Show();
+                }
+
                 return true;
             }
 
             if (!isFlippedCall && other != null)
-                other.Use(sender, this, true);
+                return other.Use(sender, this, true);
 
             return !sender.Reply(this.UseText);
         }

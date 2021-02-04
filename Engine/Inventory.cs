@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LostAndFound.FindLosty;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,12 +100,14 @@ namespace LostAndFound.Engine
             return true;
         }
 
+        public void Remove(IThing thing) => Remove(thing.Name);
         public void Remove(string name)
         {
             var key = _BuildKey(name);
             this.dict.Remove(key);
         }
 
+        public bool Has(IThing thing, bool onlyWhenMentioned = true) => Has(thing.Name, onlyWhenMentioned);
         public bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);

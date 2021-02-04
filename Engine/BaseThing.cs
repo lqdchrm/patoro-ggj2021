@@ -168,7 +168,15 @@ namespace LostAndFound.Engine
             else if (container.Inventory.Transfer(this.Name, sender.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You took {this} from {container}", $"Taken: {this}"));
-                sender.Room.SendText($"{sender} now owns {this}");
+                if (container is TPlayer otherPlayer)
+                {
+                    sender.Room.SendText($"{sender} took {this} from {container}", sender, otherPlayer);
+                    otherPlayer.Reply($"{sender} took {this} from you");
+                }
+                else
+                {
+                    sender.Room.SendText($"{sender} took {this} from {container}", sender);
+                }
             }
             else
             {
@@ -206,8 +214,22 @@ namespace LostAndFound.Engine
             }
             else if (sender.Inventory.Transfer(this.Name, container.Inventory))
             {
-                sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));
-                sender.Room.SendText($"{this} is now in {container}", sender);
+                if (container is TRoom)
+                {
+                    sender.ReplyWithState($"You drop {this} in {container}");
+                    sender.Room.SendText($"{sender} dropped {this} in {container}", sender);
+                }
+                else if (container is TPlayer otherPlayer)
+                {
+                    sender.ReplyWithState($"You give {this} to {container}");
+                    otherPlayer.Reply($"{sender} gave {this} to you");
+                    sender.Room.SendText($"{sender} gave {this} to {container}", sender, otherPlayer);
+                }
+                else
+                {
+                    sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));
+                    sender.Room.SendText($"{sender} put {this} into {container}", sender);
+                }
             }
             else
             {
@@ -233,6 +255,7 @@ namespace LostAndFound.Engine
             if (!isFlippedCall && !other.Use(sender, this as TThing, true))
                 return !sender.Reply(revokeText(other));
 
+            // I think this is not correct???
             return !sender.Reply(revokeText(other));
         }
 

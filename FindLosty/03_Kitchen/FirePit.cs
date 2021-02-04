@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace LostAndFound.FindLosty.Things
+namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class FirePit : Container
     {

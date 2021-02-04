@@ -109,12 +109,13 @@ namespace LostAndFound.FindLosty._02_DiningRoom
                 {
                     sender.Reply($"You hold the {hamster} in front of the {this}. A short beep sounds.");
                     sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep sounds.", sender);
-                    return false;
+                    return true;
                 }
                 else
                 {
                     sender.Reply($"You hold the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.");
                     sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.", sender);
+                    this.Game.DiningRoom.Door.Unlock();
                     return true;
                 }
             }
@@ -122,7 +123,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             {
                 sender.Reply($"You hold the {poo} in the green light. It shimmers green.");
                 sender.Room.SendText($"{sender} does something strange with the {this}. Maybe leave him alone for now?", sender);
-                return false;
+                return true;
             }
             else
                 return base.Use(sender, other);

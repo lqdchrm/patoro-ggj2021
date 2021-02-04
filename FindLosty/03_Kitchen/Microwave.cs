@@ -1,4 +1,4 @@
-﻿namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Microwave : Container
     {
@@ -36,6 +36,10 @@
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
+            if (other is not null)
+            {
+                return base.Use(sender, other, isFlippedCall);
+            }
             IThing item = null;
             bool found_tofu = this.Inventory.TryFind("tofu", out item);
             if (found_tofu && item is Tofu tofu)

@@ -1,10 +1,12 @@
-﻿namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Fridge : Container
     {
+        public Tofu Tofu { get; }
         public Fridge(FindLostyGame game) : base(game, false, "Fridge")
         {
-            this.Inventory.InitialAdd(new Tofu(game));
+            Tofu = new Tofu(game);
+            this.Inventory.InitialAdd(Tofu);
         }
 
 
