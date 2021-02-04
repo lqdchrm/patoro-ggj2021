@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LostAndFound.FindLosty.Things;
 
 namespace LostAndFound.FindLosty._03_Kitchen
@@ -18,11 +13,11 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public Kitchen(FindLostyGame game) : base(game)
         {
             // Create Things in room
-            Inventory.InitialAdd(
-                Fridge = new Fridge(game),
-                Shelves = new Shelves(game),
-                FirePit = new FirePit(game),
-                Microwave = new Microwave(game)
+            this.Inventory.InitialAdd(
+                this.Fridge = new Fridge(game),
+                this.Shelves = new Shelves(game),
+                this.FirePit = new FirePit(game),
+                this.Microwave = new Microwave(game)
             );
         }
 
@@ -43,12 +38,13 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(IPlayer sender) {
+        public override string LookIntroText(IPlayer sender)
+        {
             return $@"
-                There are {Shelves} at one wall and a large {Fridge} on the other.
-                A {Microwave} is mounted on the wall next to the {Shelves}.
-                In the middle of the room is a large fire {FirePit}.
-                {FirePit.LookText}
+                There are {this.Shelves} at one wall and a large {this.Fridge} on the other.
+                A {this.Microwave} is mounted on the wall next to the {this.Shelves}.
+                In the middle of the room is a large fire {this.FirePit}.
+                {this.FirePit.LookText}
                 There is one [door] leading to the dining room.
                  ".FormatMultiline();
         }

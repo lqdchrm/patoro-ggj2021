@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LostAndFound.Engine;
-
-namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty.Things
 {
     public class Microwave : Container
     {
@@ -17,13 +10,13 @@ namespace LostAndFound.FindLosty.Things
 
         public override string UseText
         {
-            get { return$"This is the best fridge ever."; }
+            get { return $"This is the best fridge ever."; }
         }
 
         public override bool DoesItemFit(IThing thing, out string error)
         {
             IThing item = null;
-            bool found_tofu = Inventory.TryFind("tofu", out item);
+            bool found_tofu = this.Inventory.TryFind("tofu", out item);
             if (found_tofu)
             {
                 error = $"You can't put that in. there is {item} inside the microwave.";
@@ -44,7 +37,7 @@ namespace LostAndFound.FindLosty.Things
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
             IThing item = null;
-            bool found_tofu = Inventory.TryFind("tofu", out item);
+            bool found_tofu = this.Inventory.TryFind("tofu", out item);
             if (found_tofu && item is Tofu tofu)
             {
                 tofu.Frozen = false;

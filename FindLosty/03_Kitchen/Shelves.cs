@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LostAndFound.Engine;
-
-namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty.Things
 {
     public class Shelves : Container
     {
 
         bool DoorsOpen = false;
-        
+
         public Shelves(FindLostyGame game) : base(game, false, "Shelves")
         {
 
@@ -19,21 +12,23 @@ namespace LostAndFound.FindLosty.Things
 
         public override string LookText
         {
-            get {
+            get
+            {
                 return $"This is the best shelf ever";
             }
         }
 
         public override string UseText
         {
-            get {
+            get
+            {
                 return $"This is the best shelf ever";
             }
         }
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
-            string txt = UseText;
+            string txt = this.UseText;
 
             sender.Reply("YOU JUST USED ME. POLICE." + txt);
             return true;

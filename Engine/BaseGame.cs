@@ -1,11 +1,11 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using LostAndFound.Engine.Events;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using LostAndFound.Engine.Events;
+using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -17,7 +17,7 @@ namespace LostAndFound.Engine
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public IReadOnlyDictionary<string, TPlayer> Players { get; }
-        
+
         public void Say(string msg, bool alsoInDefaultChannel = false);
     }
 
@@ -29,8 +29,8 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        private DiscordClient _Client;
-        private DiscordGuild _Guild;
+        private readonly DiscordClient _Client;
+        private readonly DiscordGuild _Guild;
         internal DiscordChannel _ParentChannel;
 
         private readonly Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
@@ -73,8 +73,8 @@ namespace LostAndFound.Engine
         {
             await CleanupOldAsync();
             await CreateDefaultChannelsAsync();
-            Ready = true;
-            var member = await _Guild.GetMemberAsync(_Client.CurrentUser.Id);
+            this.Ready = true;
+            var member = await this._Guild.GetMemberAsync(this._Client.CurrentUser.Id);
             if (member != null)
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
             Say("A new game has started. Please select your channel.", true);
@@ -84,18 +84,18 @@ namespace LostAndFound.Engine
         {
             Console.Error.WriteLine("[ENGINE] Cleaning up ...");
 
-            foreach (var child in _ParentChannel.Children)
+            foreach (var child in this._ParentChannel.Children)
             {
                 await child.DeleteAsync();
             }
-            await _ParentChannel.DeleteAsync();
+            await this._ParentChannel.DeleteAsync();
             Console.Error.WriteLine("[ENGINE] ... cleaned up");
         }
 
         public async Task CleanupOldAsync()
         {
             Console.Error.WriteLine("[ENGINE] Cleaning up ...");
-            var oldGroup = _Guild.Channels.Values.FirstOrDefault(c => c.Name == this.Name);
+            var oldGroup = this._Guild.Channels.Values.FirstOrDefault(c => c.Name == this.Name);
             if (oldGroup != null)
             {
                 foreach (var child in oldGroup.Children)
@@ -110,7 +110,7 @@ namespace LostAndFound.Engine
         private async Task CreateDefaultChannelsAsync()
         {
             Console.Error.WriteLine("[ENGINE] Adding default channels ...");
-            _ParentChannel = await this._Guild.CreateChannelAsync(this.Name, ChannelType.Category);
+            this._ParentChannel = await this._Guild.CreateChannelAsync(this.Name, ChannelType.Category);
             Console.Error.WriteLine("[ENGINE] ... default channels added");
         }
 
@@ -119,15 +119,15 @@ namespace LostAndFound.Engine
             if (e.Guild.Id != this._Guild.Id)
                 return Task.CompletedTask;
 
-            if (!Ready)
+            if (!this.Ready)
                 return Task.CompletedTask;
 
             // handle user info
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;
 
-            var oldRoom = (oldChannel != null && _Rooms.ContainsKey(oldChannel.Name)) ? _Rooms[oldChannel.Name] : default(TRoom);
-            var newRoom = (newChannel != null && _Rooms.ContainsKey(newChannel.Name)) ? _Rooms[newChannel.Name] : default(TRoom);
+            var oldRoom = (oldChannel != null && this._Rooms.ContainsKey(oldChannel.Name)) ? this._Rooms[oldChannel.Name] : default;
+            var newRoom = (newChannel != null && this._Rooms.ContainsKey(newChannel.Name)) ? this._Rooms[newChannel.Name] : default;
 
             if (oldRoom == newRoom)
                 return Task.CompletedTask;
@@ -135,7 +135,7 @@ namespace LostAndFound.Engine
             // Do not wait for these
             Task.Run(async () =>
             {
-                var member = await _Guild.GetMemberAsync(e.User.Id);
+                var member = await this._Guild.GetMemberAsync(e.User.Id);
                 var player = await GetOrCreatePlayer(member);
                 player.Room = newRoom;
 
@@ -150,10 +150,10 @@ namespace LostAndFound.Engine
             if (e.Guild.Id != this._Guild.Id)
                 return;
 
-            var member = await _Guild.GetMemberAsync(e.Author.Id);
+            var member = await this._Guild.GetMemberAsync(e.Author.Id);
             if (member == null) return;
 
-            if (e.Channel.Parent != _ParentChannel)
+            if (e.Channel.Parent != this._ParentChannel)
                 return;
 
             // if player is not bot
@@ -175,7 +175,7 @@ namespace LostAndFound.Engine
 
         public void Say(string msg, bool alsoInDefaultChannel = false)
         {
-            var rooms = Rooms.Values.ToList();
+            var rooms = this.Rooms.Values.ToList();
             Task.Run(async () =>
             {
                 foreach (var room in rooms)
@@ -194,12 +194,13 @@ namespace LostAndFound.Engine
         public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
             where TRoomCurrent : BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>, TRoom
         {
-            _Rooms.Add(room.Name, room);
-            room._VoiceChannel = await _Guild.CreateChannelAsync(room.Name, ChannelType.Voice, _ParentChannel);
+            this._Rooms.Add(room.Name, room);
+            room._VoiceChannel = await this._Guild.CreateChannelAsync(room.Name, ChannelType.Voice, this._ParentChannel);
             if (visible)
             {
                 await room.Show(true);
-            } else
+            }
+            else
             {
                 await room.Hide(true);
             }
@@ -207,12 +208,12 @@ namespace LostAndFound.Engine
             return room;
         }
 
-        public IReadOnlyDictionary<string, TRoom> Rooms => _Rooms;
+        public IReadOnlyDictionary<string, TRoom> Rooms => this._Rooms;
         #endregion
 
 
         #region Player Helpers
-        public IReadOnlyDictionary<string, TPlayer> Players => _Players.Values.ToDictionary(p => p.Name);
+        public IReadOnlyDictionary<string, TPlayer> Players => this._Players.Values.ToDictionary(p => p.Name);
 
         protected abstract TPlayer CreatePlayer(DiscordMember member);
 
@@ -225,14 +226,14 @@ namespace LostAndFound.Engine
         {
 
 
-            if (!_Players.TryGetValue(member.Id, out var player))
+            if (!this._Players.TryGetValue(member.Id, out var player))
             {
                 Console.Error.WriteLine($"[ENGINE] Adding player {member.DisplayName} ...");
                 player = CreatePlayer(member);
-                await player._InitPlayer(_ParentChannel);
+                await player._InitPlayer(this._ParentChannel);
 
 
-                _Players.Add(member.Id, player);
+                this._Players.Add(member.Id, player);
                 Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
             }
             return player;
@@ -253,14 +254,13 @@ namespace LostAndFound.Engine
         /// <param name="sender"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public TThing GetThing(TPlayer sender, string token, TContainer other = default(TContainer), bool showHelp = false)
+        public TThing GetThing(TPlayer sender, string token, TContainer other = default, bool showHelp = false)
         {
             bool helpCalculated = false;
-            if (token is null) return default(TThing);
+            if (token is null) return default;
 
             // find in inventory
-            TThing item = default(TThing);
-            if (sender.Inventory.TryFind(token, out item)) return item;
+            if (sender.Inventory.TryFind(token, out TThing item)) return item;
 
             // find in room
             if (sender.Room.Inventory.TryFind(token, out item)) return item;
@@ -274,13 +274,13 @@ namespace LostAndFound.Engine
                 var candidates = sender.Room.Players.Where(p => p.NormalizedName.StartsWith(token)).ToList();
 
                 // only one match
-                if (candidates.Count() == 1) return candidates.First();
+                if (candidates.Count == 1) return candidates.First();
 
                 // only one exact match
                 if ((item = candidates.FirstOrDefault(p => p.NormalizedName == token)) != null) return item;
 
                 // multiple matches
-                if (candidates.Count() > 1)
+                if (candidates.Count > 1)
                 {
                     var names = string.Join(", ", candidates.Select(cand => cand.Name));
                     sender.Reply($"Found multiple players: {names}");
@@ -314,13 +314,13 @@ namespace LostAndFound.Engine
         #region IDisposable
 
         private bool disposedValue;
-        public bool IsDisposed => disposedValue;
+        public bool IsDisposed => this.disposedValue;
 
         public void Dispose()
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
-                disposedValue = true;
+                this.disposedValue = true;
 
                 // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
                 Dispose(disposing: true);
@@ -332,8 +332,8 @@ namespace LostAndFound.Engine
         {
             if (disposing)
             {
-                _Client.VoiceStateUpdated -= VoiceStateUpdated;
-                _Client.MessageCreated -= OnMessageCreated;
+                this._Client.VoiceStateUpdated -= VoiceStateUpdated;
+                this._Client.MessageCreated -= OnMessageCreated;
 
                 // cleanup
                 await CleanupAsync();

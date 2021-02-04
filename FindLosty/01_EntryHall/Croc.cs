@@ -1,10 +1,5 @@
-﻿using LostAndFound.Engine;
+using LostAndFound.Engine;
 using LostAndFound.FindLosty._02_DiningRoom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -35,7 +30,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => CrocImage;
+        public override string LookText => this.CrocImage;
 
         public string CrocImage => @$"
         The {this} looks hungry. But luckily it is chained to a table.
@@ -164,7 +159,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (!isFlippedCall && other != null)
                 other.Use(sender, this, true);
 
-            return !sender.Reply(UseText);
+            return !sender.Reply(this.UseText);
         }
 
         /*

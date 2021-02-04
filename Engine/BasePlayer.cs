@@ -1,7 +1,7 @@
-﻿using DSharpPlus.Entities;
-using System.Threading.Tasks;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using System.Linq;
-using DSharpPlus;
+using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
@@ -33,8 +33,12 @@ namespace LostAndFound.Engine
 
         bool ReplySpeach(string msg);
 
+#pragma warning disable IDE1006 // Naming Styles
+
         Task _InitPlayer(DiscordChannel parentChannel);
         bool _UsesChannel(DiscordChannel channel);
+
+#pragma warning restore IDE1006 // Naming Styles
     }
 
     public abstract class BasePlayerImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -45,31 +49,36 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
+#pragma warning disable IDE1006 // Naming Styles
+
         private DiscordChannel _Channel;
         private DiscordMember _Member { get; set; }
 
-        public TRoom Room { get; set; }
-        public string NormalizedName => string.Join("", Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
+#pragma warning restore IDE1006 // Naming Styles
 
-        public override string Emoji => emoji;
+
+        public TRoom Room { get; set; }
+        public string NormalizedName => string.Join("", this.Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
+
+        public override string Emoji => this.emoji;
 
         public BasePlayerImpl(TGame game, DiscordMember member) : base(game, false, false, member.DisplayName)
         {
-            emoji = Emojis.Players.TakeOneRandom();
-            WasMentioned = true;
+            this.emoji = Emojis.Players.TakeOneRandom();
+            this.WasMentioned = true;
             this._Member = member;
         }
 
         public async Task _InitPlayer(DiscordChannel parentChannel)
         {
             var builder = new DiscordOverwriteBuilder();
-            var guild = _Member.Guild;
+            var guild = this._Member.Guild;
             if (guild != null)
             {
                 var discordOverwriteBuilder = builder.For(guild.EveryoneRole).Deny(Permissions.AccessChannels);
                 var overwrites = new[] { discordOverwriteBuilder };
                 var channel = await guild.CreateChannelAsync($"{this.Emoji}{this.Name}", ChannelType.Text, parentChannel, overwrites: overwrites);
-                await channel.AddOverwriteAsync(_Member, Permissions.AccessChannels);
+                await channel.AddOverwriteAsync(this._Member, Permissions.AccessChannels);
                 this._Channel = channel;
             }
         }
@@ -85,28 +94,28 @@ namespace LostAndFound.Engine
          */
         private readonly string emoji;
 
-        public virtual string StatusText => this.ToString();
+        public virtual string StatusText => ToString();
 
         private TThing thingPlayerIsUsingAndHasToStop;
         public TThing ThingPlayerIsUsingAndHasToStop
         {
             get
             {
-                return thingPlayerIsUsingAndHasToStop;
+                return this.thingPlayerIsUsingAndHasToStop;
             }
             set
             {
                 if (this is TPlayer self)
                 {
-                    if (thingPlayerIsUsingAndHasToStop != null && value == null)
+                    if (this.thingPlayerIsUsingAndHasToStop != null && value == null)
                     {
-                        this.Room.SendText($"{this} stopped using {thingPlayerIsUsingAndHasToStop}", self);
+                        this.Room.SendText($"{this} stopped using {this.thingPlayerIsUsingAndHasToStop}", self);
                     }
-                    else if (value != null && thingPlayerIsUsingAndHasToStop != value)
+                    else if (value != null && this.thingPlayerIsUsingAndHasToStop != value)
                     {
                         this.Room.SendText($"{this} started using {value}", self);
                     }
-                    thingPlayerIsUsingAndHasToStop = value;
+                    this.thingPlayerIsUsingAndHasToStop = value;
                 }
             }
         }
@@ -119,9 +128,9 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookInventoryText => "\nBackpack:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
+        public override string LookInventoryText => "\nBackpack:\n\t" + string.Join("\n\t", this.Inventory.Select(i => i.ToString()));
         public virtual string LookStatus => this.StatusText;
-        public override string LookText => $"{LookTextHeader}{LookInventoryText}\n{LookStatus}";
+        public override string LookText => $"{this.LookTextHeader}{this.LookInventoryText}\n{this.LookStatus}";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -197,38 +206,38 @@ namespace LostAndFound.Engine
         */
         public void Mute()
         {
-            _Member?.ModifyAsync(x => x.Muted = true);
+            this._Member?.ModifyAsync(x => x.Muted = true);
         }
 
         public void Unmute()
         {
-            _Member?.ModifyAsync(x => x.Muted = false);
+            this._Member?.ModifyAsync(x => x.Muted = false);
         }
 
         public bool Reply(string msg)
         {
             msg = $"```css\n{msg}```";
-            _Channel?.SendMessageAsync(msg);
+            this._Channel?.SendMessageAsync(msg);
             return true;
         }
 
         public bool ReplyWithState(string msg)
         {
-            msg = $"```css\n{msg}\nYour Status: {StatusText}```";
-            _Channel?.SendMessageAsync(msg);
+            msg = $"```css\n{msg}\nYour Status: {this.StatusText}```";
+            this._Channel?.SendMessageAsync(msg);
             return true;
         }
 
         public bool ReplyImage(string msg)
         {
             msg = $"```\n{msg}\n```";
-            _Channel?.SendMessageAsync(msg);
+            this._Channel?.SendMessageAsync(msg);
             return true;
         }
 
         public bool ReplySpeach(string msg)
         {
-            _Channel?.SendMessageAsync(msg, true);
+            this._Channel?.SendMessageAsync(msg, true);
             return true;
         }
 

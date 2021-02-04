@@ -23,7 +23,7 @@
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => "The sofa is made of a dark lather. It looks comfortable."; 
+        public override string LookText => "The sofa is made of a dark lather. It looks comfortable.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

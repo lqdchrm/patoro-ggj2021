@@ -1,9 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
 {
@@ -46,7 +41,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Kick(IPlayer sender)
         {
-            if (IsOpen)
+            if (this.IsOpen)
             {
                 sender.Reply($"The open {this} hits the back wall and then swings back and hits your face.");
                 sender.Hit("swinging door");
@@ -77,15 +72,15 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Open(IPlayer sender)
         {
-            if (IsOpen)
+            if (this.IsOpen)
             {
                 sender.Reply($"You open the {this} as much as possible.");
             }
             else
             {
-                IsOpen = true;
+                this.IsOpen = true;
                 sender.Reply($"The {this} swings open. Who doesn't lock their front {this}?");
-                Game.EntryHall.Show();
+                this.Game.EntryHall.Show();
             }
         }
 

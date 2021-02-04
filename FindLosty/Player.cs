@@ -1,11 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using LostAndFound.Engine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty
 {
@@ -15,7 +10,7 @@ namespace LostAndFound.FindLosty
         bool Hit(string by = null, IPlayer byPlayer = null);
         bool Heal(string by = null, IPlayer byPlayer = null);
     }
-    
+
     public class Player : BasePlayerImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IPlayer
     {
         public Player(DiscordMember name, FindLostyGame game) : base(game, name) { }
@@ -32,11 +27,11 @@ namespace LostAndFound.FindLosty
         {
             get
             {
-                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, Health));
-                var items = string.Join("", Inventory.Select(i => i.Emoji));
+                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health));
+                var items = string.Join("", this.Inventory.Select(i => i.Emoji));
                 var item = this.ThingPlayerIsUsingAndHasToStop?.ToString();
                 var action = item != null ? $"using {item}" : "";
-                return $"[{Emoji}{Name}] {health} {items} {action}";
+                return $"[{this.Emoji}{this.Name}] {health} {items} {action}";
             }
         }
 
@@ -54,11 +49,11 @@ namespace LostAndFound.FindLosty
 
         public int Health
         {
-            get => health;
+            get => this.health;
             set
             {
-                var old = health;
-                health = value;
+                var old = this.health;
+                this.health = value;
                 if (value == 0 && old > 0)
                 {
                     ReplyWithState($"You health has depleted and you are now muted. Try to heal yourself to be able to speak again (or ask the server admin to unmute you).");
@@ -93,7 +88,7 @@ namespace LostAndFound.FindLosty
         {
             base.Look(sender);
             var verb = OneOf("staring at", "looking at", "admiring", "peeping on");
-            this.Reply($"{sender} is {verb} you.");
+            Reply($"{sender} is {verb} you.");
         }
 
         /*
@@ -108,7 +103,7 @@ namespace LostAndFound.FindLosty
         {
             base.Kick(sender);
             var how = OneOf("hard", "in your butt", "with love", "and you deserved it");
-            this.Reply($"{sender} kicked you {how}");
+            Reply($"{sender} kicked you {how}");
         }
 
 
@@ -123,7 +118,7 @@ namespace LostAndFound.FindLosty
         public override void Listen(IPlayer sender)
         {
             base.Listen(sender);
-            this.Reply($"{sender} is listening to you...");
+            Reply($"{sender} is listening to you...");
         }
 
         /*

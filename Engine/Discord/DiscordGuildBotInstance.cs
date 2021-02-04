@@ -31,24 +31,25 @@ namespace LostAndFound.Engine.Discord
             this.client = sender;
             this.guild = guild;
 
-            client.MessageCreated += this.Client_MessageCreated;
+            this.client.MessageCreated += this.Client_MessageCreated;
 
             // TODO: Find the default text channel without using hardcoded strings...
-            var defaultChanel = 
+            var defaultChanel =
                 guild.Channels.FirstOrDefault(x => x.Value.Name == "Allgemein" && x.Value.Type == ChannelType.Text).Value
                 ?? guild.Channels.FirstOrDefault(x => x.Value.Type == ChannelType.Text).Value;
-            
+
             if (defaultGame != null)
             {
                 var gameName = defaultGame.Name.Replace("Game", "");
-                var game = GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(gameName, client, guild);
+                var game = this.GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(gameName, this.client, guild);
                 if (game != null)
                 {
-                    gameLookup[gameName] = game;
+                    this.gameLookup[gameName] = game;
                     _ = game.StartAsync();
                 }
 
-            } else
+            }
+            else
             {
                 if (defaultChanel is not null)
                     Welcome(defaultChanel);
@@ -66,21 +67,21 @@ namespace LostAndFound.Engine.Discord
             if (e.Guild.Id != this.guild.Id)
                 return Task.CompletedTask;
 
-            var match = gameRegex.Match(e.Message.Content);
+            var match = this.gameRegex.Match(e.Message.Content);
 
-            if (e.MentionedUsers.Any(x => x.Id == client.CurrentUser.Id))
+            if (e.MentionedUsers.Any(x => x.Id == this.client.CurrentUser.Id))
             {
 
                 var gameName = match.Groups["game"].Value;
                 var instanceName = match.Groups["instance"].Value;
 
-                var game = GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(instanceName, client, guild);
+                var game = this.GameMapping.FirstOrDefault(entry => entry.Key == gameName).Value?.Invoke(instanceName, this.client, this.guild);
 
                 if (match.Success && game is not null)
                 {
-                    if (gameLookup.TryGetValue(instanceName, out var oldGame))
+                    if (this.gameLookup.TryGetValue(instanceName, out var oldGame))
                         oldGame.Dispose();
-                    gameLookup[instanceName] = game;
+                    this.gameLookup[instanceName] = game;
                     _ = game.StartAsync();
                 }
                 else
@@ -96,19 +97,19 @@ namespace LostAndFound.Engine.Discord
         private string GetValidGames()
         {
             return @$"Valid Games are
- - {string.Join("\n - ", GameMapping.Keys)}
+ - {string.Join("\n - ", this.GameMapping.Keys)}
 
 Use `[GameName] [InstanceName]` to create a game";
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
-                disposedValue = true;
+                this.disposedValue = true;
                 if (disposing)
                 {
-                    client.MessageCreated -= this.Client_MessageCreated;
+                    this.client.MessageCreated -= this.Client_MessageCreated;
 
                 }
 

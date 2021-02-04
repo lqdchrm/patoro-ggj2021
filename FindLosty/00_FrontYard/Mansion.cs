@@ -1,8 +1,4 @@
 ﻿using LostAndFound.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
@@ -10,7 +6,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
     public class Mansion : Thing
     {
         public override string Emoji => Emojis.Mansion;
-        
+
         public Mansion(FindLostyGame game) : base(game) { }
 
         /*
@@ -36,7 +32,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             {
                 sender.Reply(House);
                 await Task.Delay(500);
-                sender.Reply($"There seems to be only one way into the building. A large oak {Game.FrontYard.Door}.");
+                sender.Reply($"There seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.");
             });
         }
 

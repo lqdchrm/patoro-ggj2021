@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using LostAndFound.Engine;
@@ -12,6 +8,10 @@ using LostAndFound.FindLosty._02_DiningRoom;
 using LostAndFound.FindLosty._03_Kitchen;
 using LostAndFound.FindLosty._04_LivingRoom;
 using LostAndFound.FindLosty._05_Cellar;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty
 {
@@ -34,25 +34,25 @@ namespace LostAndFound.FindLosty
         public Kitchen Kitchen { get; init; }
         public Cellar Cellar { get; init; }
 
-        private IDictionary<string, Room> _RoomMap;
+        private readonly IDictionary<string, Room> _RoomMap;
 
         public FindLostyGame(string name, DiscordClient client, DiscordGuild guild) : base(name, client, guild)
         {
             // Rooms
-            FrontYard = new FrontYard(this);
-            EntryHall = new EntryHall(this);
-            DiningRoom = new DiningRoom(this);
-            Kitchen = new Kitchen(this);
-            LivingRoom = new LivingRoom(this);
-            Cellar = new Cellar(this);
+            this.FrontYard = new FrontYard(this);
+            this.EntryHall = new EntryHall(this);
+            this.DiningRoom = new DiningRoom(this);
+            this.Kitchen = new Kitchen(this);
+            this.LivingRoom = new LivingRoom(this);
+            this.Cellar = new Cellar(this);
 
-            _RoomMap = new Dictionary<string, Room> {
-                { "00", FrontYard },
-                { "01", EntryHall },
-                { "02", DiningRoom },
-                { "03", Kitchen },
-                { "04", LivingRoom },
-                { "05", Cellar }
+            this._RoomMap = new Dictionary<string, Room> {
+                { "00", this.FrontYard },
+                { "01", this.EntryHall },
+                { "02", this.DiningRoom },
+                { "03", this.Kitchen },
+                { "04", this.LivingRoom },
+                { "05", this.Cellar }
             };
         }
 
@@ -62,12 +62,12 @@ namespace LostAndFound.FindLosty
         {
             await base.StartAsync();
 
-            await AddRoomAsync(FrontYard, true);
-            await AddRoomAsync(EntryHall, false);
-            await AddRoomAsync(DiningRoom, false);
-            await AddRoomAsync(LivingRoom, false);
-            await AddRoomAsync(Kitchen, false);
-            await AddRoomAsync(Cellar, false);
+            await AddRoomAsync(this.FrontYard, true);
+            await AddRoomAsync(this.EntryHall, false);
+            await AddRoomAsync(this.DiningRoom, false);
+            await AddRoomAsync(this.LivingRoom, false);
+            await AddRoomAsync(this.Kitchen, false);
+            await AddRoomAsync(this.Cellar, false);
 
 #if DEBUG
             PlayerChangedRoom += LogRoomChange;
@@ -115,7 +115,7 @@ namespace LostAndFound.FindLosty
 
             // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
-            
+
             if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
             {
                 player.Reply($"You are still using {player.ThingPlayerIsUsingAndHasToStop}. Please stop before doing anything else.");
@@ -215,14 +215,13 @@ namespace LostAndFound.FindLosty
                 case "cheat":
                     if (first == "open")
                     {
-                        Room roomToOpen;
-                        if (_RoomMap.TryGetValue(prepo, out roomToOpen))
+                        if (this._RoomMap.TryGetValue(prepo, out Room roomToOpen))
                         {
                             roomToOpen.Show(true);
                         }
                         else if (prepo == "all")
                         {
-                            foreach (var _room in _RoomMap.Values)
+                            foreach (var _room in this._RoomMap.Values)
                                 _room.Show(true);
                         }
                     }
@@ -243,7 +242,7 @@ namespace LostAndFound.FindLosty
             }
         }
 
-        private string HelpText => $@"
+        private static string HelpText => $@"
             [help]   - This help message
             [look]   - look (something or somebody)*, eg look box
             [listen] - listen (something or somebody)*, eg listen door

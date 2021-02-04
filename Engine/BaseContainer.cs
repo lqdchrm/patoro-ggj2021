@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace LostAndFound.Engine
 {
@@ -30,7 +26,7 @@ namespace LostAndFound.Engine
 
         public BaseContainerImpl(TGame game, bool transferable, bool canAcceptNonTransferables = false, string name = null) : base(game, transferable, name)
         {
-            Inventory = new Inventory<TGame, TPlayer, TRoom, TContainer, TThing>(this as TContainer, canAcceptNonTransferables);
+            this.Inventory = new Inventory<TGame, TPlayer, TRoom, TContainer, TThing>(this as TContainer, canAcceptNonTransferables);
         }
 
         public virtual bool DoesItemFit(TThing thing, out string error)
@@ -38,7 +34,7 @@ namespace LostAndFound.Engine
             error = "";
             return true;
         }
-        
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -49,7 +45,7 @@ namespace LostAndFound.Engine
         */
 
         public virtual string LookTextHeader => base.LookText;
-        public virtual string LookInventoryText => "\nInside:\n\t" + string.Join("\n\t", Inventory.Select(i => i.ToString()));
-        public override string LookText => $"{LookTextHeader}{LookInventoryText}";
+        public virtual string LookInventoryText => "\nInside:\n\t" + string.Join("\n\t", this.Inventory.Select(i => i.ToString()));
+        public override string LookText => $"{this.LookTextHeader}{this.LookInventoryText}";
     }
 }

@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LostAndFound.Engine;
-
-namespace LostAndFound.FindLosty.Things
+﻿namespace LostAndFound.FindLosty.Things
 {
     public class Fridge : Container
     {
         public Fridge(FindLostyGame game) : base(game, false, "Fridge")
         {
-            Inventory.InitialAdd(new Tofu(game));
+            this.Inventory.InitialAdd(new Tofu(game));
         }
 
 
         public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
         {
-            var txt = UseText;
+            var txt = this.UseText;
 
             sender.Reply(txt);
             return true;
