@@ -100,6 +100,12 @@ namespace LostAndFound.Engine
             return true;
         }
 
+        public void Remove(string name)
+        {
+            var key = _BuildKey(name);
+            dict.Remove(key);
+        }
+
         public bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);

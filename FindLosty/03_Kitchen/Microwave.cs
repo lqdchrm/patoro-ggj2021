@@ -10,7 +10,7 @@ namespace LostAndFound.FindLosty.Things
     public class Microwave : Container
     {
 
-        public Microwave(FindLostyGame game) : base(game)
+        public Microwave(FindLostyGame game) : base(game, false, "Microwave")
         {
         }
 

@@ -9,7 +9,7 @@ namespace LostAndFound.FindLosty.Things
 {
     public class Fridge : Container
     {
-        public Fridge(FindLostyGame game) : base(game)
+        public Fridge(FindLostyGame game) : base(game, false, "Fridge")
         {
             Inventory.InitialAdd(new Tofu(game));
         }
