@@ -268,6 +268,18 @@ namespace LostAndFound.Engine
             // find in other inventory
             if (other?.Inventory.TryFind(token, out item) ?? false) return item;
 
+            // find in all containers in room to show some help
+            if (showHelp)
+            {
+                var containerContainingToken = sender.Room?.Inventory.OfType<TContainer>()
+                    .FirstOrDefault(c => c.Inventory.Any(i => i.Name.ToLowerInvariant().Equals(token?.ToLowerInvariant())));
+                if (containerContainingToken != null)
+                {
+                    sender.Reply($"There is no {token} here. Maybe you should try it with {containerContainingToken}."); // first thing not found
+                }
+                return default;
+            }
+
             //search player
             if (token.Length > 2)
             {
@@ -289,7 +301,8 @@ namespace LostAndFound.Engine
             }
 
             // check if current room was meant
-            if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant()) return sender.Room;
+            if (sender.Room.Name.ToLowerInvariant() == token.ToLowerInvariant())
+                return sender.Room;
 
             // show possible solutions
             if (!helpCalculated && showHelp)

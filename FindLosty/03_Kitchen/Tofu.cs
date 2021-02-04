@@ -96,13 +96,16 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-
         public override void PutInto(IPlayer sender, IContainer container)
         {
             if (container is _01_EntryHall.Croc croc)
             {
-                this.Use(sender, croc);
-                return;
+                var crocAteTofu = croc.TryToEatTofu(sender, this);
+                var target = crocAteTofu ? croc.Inventory : sender.Room.Inventory;
+                if (!sender.Inventory.Transfer(this, target))
+                {
+                    sender.Reply($"You don't posses {a} {this}.");
+                }
             }
             base.PutInto(sender, container);
         }
@@ -115,33 +118,26 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override void Use(IPlayer sender, IThing other)
         {
             if (other is null)
             {
                 if (this.Frozen)
                 {
                     sender.Reply("You lick the frozen tofu. Besides a strange taste in your mouth nothing happens.");
+                    sender.Room.SendText($"{sender} licked tofu", sender);
                 }
                 else
                 {
-                    if (this.UseCount < 3)
-                    {
-                        sender.Reply("You take a bite of tofu. It tastes good.");
-                        this.UseCount++;
-                    }
-                    else
-                    {
-                        sender.Reply("There is not much tofu left and you feel like you might need some tofu later.");
-                    }
+                    sender.Reply(OneOf(
+                        $"You take a bite of tofu. It tastes good.",
+                        $"There is not much tofu left and you feel like you might need some tofu later."
+                    ));
+                    sender.Room.SendText($"{sender} tastes tofu", sender);
                 }
-                return true;
-            }
-            else
+            } else
             {
-                if (!isFlippedCall && other != null)
-                    return other.Use(sender, this, true);
-                return false;
+                base.Use(sender, other);
             }
         }
 

@@ -29,11 +29,7 @@ namespace LostAndFound.Engine
             this.Inventory = new Inventory<TGame, TPlayer, TRoom, TContainer, TThing>(this as TContainer, canAcceptNonTransferables);
         }
 
-        public virtual bool DoesItemFit(TThing thing, out string error)
-        {
-            error = "";
-            return true;
-        }
+        public virtual bool DoesItemFit(TThing thing, out string error) { error = ""; return true; }
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗

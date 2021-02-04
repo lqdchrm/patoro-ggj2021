@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using LostAndFound.FindLosty._01_EntryHall;
+using System.Linq;
 
 namespace LostAndFound.FindLosty._03_Kitchen
 {
@@ -23,11 +24,10 @@ namespace LostAndFound.FindLosty._03_Kitchen
 
         public override bool DoesItemFit(IThing thing, out string error)
         {
-            error = "";
             IThing maybeTofu = this.Inventory.FirstOrDefault();
             if (maybeTofu == null)
             {
-                return true;
+                return base.DoesItemFit(thing, out error);
             }
             else
             {
@@ -36,19 +36,15 @@ namespace LostAndFound.FindLosty._03_Kitchen
             }
         }
 
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall)
+        public override void Use(IPlayer sender, IThing other)
         {
             if (other is null)
             {
                 sender.Reply($"You feel really warm.");
-                return true;
             }
-            else if (other == this.Game.EntryHall.Splinters)
+            else if (other is Splinters splinters)
             {
-                sender.Inventory.Remove(other.Name);
-                this.Burning = true;
-                sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
-                return true;
+                BurnSplinters(sender, splinters);
             }
             else
             {
@@ -60,8 +56,14 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 {
                     sender.Reply($"The fire is not warm enough to do anything.");
                 }
-                return true;
             }
+        }
+
+        private void BurnSplinters(IPlayer sender, Splinters splinters)
+        {
+            sender.Inventory.Remove(splinters);
+            this.Burning = true;
+            sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
         }
     }
 }

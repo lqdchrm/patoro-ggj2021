@@ -49,7 +49,7 @@ namespace LostAndFound.Engine
         void PutInto(TPlayer sender, TContainer container);
 
         string UseText { get; }
-        bool Use(TPlayer sender, TThing other, bool isFlippedCall = false);
+        void Use(TPlayer sender, TThing other);
     }
 
     public abstract class BaseThingImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -165,7 +165,7 @@ namespace LostAndFound.Engine
             {
                 sender.Reply(OneOf($"{this} can't be taken. How could this even work?"));
             }
-            else if (container.Inventory.Transfer(this.Name, sender.Inventory))
+            else if (container.Inventory.Transfer(this as TThing, sender.Inventory))
             {
                 sender.ReplyWithState(OneOf($"You took {this} from {container}", $"Taken: {this}"));
                 if (container is TPlayer otherPlayer)
@@ -212,7 +212,7 @@ namespace LostAndFound.Engine
             {
                 sender.ReplyWithState(error);
             }
-            else if (sender.Inventory.Transfer(this.Name, container.Inventory))
+            else if (sender.Inventory.Transfer(this as TThing, container.Inventory))
             {
                 if (container is TRoom)
                 {
@@ -246,17 +246,9 @@ namespace LostAndFound.Engine
          ╚═════╝ ╚══════╝╚══════╝
         */
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual bool Use(TPlayer sender, TThing other, bool isFlippedCall = false)
+        public virtual void Use(TPlayer sender, TThing other)
         {
-            Func<TThing, string> revokeText = (thing) => OneOf(this.UseText, $"You can't just simply use {thing}.");
-
-            if (other is null) return !sender.Reply(revokeText(this as TThing));
-
-            if (!isFlippedCall && !other.Use(sender, this as TThing, true))
-                return !sender.Reply(revokeText(other));
-
-            // I think this is not correct???
-            return !sender.Reply(revokeText(other));
+            sender.Reply(UseText);
         }
 
         /*

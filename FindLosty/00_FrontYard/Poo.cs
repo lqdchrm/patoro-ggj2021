@@ -90,15 +90,17 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override string UseText => OneOf($"Disgusting !!!", $"You just didn't... Did you?");
+
+        public override void Use(IPlayer sender, IThing other)
         {
-            if (other is null) return sender.Reply("You take a big bite .... just kidding.");
-
-            // relay procession to other and handle if relay returns false
-            if (!isFlippedCall && !other.Use(sender, this, true))
-                return !sender.Reply(OneOf($"Disgusting !!!", $"You just didn't... Did you?"));
-
-            return false;
+            if (other is null)
+            {
+                sender.Reply("You take a big bite .... just kidding.");
+            } else
+            {
+                base.Use(sender, other);
+            }
         }
 
         /*

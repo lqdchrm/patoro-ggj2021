@@ -6,11 +6,12 @@ namespace LostAndFound.FindLosty._02_DiningRoom
     {
 
         public override string Emoji => Emojis.Cage;
+        public readonly Hamster Hamster;
 
         public Cage(FindLostyGame game) : base(game)
         {
-            var hamster = new Hamster(game);
-            this.Inventory.InitialAdd(hamster);
+            this.Hamster = new Hamster(game);
+            this.Inventory.InitialAdd(this.Hamster);
         }
 
         /*
@@ -22,7 +23,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        private bool HasHamster => this.Inventory.Has("hamster", false);
+        private bool HasHamster => this.Inventory.Has(Hamster, false);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗

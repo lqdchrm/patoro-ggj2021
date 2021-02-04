@@ -105,26 +105,25 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override bool Use(IPlayer sender, IThing other, bool isFlippedCall = false)
+        public override void Use(IPlayer sender, IThing other)
         {
             if (other == null)
             {
                 IPlayer otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
                 if (otherUser != null)
                 {
-                    return sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
+                    sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
+                    otherUser.Reply($"{sender} is trying to use the {this}. But you are blocking it.");
                 }
                 else
                 {
                     sender.ThingPlayerIsUsingAndHasToStop = this;
-                    return sender.Reply($"You sit down and start to cycle. You hear something crackle.");
+                    sender.Reply($"You sit down and start to cycle. You hear something crackle.");
                 }
+            } else
+            {
+                base.Use(sender, other);
             }
-
-            if (!isFlippedCall)
-                return other.Use(sender, this, true);
-
-            return base.Use(sender, other, isFlippedCall);
         }
 
         /*
