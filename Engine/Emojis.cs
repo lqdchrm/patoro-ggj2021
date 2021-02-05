@@ -39,5 +39,6 @@ namespace LostAndFound.Engine
         public const string Powercord = "🔌";
         public const string Fridge = "❄";
         public const string Firepit = "🔥";
+        public const string Book = "📘";
     }
 }

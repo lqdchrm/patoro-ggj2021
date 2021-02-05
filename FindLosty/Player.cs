@@ -6,6 +6,7 @@ namespace LostAndFound.FindLosty
 {
     public interface IPlayer : BasePlayer<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IContainer
     {
+        bool OmniPotentPowerOfShelf {get; set;}
         int Health { get; set; }
         bool Hit(string by = null, IPlayer byPlayer = null);
         bool Heal(string by = null, IPlayer byPlayer = null);
@@ -15,6 +16,15 @@ namespace LostAndFound.FindLosty
     {
         public Player(FindLostyGame game, string name) : base(game, name) { }
 
+        private bool omniPotentPowerOfShelf = false;
+
+        public bool OmniPotentPowerOfShelf {
+            get => this.omniPotentPowerOfShelf;
+            set
+            {
+                this.omniPotentPowerOfShelf = value;
+            }
+        }
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
          ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
@@ -31,7 +41,9 @@ namespace LostAndFound.FindLosty
                 var items = string.Join("", this.Inventory.Select(i => i.Emoji));
                 var item = this.ThingPlayerIsUsingAndHasToStop?.ToString();
                 var action = item != null ? $"using {item}" : "";
-                return $"[{this.Emoji}{this.Name}] {health} {items} {action}";
+                var super_powers_start =  OmniPotentPowerOfShelf ? "🔥🌎🔥":"";
+                var super_powers_end = OmniPotentPowerOfShelf ? "🔥🌎🔥":"";
+                return $"[{super_powers_start} {this.Emoji}{this.Name} {super_powers_end}] {health} {items} {action}";
             }
         }
 
