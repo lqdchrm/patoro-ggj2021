@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-
+        public override string LookText => $"A bunch of {this}. They are fairly dry.";
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝

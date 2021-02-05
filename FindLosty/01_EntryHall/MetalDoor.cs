@@ -28,7 +28,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A very study door. It would be a blast to open it.";
+        public override string LookText => this.open
+            ? "Dark burn makrs are on the door. The Explosion deformed it. It can no longer close."
+            : $"A very study door. It would be a blast to open it.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -38,7 +40,26 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
+        public override void Kick(IPlayer sender)
+        {
 
+            if (this.open)
+            {
+                sender.Reply(@"
+                    You kick the door, it is not so thougt anymore.".FormatMultiline());
+                sender.Room.SendText($"{sender} kicks against the door.", sender);
+            }
+            else
+            {
+                sender.Reply(@"
+                    You try to kick open the door, but it is much studier then you thougt.
+                    The pain crawls from your feet up to you hip.
+                    You try to put on a breave face.
+                    ".FormatMultiline());
+                sender.Room.SendText($"{sender} kicks against the door. He trys to hide the fact that he hurt himselfe.", sender);
+                sender.Hit(this.Name);
+            }
+        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -59,6 +80,23 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
+        public override void Open(IPlayer sender) {
+
+            if (this.open)
+            {
+                sender.Reply(@"
+                    The door is already open.".FormatMultiline());
+             
+            }
+            else
+            {
+                sender.Reply(@"
+                    Its locked.
+                    ".FormatMultiline());
+                sender.Room.SendText($"{sender} pulls on {this}. But it won't open.", sender);
+            }
+        }
+
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
         ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝
@@ -67,6 +105,19 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+
+        public override void Close(IPlayer sender)
+        {
+            if (this.open)
+            {
+                sender.Reply(@"The door was opend with dynamite.
+                                Your not realy thinking it will ever close again.".FormatMultiline());
+            }
+            else
+            {
+                sender.Reply("It is already closed.");
+            }
+        }
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

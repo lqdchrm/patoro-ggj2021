@@ -33,7 +33,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override string LookText => this.IsNapping
             ? this.CrocSleepImage
-            :this.CrocImage;
+            : this.CrocImage;
 
         public string CrocSleepImage => @$"
 The croc is nappint next to the door.
@@ -108,6 +108,10 @@ You only see its tail.
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
+        public override string ListenText => this.IsNapping
+            ? "You don't want to get that near..."
+            : $"You put your Ear on the {this} and listen to its heart beat.";
+
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
         ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
@@ -116,7 +120,7 @@ You only see its tail.
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-
+        public override string OpenText => "You think it will open its mouth on its own, if it want to.";
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
         ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝

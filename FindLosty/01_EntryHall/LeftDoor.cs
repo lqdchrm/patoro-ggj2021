@@ -112,7 +112,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override string OpenText => $"The door is jammed. It might need united force to break it open.";
+        public override string OpenText => this.IsOpen
+            ? "There is not much left that could be opened"
+            : $"The door is jammed. It might need united force to break it open.";
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -122,6 +124,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        public override string CloseText => this.IsOpen
+            ? "You don't think the remains can close anything."
+            : "Its already Closed.";
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

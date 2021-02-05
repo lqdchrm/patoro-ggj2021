@@ -32,6 +32,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
             ? @$"
                 Like many elements in this room the stairs are made of a dark wood.
                 But the lower stairs are broken... you can no longer use this.
+                
+                Under the Staircase is a concreat wall that seems to cover the basement stairs.
+                A {this.Game.EntryHall.MetalDoor} is blocking the way to the basement.
                 ".FormatMultiline()
             : @$"
             Like many elements in this room the stairs are made of a dark wood.
@@ -57,6 +60,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+
+        public override string ListenText => $"You hear barking from under the {this}.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -125,7 +130,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
                     sender.Hit();
                     this.isBroken = true;
                 }
-            } else
+            }
+            else
             {
                 base.Use(sender, other);
             }

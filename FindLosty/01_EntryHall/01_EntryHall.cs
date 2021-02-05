@@ -59,7 +59,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
                 In the back of the hall is a wide {this.Staircase}. You can also see a {this.Window} on the back of the room if you look past the {this.Staircase}.
 
-                The barking gets loader.
+                The barking seemns to come from the {this.Staircase}.
             ".FormatMultiline();
         }
 

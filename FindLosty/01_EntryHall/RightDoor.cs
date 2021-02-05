@@ -18,7 +18,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => this.IsOpen ? DoorImage : $"The massive door made of dark wood is still in good condition.";
+        public override string LookText => this.IsOpen
+            ? DoorImage
+            : this.Game.EntryHall.Croc.IsNapping
+                ? this.Game.EntryHall.Croc.CrocSleepImage
+                : $"The massive door made of dark wood is still in good condition.";
 
         public bool IsOpen { get; private set; } = false;
 
@@ -30,7 +34,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
+        public override string KickText => this.IsOpen
+            ? $"Do not disturb the {this.Game.EntryHall.Croc}"
+            : base.KickText;
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -40,6 +46,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+
+        public override string ListenText => this.IsOpen
+            ? base.ListenText
+            : "You hear something breatihg";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

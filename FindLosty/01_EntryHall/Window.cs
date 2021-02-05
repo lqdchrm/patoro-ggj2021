@@ -37,6 +37,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
 
+        public override string KickText => "You don't want to hurt yourself breaking the window.";
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -46,6 +47,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+        public override string ListenText => "The barking does not come from outside the house."; 
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -55,6 +57,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+
+        public override string OpenText => "The handle of the Window is missing.";
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗

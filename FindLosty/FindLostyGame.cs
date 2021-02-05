@@ -171,6 +171,7 @@ namespace LostAndFound.FindLosty
                     {
                         if (other is not null) thing.Use(player, other);                    // two things => put a into b
                         else if (thing is PinPad pinpad && second is string) pinpad.Use(player, second);
+                        else if (thing is Phone phone && second is string) phone.Use(player, second);
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
                         else thing.Use(player, null);                                       // one thing
                     }
