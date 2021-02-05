@@ -33,6 +33,11 @@ namespace LostAndFound.Engine
         public const string Scanner = "💫";
         public const string Table = "Π ";
         public const string Socket = "🐽";
+        public const string FrozenTofu = "🧊";
         public const string Tofu = "🥡";
+        public const string Microwave = "♨";
+        public const string Powercord = "🔌";
+        public const string Fridge = "❄";
+        public const string Firepit = "🔥";
     }
 }
