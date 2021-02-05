@@ -28,8 +28,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookText => @"
-            The chimney gas powered, looks like it wasn't used in some time...
+        public override string LookText => $@"
+            The {this} is gas powered, looks like it wasn't used in some time...
             and could need some cleaning.
             ".FormatMultiline();
 
@@ -51,6 +51,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
+
+        public override string ListenText => "You listen on the gas vale. No gas is leaking.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -101,11 +103,11 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         public override void Use(IPlayer sender, IThing other)
         {
             sender.Reply(@"
-                The chimney gas powered, looks like it wasn't used in some time...
-                and could need some cleaning.
+                    You open the gas but nothing streams out. Either it is empty or clogged.
+                    You close valve again. Better safe then sorry...
             ".FormatMultiline());
 
-            sender.Room.SendText($"{sender} is poking in the chimney.", sender);
+            sender.Room.SendText($"{sender} is poking in the {this}.", sender);
         }
 
         /*

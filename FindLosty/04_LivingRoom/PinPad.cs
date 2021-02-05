@@ -46,6 +46,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
 
+        public override string KickText => "Its hard to type with your feet.";
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -56,6 +57,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
+        public override string ListenText => "You hear the humming of the electronics.";
+
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
         ██╔═══██╗██╔══██╗██╔════╝████╗  ██║
@@ -64,6 +67,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+
+        public override string OpenText => "If you would know more about electronics, this amy be a valid approach.";
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -82,6 +87,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
+
+        public override string TakeText => "Its mounted on an metal locker. Which itself is mountet on the wall. Your shure you can't take it.";
 
         /*
         ██████╗ ██╗   ██╗████████╗

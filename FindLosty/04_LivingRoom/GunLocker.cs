@@ -90,6 +90,11 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
 
+        public override void Kick(IPlayer sender)
+        {
+            sender.Reply($"You kick against the steel. But only your toe throbs.");
+            sender.Room.SendText($"You witness how {sender} tries to open the {this} with a kick. And Fails...", sender);
+        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -156,7 +161,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-
+        public override string TakeText => "Even if it would not be secured in the wall. It would still be to heavy.";
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
