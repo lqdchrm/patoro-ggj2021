@@ -218,7 +218,7 @@ namespace LostAndFound.FindLosty
                             .Where(room => room.RoomNumber == first
                                     || (first.Length >= 2 && room.Name.StartsWith(first, StringComparison.OrdinalIgnoreCase)));
                         if (possibleRoomToGo.Skip(1).Any())
-                            player.Reply($"Multiple possible rooms found for {prepo}: {string.Join("", possibleRoomToGo)}.");
+                            player.Reply($"Multiple possible rooms found for {first}: {string.Join(", ", possibleRoomToGo)}.");
                         else if (possibleRoomToGo.Any())
                             player.MoveTo(possibleRoomToGo.First());
                         else
@@ -231,7 +231,7 @@ namespace LostAndFound.FindLosty
                     break;
 
                 default:
-                    var knownCommands = new[] { "look", "kick", "listen", "open", "close", "drop", "take", "give", "put", "use", "help" };
+                    var knownCommands = new[] { "look", "listen", "open", "close", "take", "put", "kick", "use", "stop", "drop", "give", "goto", "help" };
                     var dists = knownCommands.Select(c => (c, d: cmd.Levenshtein(c))).OrderBy(_ => _.d).Take(3);
                     var help = string.Join(", ", dists.Select(_ => $"[{_.c}]"));
 
@@ -254,6 +254,7 @@ namespace LostAndFound.FindLosty
             [stop]   - stops your current action
             [drop]   - drop something, eg drop box
             [give]   - give something to somebody, eg give box to player
+            [goto]   - go to another room, eg goto kitchen
 
             * these are optional
         ".FormatMultiline();

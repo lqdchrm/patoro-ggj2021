@@ -74,7 +74,9 @@ namespace LostAndFound.Engine
             var member = await this._Guild.GetMemberAsync(this._Client.CurrentUser.Id);
             if (member != null)
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
+#if !DEBUG
             Say("A new game has started. Please select your channel.", true);
+#endif
         }
 
         public async Task CleanupAsync()
@@ -191,7 +193,7 @@ namespace LostAndFound.Engine
         }
 
 
-        #region Rooms Helpers
+#region Rooms Helpers
         public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
             where TRoomCurrent : BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>, TRoom
         {
@@ -211,10 +213,10 @@ namespace LostAndFound.Engine
         }
 
         public IReadOnlyDictionary<string, TRoom> Rooms => this._Rooms;
-        #endregion
+#endregion
 
 
-        #region Player Helpers
+#region Player Helpers
         public IReadOnlyDictionary<string, TPlayer> Players => this._Players.Values.ToDictionary(p => p.Name);
 
         protected abstract TPlayer CreatePlayer(DiscordMember member);
@@ -241,9 +243,9 @@ namespace LostAndFound.Engine
             return player;
         }
 
-        #endregion
+#endregion
 
-        #region Thing Helpers
+#region Thing Helpers
 
         /// <summary>
         /// search for a thing
@@ -324,9 +326,9 @@ namespace LostAndFound.Engine
 
             return item;
         }
-        #endregion
+#endregion
 
-        #region IDisposable
+#region IDisposable
 
         private bool disposedValue;
         public bool IsDisposed => this.disposedValue;
@@ -355,6 +357,6 @@ namespace LostAndFound.Engine
             }
         }
 
-        #endregion
+#endregion
     }
 }

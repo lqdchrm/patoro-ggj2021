@@ -1,7 +1,11 @@
-﻿namespace LostAndFound.FindLosty._03_Kitchen
+﻿using LostAndFound.Engine;
+
+namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Fridge : Container
     {
+        public override string Emoji => Emojis.Fridge;
+
         public Tofu Tofu { get; }
         public Fridge(FindLostyGame game) : base(game, false, "Fridge")
         {

@@ -9,6 +9,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public FirePit FirePit { get; init; }
         public Microwave Microwave { get; init; }
 
+        public Powercord Powercord { get; init; }
+
         public Kitchen(FindLostyGame game) : base(game, "03")
         {
             // Create Things in room
@@ -16,8 +18,9 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 this.Fridge = new Fridge(game),
                 this.Shelves = new Shelves(game),
                 this.FirePit = new FirePit(game),
-                this.Microwave = new Microwave(game)
-            );
+                this.Microwave = new Microwave(game),
+                this.Powercord = new Powercord(game)
+            ); ;
         }
 
         /*
@@ -44,7 +47,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 A {this.Microwave} is mounted on the wall next to the {this.Shelves}.
                 In the middle of the room is a large {this.FirePit}.
                 {this.FirePit.LookText}
-                There is one [door] leading to the dining room.
+                There is one Door leading to the dining room.
                  ".FormatMultiline();
         }
 

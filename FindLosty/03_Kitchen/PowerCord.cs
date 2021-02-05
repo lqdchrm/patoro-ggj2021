@@ -1,13 +1,14 @@
 ﻿using LostAndFound.Engine;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+namespace LostAndFound.FindLosty._03_Kitchen
 {
-    public class Socket : Thing
+    public class Powercord : Item
     {
-        public override string Emoji => Emojis.Socket;
+        public override string Emoji => Emojis.Powercord;
 
-        public Socket(FindLostyGame game) : base(game)
+        public Powercord(FindLostyGame game) : base(game)
         {
+
         }
 
         /*
@@ -18,6 +19,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
+        public bool Connected { get; private set; }
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -27,7 +29,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"The socket seems to be a power outlet. You could connect a powercord here.";
+        public override string LookText => $"A {this} powercord connected to the {this.Game.Kitchen.Microwave}.";
+
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -74,6 +77,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
+        public override void Take(IPlayer sender, IThing other)
+        {
+            Connected = false;
+            base.Take(sender, other);
+        }
 
         /*
         ██████╗ ██╗   ██╗████████╗
@@ -83,6 +91,13 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+        public override void Put(IPlayer sender, IThing other)
+        {
+            if (other is _02_DiningRoom.Socket socket)
+                Use(sender, socket);
+            else
+                base.Put(sender, other);
+        }
 
         /*
         ██╗   ██╗███████╗███████╗
@@ -92,6 +107,21 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override string UseText => $"That won't fit";
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is _02_DiningRoom.Socket)
+            {
+                Connected = true;
+                sender.Inventory.Transfer(this, Game.DiningRoom.Inventory);
+                sender.Reply($"You connected the {Game.Kitchen.Microwave} with the {Game.DiningRoom.Ergometer}.");
+                sender.Room.SendText($"{sender} connected the {Game.Kitchen.Microwave} with the {Game.DiningRoom.Ergometer}.", sender);
+            } else
+            {
+                base.Use(sender, other);
+            }
+        }
+
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

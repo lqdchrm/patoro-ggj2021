@@ -4,11 +4,9 @@ namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Tofu : Item
     {
-        public override string Emoji => Emojis.Tofu;
+        public override string Emoji => Frozen ? Emojis.FrozenTofu : Emojis.Tofu;
 
         public Tofu(FindLostyGame game) : base(game) => this.WasMentioned = true;
-
-
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
