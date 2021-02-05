@@ -152,7 +152,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
 
         public void BurnSplinters(IPlayer sender, Splinters splinters)
         {
-            sender.Inventory.Transfer(splinters, Game.DiningRoom.Inventory);
+            sender.Inventory.Transfer(splinters, Game.EntryHall.Inventory);
             this.Burning = true;
             sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
         }

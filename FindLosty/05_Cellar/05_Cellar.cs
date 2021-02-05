@@ -25,8 +25,28 @@ namespace LostAndFound.FindLosty._05_Cellar
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookIntroText(IPlayer sender) => @$"
-            You look around in the dark cellar. If you turn on the lights you see your dog. YOU WIN!!!!!!!!!!!!".FormatMultiline();
+
+        private const string DOG_IMAGE = @"
+    Wuff!             _                
+                     | \               
+           _         |  \              
+          / \_______/    \             
+         |   |       @    \            
+          \_/              \           
+           \-------         \          
+            _ / / /          \__         
+            \| | | _|                 
+             | | |  \                 
+             \___/                     
+                                       
+                                       
+";
+
+        public override void Look(IPlayer sender)
+        {
+            sender.Reply("You look around in the dark cellar. If you turn on the lights you see your dog. YOU WIN!!!!!!!!!!!!");
+            sender.ReplyImage(DOG_IMAGE);
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
