@@ -21,7 +21,7 @@ namespace LostAndFound.Engine.Discord
         {
             //{"LostAndFound", (instanceName, client, guild) => new Game.LostAndFound.LostAndFoundGame(instanceName,client,guild) },
             //{"Mansion", (instanceName, client, guild) => new Game.Mansion.MansionGame(instanceName,client,guild) },
-            {"FindLosty", (instanceName, client, guild) => new FindLosty.FindLostyGame(instanceName,client,guild) }
+            {"FindLosty", (instanceName, client, guild) => FindLosty.FindLostyGame.Discord(instanceName, client, guild) }
         };
 
         private readonly Dictionary<string, IGame> gameLookup = new Dictionary<string, IGame>();

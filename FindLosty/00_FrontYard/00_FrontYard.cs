@@ -38,17 +38,13 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+
+
         public override void Look(IPlayer sender)
         {
             this.Poo.WasMentioned = true;
             this.Box.WasMentioned = true;
-
-            Task.Run(async () =>
-            {
-                sender.Reply(Mansion.Fence);
-                await Task.Delay(500);
-                base.Look(sender);
-            });
+            base.Look(sender);
         }
 
         public override string LookIntroText(IPlayer sender)
@@ -61,7 +57,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
                 : $"Your friends {friendsNames} are here."
                 : "You are alone.";
 
-            return $@"
+            return $@"{Mansion.Fence}
                     You're looking at the beautiful front yard of 404 Foundleroy Road.
                     A picket fence surrounds the {this.Mansion} in front of you.
                     This looks like some kind of maniac lives here.
