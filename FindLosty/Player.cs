@@ -7,7 +7,7 @@ namespace LostAndFound.FindLosty
     public interface IPlayer : BasePlayer<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IContainer
     {
         int Health { get; set; }
-        bool Hit(string by = null, IPlayer byPlayer = null);
+        bool Hit(string by = null, IPlayer byPlayer = null, int damage = 1);
         bool Heal(string by = null, IPlayer byPlayer = null);
     }
 
@@ -175,11 +175,13 @@ namespace LostAndFound.FindLosty
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
 
-        public bool Hit(string by = null, IPlayer byPlayer = null)
+        public bool Hit(string by = null, IPlayer byPlayer = null, int damage = 1)
         {
             if (this.Health > 0)
             {
-                this.Health--;
+                this.Health = System.Math.Max(this.Health - damage, 0);
+
+
 
                 var msg = "You were hit";
 
@@ -191,6 +193,11 @@ namespace LostAndFound.FindLosty
                 {
                     byPlayer.Reply($"You hit [{this}] really hard.");
                     msg += $" by [{byPlayer}], but it was probably deserved";
+                }
+
+                if(Health == 0)
+                {
+                    msg += " (Your dead)";
                 }
 
                 ReplyWithState(msg);
