@@ -1,6 +1,7 @@
 ﻿using LostAndFound.Engine.Discord;
 using LostAndFound.FindLosty;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,10 +13,17 @@ namespace LostAndFound
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            var bot = new DiscordBot();
+            if (args.Any())
+            {
+                var game = FindLostyGame.Terminal();
+                await game.StartAsync();
+            }
+            else
+            {
+                var bot = new DiscordBot();
+                await bot.Start(typeof(FindLostyGame));
+            }
 
-            // set arg to null for game selection
-            await bot.Start(typeof(FindLostyGame));
             await Task.Delay(-1);
         }
     }
