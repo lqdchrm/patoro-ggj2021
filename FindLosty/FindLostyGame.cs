@@ -1,6 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using LostAndFound.Engine;
+using LostAndFound.Engine.Discord;
 using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
 using LostAndFound.FindLosty._01_EntryHall;
@@ -25,7 +26,7 @@ namespace LostAndFound.FindLosty
         Cellar Cellar { get; }
     }
 
-    public class FindLostyGame : BaseGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
+    public class FindLostyGame : DiscordGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
     {
         public FrontYard FrontYard { get; init; }
         public EntryHall EntryHall { get; init; }
@@ -45,7 +46,7 @@ namespace LostAndFound.FindLosty
             this.Cellar = new Cellar(this);
         }
 
-        protected override Player CreatePlayer(DiscordMember member) => new Player(member, this);
+        protected override Player CreatePlayer(string name) => new Player(this, name);
 
         public override async Task StartAsync()
         {
