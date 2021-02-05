@@ -1,6 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using LostAndFound.Engine;
+using LostAndFound.Engine.Cnsole;
 using LostAndFound.Engine.Discord;
 using LostAndFound.Engine.Events;
 using LostAndFound.FindLosty._00_FrontYard;
@@ -26,7 +27,7 @@ namespace LostAndFound.FindLosty
         Cellar Cellar { get; }
     }
 
-    public class FindLostyGame : DiscordGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
+    public class FindLostyGame : BaseGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
     {
         public FrontYard FrontYard { get; init; }
         public EntryHall EntryHall { get; init; }
@@ -35,7 +36,10 @@ namespace LostAndFound.FindLosty
         public Kitchen Kitchen { get; init; }
         public Cellar Cellar { get; init; }
 
-        public FindLostyGame(string name, DiscordClient client, DiscordGuild guild) : base(name, client, guild)
+        public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild) => new FindLostyGame(name, new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
+        public static FindLostyGame Terminal() => new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>());
+
+        private FindLostyGame(string name, BaseEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> engine) : base(name, engine)
         {
             // Rooms
             this.FrontYard = new FrontYard(this);
@@ -46,12 +50,15 @@ namespace LostAndFound.FindLosty
             this.Cellar = new Cellar(this);
         }
 
-        protected override Player CreatePlayer(string name) => new Player(this, name);
-
-        public override async Task StartAsync()
+        public override Player CreateAndAddPlayer(string name)
         {
-            await base.StartAsync();
+            var player = new Player(this, name);
+            this._Players.Add(player.Name, player);
+            return player;
+        }
 
+        public override async Task InitAsync()
+        {
             await AddRoomAsync(this.FrontYard, true);
             await AddRoomAsync(this.EntryHall, false);
             await AddRoomAsync(this.DiningRoom, false);
@@ -224,6 +231,13 @@ namespace LostAndFound.FindLosty
                             player.MoveTo(possibleRoomToGo.First());
                         else
                             player.Reply($"Unknown Room: {first}.");
+                    }
+                    break;
+
+                case "run":
+                    {
+                        if (this.EntryHall.MetalDoor.IsDynamiteUsed && !this.EntryHall.MetalDoor.IsOpen)
+                            player.MoveTo(new IRoom[] { this.FrontYard, this.DiningRoom, this.LivingRoom }.TakeOneRandom());
                     }
                     break;
 

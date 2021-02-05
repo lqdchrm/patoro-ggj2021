@@ -38,11 +38,11 @@ This is an error: ❌
 - [ ] Tofu (initially frozen, must be put into *microwave*, then given to *croc*)
 
 ## LivingRoom
-- [ ] Chimney
-- [ ] Dynamite (used to open Cellar)
-- [ ] GunLocker
-- [ ] LionHead
-- [ ] PinPad
+- [✔️] Chimney
+- [~] Dynamite (used to open Cellar) Maybe movable after ignition.
+- [✔️] GunLocker
+- [✔️] LionHead
+- [✔️] PinPad
 - [✔️] Sofa
 
 ## Cellar

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "FindLosty-Discord": {
+      "commandName": "Project"
+    },
+    "FindLosty-Terminal": {
+      "commandName": "Project",
+      "commandLineArgs": "terminal"
+    }
+  }
+}
