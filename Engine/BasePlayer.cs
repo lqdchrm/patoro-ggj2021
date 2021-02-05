@@ -33,6 +33,8 @@ namespace LostAndFound.Engine
 
         bool ReplySpeach(string msg);
 
+        public void MoveTo(TRoom room);
+
 #pragma warning disable IDE1006 // Naming Styles
 
         Task _InitPlayer(DiscordChannel parentChannel);
@@ -230,6 +232,13 @@ namespace LostAndFound.Engine
         {
             this._Channel?.SendMessageAsync(msg, true);
             return true;
+        }
+
+        public void MoveTo(TRoom room)
+        {
+            if (room is not BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> romImp)
+                return;
+            romImp._VoiceChannel.PlaceMemberAsync(this._Member);
         }
 
         public bool _UsesChannel(DiscordChannel channel) => channel == this._Channel && channel is not null;

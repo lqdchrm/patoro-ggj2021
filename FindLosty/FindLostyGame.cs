@@ -211,6 +211,20 @@ namespace LostAndFound.FindLosty
                     }
                     break;
 
+                case "goto":
+                    {
+                        var possibleRoomToGo = this.Rooms.Values.Where(x => x.IsVisible)
+                            .Where(room => room.RoomNumber == first
+                                    || (first.Length >= 2 && room.Name.StartsWith(first, StringComparison.OrdinalIgnoreCase)));
+                        if (possibleRoomToGo.Skip(1).Any())
+                            player.Reply($"Multiple possible rooms found for {prepo}: {string.Join("", possibleRoomToGo)}.");
+                        else if (possibleRoomToGo.Any())
+                            player.MoveTo(possibleRoomToGo.First());
+                        else
+                            player.Reply($"Unknown Room: {first}.");
+                    }
+                    break;
+
                 case "help":
                     player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
                     break;
@@ -258,7 +272,7 @@ namespace LostAndFound.FindLosty
                 if (newRoom is null)
                 {
                     var stuff = e.Player.Inventory.ToList();
-                    foreach(var item in stuff)
+                    foreach (var item in stuff)
                         e.Player.Inventory.Transfer(item, oldRoom.Inventory);
 
                     e.Player.Room = oldRoom;
