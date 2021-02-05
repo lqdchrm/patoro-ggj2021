@@ -43,12 +43,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
             this.Poo.WasMentioned = true;
             this.Box.WasMentioned = true;
 
-            Task.Run(async () =>
-            {
-                sender.Reply(Mansion.Fence);
-                await Task.Delay(500);
-                base.Look(sender);
-            });
+            sender.Reply(Mansion.Fence);
+            base.Look(sender);
         }
 
         public override string LookIntroText(IPlayer sender)

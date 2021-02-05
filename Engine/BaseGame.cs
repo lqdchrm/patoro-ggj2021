@@ -16,21 +16,26 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
+        public string Name { get; }
+        public bool Ready { get; }
+
         public IReadOnlyDictionary<string, TRoom> Rooms { get; }
         public IReadOnlyDictionary<string, TPlayer> Players { get; }
 
+        public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom);
+        public void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd);
+        public TPlayer CreateAndAddPlayer(string name);
+
         public void Say(string msg, bool alsoInDefaultChannel = false);
 
-        public Task ShowRoom(TRoom room);
-        public Task HideRoom(TRoom room);
-        public void Mute(TPlayer player);
-        public void Unmute(TPlayer player);
-
-        public bool SendReplyTo(TPlayer player, string msg);
-        public bool SendReplyWithStateTo(TPlayer player, string msg);
-        public bool SendImageTo(TPlayer player, string msg);
-        public bool SendSpeechTo(TPlayer player, string msg);
-
+        Task ShowRoom(TRoom room);
+        Task HideRoom(TRoom room);
+        void Mute(TPlayer player);
+        void Unmute(TPlayer player);
+        bool SendReplyTo(TPlayer player, string msg);
+        bool SendReplyWithStateTo(TPlayer player, string msg);
+        bool SendImageTo(TPlayer player, string msg);
+        bool SendSpeechTo(TPlayer player, string msg);
         public void MovePlayerTo(TPlayer player, TRoom room);
     }
 
@@ -42,6 +47,7 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
+        public BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing> Engine { get; }
         public string Name { get; }
         public bool Ready { get; private set; }
 
@@ -62,23 +68,33 @@ namespace LostAndFound.Engine
 
         #endregion
 
-        public BaseGameImpl(string name)
+        public BaseGameImpl(string name, BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing> engine)
         {
             this.Name = name;
+            this.Engine = engine;
+            this.Engine.Game = this;
         }
 
-        public virtual Task StartAsync() { this.Ready = true; return Task.CompletedTask; }
+        public async Task StartAsync()
+        {
+            await Engine.PrepareEngine();
+            await InitAsync();
+            await Engine.StartEngine();
+            this.Ready = true;
+        }
 
-        public abstract Task ShowRoom(TRoom room);
-        public abstract Task HideRoom(TRoom room);
+        public abstract Task InitAsync();
 
-        public abstract void Mute(TPlayer player);
-        public abstract void Unmute(TPlayer player);
-        public abstract bool SendReplyTo(TPlayer player, string msg);
-        public virtual bool SendReplyWithStateTo(TPlayer player, string msg) => SendReplyTo(player, $"{msg}\n{player.StatusText}");
-        public abstract bool SendImageTo(TPlayer player, string msg);
-        public abstract bool SendSpeechTo(TPlayer player, string msg);
-        public virtual void MovePlayerTo(TPlayer player, TRoom room) { player.Room = room;}
+        public Task ShowRoom(TRoom room) => Engine.ShowRoom(room);
+        public Task HideRoom(TRoom room) => Engine.HideRoom(room);
+
+        public void Mute(TPlayer player) => Engine.Mute(player);
+        public void Unmute(TPlayer player) => Engine.Unmute(player);
+        public bool SendReplyTo(TPlayer player, string msg) => Engine.SendReplyTo(player, msg);
+        public bool SendReplyWithStateTo(TPlayer player, string msg) => SendReplyTo(player, $"{msg}\n{player.StatusText}");
+        public bool SendImageTo(TPlayer player, string msg) => Engine.SendImageTo(player, msg);
+        public bool SendSpeechTo(TPlayer player, string msg) => Engine.SendSpeechTo(player, msg);
+        public void MovePlayerTo(TPlayer player, TRoom room) { player.Room = room; Engine.MovePlayerTo(player, room); }
 
         public void Say(string msg, bool alsoInDefaultChannel = false)
         {
@@ -103,6 +119,8 @@ namespace LostAndFound.Engine
         public virtual async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
             where TRoomCurrent : BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>, TRoom
         {
+            await this.Engine.InitRoom(room);
+            
             this._Rooms.Add(room.Name, room);
 
             if (visible)
@@ -119,9 +137,10 @@ namespace LostAndFound.Engine
 
 
         protected Dictionary<string, TPlayer> _Players = new Dictionary<string, TPlayer>();
+
         public IReadOnlyDictionary<string, TPlayer> Players => _Players;
 
-        protected abstract TPlayer CreatePlayer(string name);
+        public abstract TPlayer CreateAndAddPlayer(string name);
 
 
         /// <summary>
@@ -204,6 +223,39 @@ namespace LostAndFound.Engine
             return item;
         }
 
-        public abstract void Dispose();
+
+        #region IDispoable
+        private bool disposedValue;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                    Engine.Dispose();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~BaseGameImpl()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

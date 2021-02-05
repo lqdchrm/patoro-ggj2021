@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "laf-ggj2021": {
+      "commandName": "Project"
+    },
+    "Terminal": {
+      "commandName": "Project",
+      "commandLineArgs": "terminal"
+    }
+  }
+}

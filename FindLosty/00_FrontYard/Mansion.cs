@@ -28,12 +28,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Look(IPlayer sender)
         {
-            Task.Run(async () =>
-            {
-                sender.Reply(House);
-                await Task.Delay(500);
-                sender.Reply($"There seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.");
-            });
+            sender.Reply(House);
+            sender.Reply($"There seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.");
         }
 
         /*
