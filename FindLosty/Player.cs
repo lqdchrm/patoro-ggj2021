@@ -79,7 +79,7 @@ namespace LostAndFound.FindLosty
         {
             get
             {
-                var adj = OneOf("beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous");
+                var adj = OneOf("nice", "beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous");
                 return $"{this} looks {adj}.";
             }
         }

@@ -17,7 +17,6 @@ namespace LostAndFound.Engine
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public string Name { get; }
-        public bool Ready { get; }
 
         public IReadOnlyDictionary<string, TRoom> Rooms { get; }
         public IReadOnlyDictionary<string, TPlayer> Players { get; }
@@ -49,7 +48,6 @@ namespace LostAndFound.Engine
     {
         public BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing> Engine { get; }
         public string Name { get; }
-        public bool Ready { get; private set; }
 
         #region Events
 
@@ -80,7 +78,6 @@ namespace LostAndFound.Engine
             await Engine.PrepareEngine();
             await InitAsync();
             await Engine.StartEngine();
-            this.Ready = true;
         }
 
         public abstract Task InitAsync();

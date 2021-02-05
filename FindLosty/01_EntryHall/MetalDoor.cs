@@ -166,7 +166,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (!this.open)
             {
                 this.open = true;
-                this.Game.Cellar.Show();
+                _ = this.Game.Cellar.Show();
                 sender.Inventory.Remove(dynamite);
             }
         }

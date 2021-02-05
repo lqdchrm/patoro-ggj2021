@@ -59,19 +59,19 @@ namespace LostAndFound.FindLosty
 
         public override async Task InitAsync()
         {
-            await AddRoomAsync(this.FrontYard, true);
-            await AddRoomAsync(this.EntryHall, false);
-            await AddRoomAsync(this.DiningRoom, false);
-            await AddRoomAsync(this.LivingRoom, false);
-            await AddRoomAsync(this.Kitchen, false);
-            await AddRoomAsync(this.Cellar, false);
-
 #if DEBUG
             PlayerChangedRoom += LogRoomChange;
             CommandSent += LogEvent;
 #endif
             PlayerChangedRoom += OnPlayerChangedRoom;
             CommandSent += OnPlayerCommandSent;
+
+            await AddRoomAsync(this.FrontYard, true);
+            await AddRoomAsync(this.EntryHall, false);
+            await AddRoomAsync(this.DiningRoom, false);
+            await AddRoomAsync(this.LivingRoom, false);
+            await AddRoomAsync(this.Kitchen, false);
+            await AddRoomAsync(this.Cellar, false);
         }
 
         private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[ROOMS] {e}");

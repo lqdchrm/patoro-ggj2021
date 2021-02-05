@@ -24,7 +24,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public void Unlock()
         {
             this.IsOpen = true;
-            this.Game.Kitchen.Show();
+            _ = this.Game.Kitchen.Show();
         }
 
         /*

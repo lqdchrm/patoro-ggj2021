@@ -134,9 +134,6 @@ namespace LostAndFound.Engine.Discord
             if (e.Guild.Id != this._Guild.Id)
                 return Task.CompletedTask;
 
-            if (!Game.Ready)
-                return Task.CompletedTask;
-
             // handle user info
             var oldChannel = e.Before?.Channel;
             var newChannel = e.After?.Channel;

@@ -80,7 +80,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             {
                 this.IsOpen = true;
                 sender.Reply($"The {this} swings open. Who doesn't lock their front {this}?");
-                this.Game.EntryHall.Show();
+                _ = this.Game.EntryHall.Show();
             }
         }
 

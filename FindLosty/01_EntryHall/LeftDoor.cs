@@ -91,7 +91,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 sender.Room.SendText(message);
                 this.door_life -= 1;
                 this.IsOpen = true;
-                this.Game.DiningRoom.Show();
+                _ = this.Game.DiningRoom.Show();
             }
         }
 

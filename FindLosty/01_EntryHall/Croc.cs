@@ -210,7 +210,7 @@ You only see its tail.
                     The {this} leaves happily and full its guarding position.
                     It takes a napp right next to the door.
                     ", sender);
-                this.Game.LivingRoom.Show();
+                _ = this.Game.LivingRoom.Show();
                 return true;
             }
         }
