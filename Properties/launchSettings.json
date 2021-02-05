@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "laf-ggj2021": {
+    "FindLosty-Discord": {
       "commandName": "Project"
     },
-    "Terminal": {
+    "FindLosty-Terminal": {
       "commandName": "Project",
       "commandLineArgs": "terminal"
     }
