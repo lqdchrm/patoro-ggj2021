@@ -31,7 +31,31 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => this.CrocImage;
+        public override string LookText => this.IsNapping
+            ? this.CrocSleepImage
+            :this.CrocImage;
+
+        public string CrocSleepImage => @$"
+The croc is nappint next to the door.
+You only see its tail.
+
+        _______________________
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+        | |_____            | |
+        | |_____.-'         | |
+        | |                 | |
+        | |                 | |
+        | |                 | |
+";
 
         public string CrocImage => @$"
         The {this} looks hungry. But luckily it is chained to a table.

@@ -29,7 +29,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
+        public override string LookText => this.door_life == 0
+            ? "Someone realy did not like this door. It is shattered."
+            : $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -61,7 +63,14 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
             if (this.door_life == 0)
             {
-                this.Game.EntryHall.Splinters.Kick(sender);
+                if (this.Game.EntryHall.Inventory.Has(this.Game.EntryHall.Splinters))
+                {
+                    this.Game.EntryHall.Splinters.Kick(sender);
+                }
+                else
+                {
+                    sender.Reply($"There are already enough {this.Game.EntryHall.Splinters}. Someone propably has a bunch of {this.Game.EntryHall.Splinters} already.");
+                }
             }
             else if (this.kick_count == 1)
             {
