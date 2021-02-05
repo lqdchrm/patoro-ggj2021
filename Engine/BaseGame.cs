@@ -66,8 +66,8 @@ namespace LostAndFound.Engine
             this._Guild = guild;
             client.VoiceStateUpdated += VoiceStateUpdated;
             client.MessageCreated += OnMessageCreated;
+            client.MessageUpdated += OnMessageUpdated;
         }
-
 
         public virtual async Task StartAsync()
         {
@@ -145,15 +145,15 @@ namespace LostAndFound.Engine
             return Task.CompletedTask;
         }
 
-        private async Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e)
+        private async Task OnMessage(DiscordClient client, DiscordGuild guild, DiscordUser author, DiscordChannel channel, DiscordMessage message)
         {
-            if (e.Guild.Id != this._Guild.Id)
+            if (guild.Id != this._Guild.Id)
                 return;
 
-            var member = await this._Guild.GetMemberAsync(e.Author.Id);
+            var member = await this._Guild.GetMemberAsync(author.Id);
             if (member == null) return;
 
-            if (e.Channel.Parent != this._ParentChannel)
+            if (channel.Parent != this._ParentChannel)
                 return;
 
             // if player is not bot
@@ -165,13 +165,17 @@ namespace LostAndFound.Engine
                 {
                     player.Reply("Please join a voice channel");
                 }
-                else if (player._UsesChannel(e.Channel))
+                else if (player._UsesChannel(channel))
                 {
-                    var cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, e.Message.Content);
+                    var cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, message.Content);
                     RaiseCommand(cmd);
                 }
             }
         }
+
+        private Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
+
+        private Task OnMessageUpdated(DiscordClient client, MessageUpdateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
 
         public void Say(string msg, bool alsoInDefaultChannel = false)
         {
