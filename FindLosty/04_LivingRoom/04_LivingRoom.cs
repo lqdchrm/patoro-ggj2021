@@ -11,11 +11,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         public GunLocker GunLocker { get; init; }
         public PinPad PinPad { get; init; }
 
-
-
-
-
-        public LivingRoom(FindLostyGame game) : base(game, "LivingRoom")
+        public LivingRoom(FindLostyGame game) : base(game, "04")
         {
             this.Sofa = new Sofa(game);
             this.Chimney = new Chimney(game);

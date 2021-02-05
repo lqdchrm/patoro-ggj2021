@@ -11,7 +11,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         public Mansion Mansion { get; private set; }
         public Door Door { get; private set; }
 
-        public FrontYard(FindLostyGame game) : base(game)
+        public FrontYard(FindLostyGame game) : base(game, "00")
         {
             this.Poo = new Poo(game);
             this.Box = new Box(game);

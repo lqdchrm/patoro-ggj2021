@@ -15,11 +15,16 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
+        public string RoomNumber { get; }
         public IEnumerable<TPlayer> Players { get; }
 
         public void SendText(string msg, params TPlayer[] excludedPlayers);
 
         public void Say(string msg, params TPlayer[] excludedPlayers);
+
+        public Task Show(bool silent = false);
+
+        public Task Hide(bool silent = false);
     }
 
     public abstract class BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -32,8 +37,11 @@ namespace LostAndFound.Engine
     {
         internal DiscordChannel _VoiceChannel { get; set; }
 
-        public BaseRoomImpl(TGame game, string name = null) : base(game, false, true, name)
+        public string RoomNumber { get; init; }
+
+        public BaseRoomImpl(TGame game, string roomNumber, string name = null) : base(game, false, true, name)
         {
+            this.RoomNumber = roomNumber;
             this.WasMentioned = true;
         }
 

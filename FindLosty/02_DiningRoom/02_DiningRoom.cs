@@ -12,7 +12,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public Table Table { get; init; }
         public Socket Socket { get; init; }
 
-        public DiningRoom(FindLostyGame game) : base(game, "DiningRoom")
+        public DiningRoom(FindLostyGame game) : base(game, "02")
         {
             this.Button = new Button(game);
             this.Cage = new Cage(game);

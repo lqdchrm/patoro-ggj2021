@@ -9,7 +9,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public FirePit FirePit { get; init; }
         public Microwave Microwave { get; init; }
 
-        public Kitchen(FindLostyGame game) : base(game)
+        public Kitchen(FindLostyGame game) : base(game, "03")
         {
             // Create Things in room
             this.Inventory.InitialAdd(

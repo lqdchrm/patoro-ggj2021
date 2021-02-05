@@ -6,7 +6,7 @@ namespace LostAndFound.FindLosty
 
     public abstract class Room : BaseRoomImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IRoom
     {
-        public Room(FindLostyGame game) : this(game, null) { }
-        public Room(FindLostyGame game, string name) : base(game, name) { }
+        public Room(FindLostyGame game, string roomNumber) : this(game, roomNumber, null) { }
+        public Room(FindLostyGame game, string roomNumber, string name = null) : base(game, roomNumber, name) { }
     }
 }

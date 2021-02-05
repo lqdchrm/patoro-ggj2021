@@ -197,6 +197,7 @@ namespace LostAndFound.Engine
         {
             this._Rooms.Add(room.Name, room);
             room._VoiceChannel = await this._Guild.CreateChannelAsync(room.Name, ChannelType.Voice, this._ParentChannel);
+
             if (visible)
             {
                 await room.Show(true);

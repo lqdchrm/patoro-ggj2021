@@ -15,7 +15,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
         public Splinters Splinters { get; init; }
 
-        public EntryHall(FindLostyGame game) : base(game)
+        public EntryHall(FindLostyGame game) : base(game, "01")
         {
             this.LeftDoor = new LeftDoor(game);
             this.RightDoor = new RightDoor(game);
