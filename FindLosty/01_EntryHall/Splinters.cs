@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._03_Kitchen;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -93,6 +94,20 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is null)
+            {
+                sender.Reply("You play with the splinters. One gets stuck in your finger.");
+                sender.Room.SendText($"{sender} has a splinter in this finger now.", sender);
+            } else if (other is FirePit firepit)
+            {
+                firepit.BurnSplinters(sender, this);
+            } else
+            {
+                base.Use(sender, other);
+            }
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

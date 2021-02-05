@@ -133,7 +133,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 
         public void ScanPoo(IPlayer sender, Poo poo)
         {
-            sender.Reply($"You hold the {poo} in the green light. It shimmers green.");
+            sender.Reply($"You hold the {poo} into the green light. It shimmers green.");
             sender.Room.SendText($"{sender} does something strange with the {this}. Maybe leave him alone for now?", sender);
         }
 

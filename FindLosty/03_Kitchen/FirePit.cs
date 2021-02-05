@@ -7,7 +7,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
     {
         bool Burning = false;
 
-        public FirePit(FindLostyGame game) : base(game, false, "pit")
+        public FirePit(FindLostyGame game) : base(game, false, "FirePit")
         {
         }
 
@@ -24,16 +24,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
 
         public override bool DoesItemFit(IThing thing, out string error)
         {
-            IThing maybeTofu = this.Inventory.FirstOrDefault();
-            if (maybeTofu == null)
-            {
-                return base.DoesItemFit(thing, out error);
-            }
-            else
-            {
-                error = $"There only is room for {maybeTofu}.";
-                return false;
-            }
+            error = $"You could 'put' things in there but this game won't let you... So maybe just 'use' them with the {this}.";
+            return false;
         }
 
         public override void Use(IPlayer sender, IThing other)
@@ -46,22 +38,36 @@ namespace LostAndFound.FindLosty._03_Kitchen
             {
                 BurnSplinters(sender, splinters);
             }
-            else
+            else if (other is Tofu tofu)
             {
-                if (this.Burning)
-                {
-                    sender.Reply($"Your {other.Name} is now really warm.");
-                }
-                else
-                {
-                    sender.Reply($"The fire is not warm enough to do anything.");
-                }
+                BurnTofu(sender, tofu);
             }
         }
 
-        private void BurnSplinters(IPlayer sender, Splinters splinters)
+        public void BurnTofu(IPlayer sender, Tofu tofu)
         {
-            sender.Inventory.Remove(splinters);
+            if (Burning)
+            {
+                if  (tofu.Frozen)
+                {
+                    sender.Reply($"The tofu melts a little and the dripping water extinguished the fire.");
+                    Burning = false;
+                }
+                else
+                {
+                    sender.Reply($"Your tofu is really warm now.");
+                    tofu.Warm = true;
+                }
+            }
+            else
+            {
+                sender.Reply($"The cold fire does absolutely nothing to your tofu.");
+            }
+        }
+
+        public void BurnSplinters(IPlayer sender, Splinters splinters)
+        {
+            sender.Inventory.Transfer(splinters, Game.DiningRoom.Inventory);
             this.Burning = true;
             sender.Reply($"The smoldering ash is hot enough to make the splinters catch fire. The fire is burning again.");
         }

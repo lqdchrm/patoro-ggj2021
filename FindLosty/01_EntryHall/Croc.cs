@@ -114,25 +114,19 @@ namespace LostAndFound.FindLosty._01_EntryHall
         {
             sender.Reply($"You don't really want to mess with the {this}.");
         }
-
-        /*
-        ██████╗ ██╗   ██╗████████╗
-        ██╔══██╗██║   ██║╚══██╔══╝
-        ██████╔╝██║   ██║   ██║   
-        ██╔═══╝ ██║   ██║   ██║   
-        ██║     ╚██████╔╝   ██║   
-        ╚═╝      ╚═════╝    ╚═╝   
-        */
-
-        /*
-        ██╗   ██╗███████╗███████╗
-        ██║   ██║██╔════╝██╔════╝
-        ██║   ██║███████╗█████╗  
-        ██║   ██║╚════██║██╔══╝  
-        ╚██████╔╝███████║███████╗
-         ╚═════╝ ╚══════╝╚══════╝
-        */
         public override string UseText => $"You better not touch the {this}.";
+
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is null)
+            {
+                sender.Reply(UseText);
+            }
+            else
+            {
+                sender.Reply($"Maybe you should 'give' the {other} to the croc");
+            }
+        }
 
         public void RefuseToEatHamster(IPlayer sender, Hamster hamster)
         {
@@ -159,6 +153,23 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 sender.Hit(tofu.ToString());
                 return false;
             }
+            else if (!tofu.Warm)
+            {
+                sender.Reply(@$"
+                    Carefully holding the {tofu} you come closer. The {this} leaps forward and with a giant snap it swallows {tofu}.
+                    And immediately spit it into your face.
+                    It drops to the ground. The croc growls horribly. Somehow it sounds like 'only warm tofu good'.
+                    ".FormatMultiline());
+
+                sender.Room.SendText(@$"
+                    {sender} goes near the {this} and puts the {tofu} in the mouth of the {this}.
+                    Angry the {this} spits the block in to the face of {sender}.
+                    The croc growls horribly. Somehow it sounds like 'only warm tofu good'.
+                    It lands on the ground.
+                    ", sender);
+                sender.Hit(tofu.ToString());
+                return false;
+            }
             else
             {
                 sender.Reply(@$"
@@ -175,7 +186,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
                     The {this} leaves happily and full its guarding position.
                     It takes a napp right next to the door.
                     ", sender);
-                this.Game.DiningRoom.Show();
+                this.Game.LivingRoom.Show();
                 return true;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._04_LivingRoom;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -17,6 +18,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
+        private bool open = false;
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -92,6 +94,31 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is null)
+            {
+                sender.Reply($"The door feels dirty now.");
+            }
+            else if (other is Dynamite dynamite)
+            {
+                UseDynamite(sender, dynamite);
+            }
+            else
+            {
+                sender.Reply($"Using {other} has no effect on a large metal door.");
+            }
+        }
+
+        public void UseDynamite(IPlayer sender, Dynamite dynamite)
+        {
+            if (!open)
+            {
+                open = true;
+                Game.Cellar.Show();
+                sender.Inventory.Remove(dynamite);
+            }
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

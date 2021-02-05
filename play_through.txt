@@ -1,0 +1,51 @@
+look
+look mansion
+open door
+
+GOTO EntryHall
+
+look
+kick leftdoor
+kick leftdoor
+kick leftdoor
+kick leftdoor
+kick leftdoor
+take splinters
+
+GOTO DiningRoom
+
+look
+look table
+look cage
+take hamster from cage
+look door
+use hamster with scanner
+
+GOTO Kitchen
+
+look
+look fridge
+take tofu from fridge
+put tofu in microwave
+use microwave
+take tofu from microwave
+use splinters with pit
+use tofu with pit
+
+
+GOTO EntryHall
+
+look rightdoor
+give tofu to croc
+look gunlocker
+use pinpad enter #39820
+take dynamite
+
+GOTO EntryHall
+
+look staircase
+use dynamite with metaldoor
+
+GOTO CELLAR
+
+look

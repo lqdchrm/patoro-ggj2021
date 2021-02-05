@@ -79,7 +79,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
 
-        public override string OpenText => this.IsOpen
+        public override string OpenText => !this.IsOpen
             ? "The door does not have a handle. Maybe you find another machanism to open it."
             : "The door is already opend.";
 

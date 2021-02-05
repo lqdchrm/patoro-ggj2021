@@ -104,6 +104,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             if (other is Croc croc)
             {
                 croc.RefuseToEatHamster(sender, this);
+            } else if (other is Scanner scanner)
+            {
+                scanner.ScanHamster(sender, this);
             } else
             {
                 base.Use(sender, other);

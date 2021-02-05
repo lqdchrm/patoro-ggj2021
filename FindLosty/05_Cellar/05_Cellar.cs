@@ -1,4 +1,6 @@
-﻿namespace LostAndFound.FindLosty._05_Cellar
+﻿using LostAndFound.Engine;
+
+namespace LostAndFound.FindLosty._05_Cellar
 {
     public class Cellar : Room
     {
@@ -23,6 +25,8 @@
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookIntroText(IPlayer sender) => @$"
+            You look around in the dark cellar. If you turn on the lights you see your dog. YOU WIN!!!!!!!!!!!!".FormatMultiline();
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

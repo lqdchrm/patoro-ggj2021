@@ -9,7 +9,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
     {
         public Dynamite Dynamite { get; }
 
-        public GunLocker(FindLostyGame game) : base(game)
+        public GunLocker(FindLostyGame game) : base(game, false, "GunLocker")
         {
             this.Dynamite = new Dynamite(game);
         }
@@ -56,7 +56,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             if (!this.IsOpen)
                 sender.Reply($@"
                         The heavy metal locker is secured in the wall.
-                        There is now way to force your way in or move it.
+                        There is no way to force your way in or move it.
                         A {this.Game.LivingRoom.PinPad} is mounted under the handle."
                     .FormatMultiline());
 

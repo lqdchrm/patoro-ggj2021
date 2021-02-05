@@ -20,6 +20,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         */
 
         public bool Frozen = true;
+        public bool Warm = false;
         public int UseCount = 0;
 
         /*
@@ -104,10 +105,13 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 var target = crocAteTofu ? croc.Inventory : sender.Room.Inventory;
                 if (!sender.Inventory.Transfer(this, target))
                 {
-                    sender.Reply($"You don't posses {a} {this}.");
+                    sender.Reply($"You don't posses a {this}.");
                 }
             }
-            base.PutInto(sender, container);
+            else
+            {
+                base.PutInto(sender, container);
+            }
         }
 
         /*
@@ -135,6 +139,9 @@ namespace LostAndFound.FindLosty._03_Kitchen
                     ));
                     sender.Room.SendText($"{sender} tastes tofu", sender);
                 }
+            } else if (other is FirePit firepit)
+            {
+                firepit.BurnTofu(sender, this);
             } else
             {
                 base.Use(sender, other);

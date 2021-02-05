@@ -42,7 +42,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
             return $@"
                 There are {this.Shelves} at one wall and a large {this.Fridge} on the other.
                 A {this.Microwave} is mounted on the wall next to the {this.Shelves}.
-                In the middle of the room is a large fire {this.FirePit}.
+                In the middle of the room is a large {this.FirePit}.
                 {this.FirePit.LookText}
                 There is one [door] leading to the dining room.
                  ".FormatMultiline();
@@ -156,7 +156,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
             var microwave_string = DescribeThing("microwave", cmd);
             return $@"
                 There are [shelves] at one wall and a large [refrigerator] on the other.
-                In the middle of the room is a large fire [pit]. {pit_string}
+                In the middle of the room is a large . {pit_string}
                 {roast_string}
                 {microwave_string}
                 There is one [door] leading to the dining room.
