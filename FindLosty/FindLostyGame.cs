@@ -234,6 +234,13 @@ namespace LostAndFound.FindLosty
                     }
                     break;
 
+                case "run":
+                    {
+                        if (this.EntryHall.MetalDoor.IsDynamiteUsed && !this.EntryHall.MetalDoor.IsOpen)
+                            player.MoveTo(new IRoom[] { this.FrontYard, this.DiningRoom, this.LivingRoom }.TakeOneRandom());
+                    }
+                    break;
+
                 case "help":
                     player.ReplyWithState($"{HelpText}\nYour are at {player.Room}");
                     break;

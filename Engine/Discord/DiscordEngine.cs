@@ -44,9 +44,6 @@ namespace LostAndFound.Engine.Discord
             var member = await this._Guild.GetMemberAsync(this._Client.CurrentUser.Id);
             if (member != null)
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
-#if !DEBUG
-            Say("A new game has started. Please select your channel.", true);
-#endif
         }
 
         public Task StartEngine() => Task.CompletedTask;

@@ -1,24 +1,21 @@
-﻿using LostAndFound.Engine;
-using System;
-using System.Linq;
+using LostAndFound.Engine;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+namespace LostAndFound.FindLosty._03_Kitchen
 {
-    public class Phone : Thing
+    public class Book : Item
     {
-        public override string Emoji => Emojis.Phone;
+        public override string Emoji => Emojis.Book;
 
-        public Phone(FindLostyGame game) : base(game)
-        {
-        }
+        public Book(FindLostyGame game) : base(game) => this.WasMentioned = true;
+
         /*
-         ███████╗████████╗ █████╗ ████████╗███████╗
-         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
-         ███████╗   ██║   ███████║   ██║   █████╗  
-         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
-         ███████║   ██║   ██║  ██║   ██║   ███████╗
-         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-         */
+        ███████╗████████╗ █████╗ ████████╗███████╗
+        ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+        ███████╗   ██║   ███████║   ██║   █████╗  
+        ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
+        ███████║   ██║   ██║  ██║   ██║   ███████╗
+        ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+        */
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -28,18 +25,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override void Look(IPlayer sender)
-        {
-            var normal_text = $"An old dark {this} with a dialplate. The decorative numbers are written on a white circle.\nThe key 6 looks very used.";
-            if (sender.OmniPotentPowerOfShelf)
-            {
-                sender.Reply(normal_text);
-            }
-            else
-            {
-                sender.Reply($"Through your sheer power of shelf. You can see the numbers: 32168, 5668678661, 666\nYou start to think this power maybe useless but fun.");
-            }
-        }
+        public override string LookText => "Howto unleash your inner shelf:\nThe one true Shelf-Help book.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -49,11 +35,6 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(IPlayer sender)
-        {
-            sender.Reply(@$"You kick the {this}. It loudly hits the floor. You feel guilty and put it back on the table.");
-            sender.Room.SendText(@$"{sender} kicks the {this} and it lands loudly on the floor. After a moment he puts it back on the table.");
-        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -63,7 +44,6 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => $"Beeeeeeeeeeeeeeeeeeeeeeeeeeeeeep.....";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -92,8 +72,6 @@ namespace LostAndFound.FindLosty._01_EntryHall
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
 
-        public override string TakeText => "The cord is to short to take it anywhere.";
-
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
@@ -111,31 +89,43 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-
-        public override string UseText => "Yeah, but what number?";
-
-        internal void Use(IPlayer sender, string second)
+        public override void Use(IPlayer sender, IThing other)
         {
-            if (!second.All(x => char.IsDigit(x)))
+            if (other is null)
             {
-                sender.Reply("A dialplate only has numbers.");
+                if (sender.Inventory.Has(this))
+                {
+                    if (TheHolderOfPower == null)
+                    {
+                        sender.Reply("You read the book and all of the sudden you seem to understand yourshelf better.");
+                        sender.Room.SendText($"{sender} has read the book of Shelf-Help and now has near omnipotent powers.\n You feel a shelfish craving to kill him and take his book.");
+                        sender.OmniPotentPowerOfShelf = true;
+                    }
+                    else if (TheHolderOfPower == sender)
+                    {
+                        sender.Reply("You reread the book but yourshelf doesn't improve.");
+                    }
+                    else
+                    {
+                        TheHolderOfPower.OmniPotentPowerOfShelf = false;
+                        TheHolderOfPower = sender;
+                        TheHolderOfPower.OmniPotentPowerOfShelf = true;
+                    }
+                } else
+                {
+                    sender.Reply("You need to have the Shelf-Help book to use it. The feeling that you need this book overwhelms you.");
+                }
             }
             else
             {
-
-                var response = second switch
-                {
-                    //Spider Murphy Gang
-                    "32168" => "Hallo hier ist Rosi, was kann ich heute für dich tuen?",
-                    "5668678661" => "I told you many times. Stop calling me",
-                    "666" => "Welcom to #@!~$§, all our lines are currently busy. Pleas hold the lin...",
-                    _ => "There is no such number"
-                };
-
-                sender.Reply(response);
+                base.Use(sender, other);
             }
+        }
 
-
+        private IPlayer TheHolderOfPower;
+        public IPlayer WhoHasThePower()
+        {
+            return TheHolderOfPower;
         }
 
         /*
@@ -146,6 +136,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+
+
+
+
+
 
     }
 }
