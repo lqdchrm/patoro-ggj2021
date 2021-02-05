@@ -18,8 +18,10 @@ namespace LostAndFound.Engine
         public string RoomNumber { get; }
         public IEnumerable<TPlayer> Players { get; }
 
+        public void SendText(string msg, IEnumerable<TPlayer> excludedPlayers);
         public void SendText(string msg, params TPlayer[] excludedPlayers);
 
+        public void Say(string msg, IEnumerable<TPlayer> excludedPlayers);
         public void Say(string msg, params TPlayer[] excludedPlayers);
 
         public Task Show(bool silent = false);
@@ -45,12 +47,14 @@ namespace LostAndFound.Engine
             this.WasMentioned = true;
         }
 
-        public void SendText(string msg, params TPlayer[] excludedPlayers)
+        public void SendText(string msg, params TPlayer[] excludedPlayers) => SendText(msg, excludedPlayers as IEnumerable<TPlayer>);
+        public void SendText(string msg, IEnumerable<TPlayer> excludedPlayers)
         {
             Send(msg, false, excludedPlayers);
         }
 
-        public void Say(string msg, params TPlayer[] excludedPlayers)
+        public void Say(string msg, params TPlayer[] excludedPlayers) => Say(msg, excludedPlayers as IEnumerable<TPlayer>);
+        public void Say(string msg, IEnumerable<TPlayer> excludedPlayers)
         {
             msg = $"{msg}";
             Send(msg, true, excludedPlayers);

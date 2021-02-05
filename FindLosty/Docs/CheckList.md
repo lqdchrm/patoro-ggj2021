@@ -10,15 +10,15 @@ This is an error: ❌
 - [✔️] Door (to EntryHall)
 
 ## EntryHall
-- [ ] Croc (prevents entry, needs *tofu*)
-- [ ] LeftDoor (to DiningRoom, must be hit with force)
-- [ ] RightDoor (to LivinRoom, secured by *croc*)
-- [ ] MetalDoor (to Cellar)
+- [✔️] Croc (prevents entry, needs *tofu*)
+- [✔️] LeftDoor (to DiningRoom, must be hit with force)
+- [✔️] RightDoor (to LivinRoom, secured by *croc*)
+- [✔️] MetalDoor (to Cellar)
 - [✔️] Phone
-- [ ] Splinters
-- [ ] Staircase
-- [ ] Wardrobe
-- [ ] Window
+- [✔️] Splinters
+- [✔️] Staircase
+- [✔️] Wardrobe
+- [✔️] Window
 
 ## DiningRoom
 - [ ] Button (shows pin for *pinPad* in LivingRoom)        // should pin be an item?
@@ -43,7 +43,7 @@ This is an error: ❌
 - [ ] GunLocker
 - [ ] LionHead
 - [ ] PinPad
-- [ ] Sofa
+- [✔️] Sofa
 
 ## Cellar
 - [ ]
