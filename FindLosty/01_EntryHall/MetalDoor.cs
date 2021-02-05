@@ -1,5 +1,8 @@
 ﻿using LostAndFound.Engine;
 using LostAndFound.FindLosty._04_LivingRoom;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -18,7 +21,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
-        private bool open = false;
+        public bool IsOpen { get; private set; } = false;
+        public bool IsDynamiteUsed { get; private set; } = false;
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -28,9 +32,13 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => this.open
-            ? "Dark burn makrs are on the door. The Explosion deformed it. It can no longer close."
-            : $"A very study door. It would be a blast to open it.";
+        public override string LookText =>
+            (this.IsDynamiteUsed, this.IsOpen) switch
+            {
+                (true, false) => $"You see the dynamite burning... RUN",
+                (_, true) => "Dark burn marks are on the door. The explosion deformed it. It can no longer close.",
+                _ => $"A very study door. It would be a blast to open it."
+            };
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -43,7 +51,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public override void Kick(IPlayer sender)
         {
 
-            if (this.open)
+            if (this.IsOpen)
             {
                 sender.Reply(@"
                     You kick the door, it is not so thougt anymore.".FormatMultiline());
@@ -80,13 +88,14 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override void Open(IPlayer sender) {
+        public override void Open(IPlayer sender)
+        {
 
-            if (this.open)
+            if (this.IsOpen)
             {
                 sender.Reply(@"
                     The door is already open.".FormatMultiline());
-             
+
             }
             else
             {
@@ -108,7 +117,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
         public override void Close(IPlayer sender)
         {
-            if (this.open)
+            if (this.IsOpen)
             {
                 sender.Reply(@"The door was opend with dynamite.
                                 Your not realy thinking it will ever close again.".FormatMultiline());
@@ -161,13 +170,34 @@ namespace LostAndFound.FindLosty._01_EntryHall
             }
         }
 
-        public void UseDynamite(IPlayer sender, Dynamite dynamite)
+        public async void UseDynamite(IPlayer sender, Dynamite dynamite)
         {
-            if (!this.open)
+            if (!this.IsDynamiteUsed)
             {
-                this.open = true;
-                _ = this.Game.Cellar.Show();
+                this.IsDynamiteUsed = true;
                 sender.Inventory.Remove(dynamite);
+
+                sender.Reply($"You put the {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this}. And Ignite its fuse.");
+                this.Game.EntryHall.SendText($"You see that {sender} puts a stick of {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this} and Ignites it.", sender);
+
+                // Dramaturgische pause
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                
+                this.Game.EntryHall.SendText("You should leave the room\nRUN");
+                
+                // fuse time
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                foreach (var players in this.Game.EntryHall.Players)
+                    players.Hit("explosion", damage: 3);
+
+                this.Game.EntryHall.SendText("An explosion throws everyone in the room to the ground. Your ears are ringing.");
+                
+                foreach (var room in this.Game.Rooms.Values.Except(new[] { this.Game.EntryHall }))
+                    room.SendText($"You hear a loud explosion from the {this.Game.EntryHall}. Everything is jiggles.");
+
+                this.IsOpen = true;
+                await this.Game.Cellar.Show();
             }
         }
 
