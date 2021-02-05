@@ -35,7 +35,7 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        internal DiscordChannel _VoiceChannel { get; set; }
+        // private DiscordChannel _VoiceChannel { get; set; }
 
         public string RoomNumber { get; init; }
 
@@ -77,36 +77,25 @@ namespace LostAndFound.Engine
         */
         public IEnumerable<TPlayer> Players => this.Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
 
-        public Task Show(bool silent = false)
+        public async Task Show(bool silent = false)
         {
             if (!this.IsVisible)
             {
-                var role = this._VoiceChannel?.Guild.EveryoneRole;
-                if (role is not null)
-                {
-                    this.IsVisible = true;
+                this.IsVisible = true;
+                await Game.ShowRoom(this as TRoom);
 
-                    if (!silent)
-                        this.Game.Say($"The new Room {this.Name} has appeared. You can switch Voice channels now.");
-
-                    return this._VoiceChannel.AddOverwriteAsync(role, allow: Permissions.AccessChannels);
-                }
+                if (!silent)
+                    this.Game.Say($"The new Room {this.Name} has appeared. You can switch Voice channels now.");
             }
-            return Task.CompletedTask;
         }
 
-        public Task Hide(bool silent = false)
+        public async Task Hide(bool silent = false)
         {
             if (this.IsVisible)
             {
-                var role = this._VoiceChannel?.Guild.EveryoneRole;
-                if (role is not null)
-                {
-                    this.IsVisible = false;
-                    return this._VoiceChannel.AddOverwriteAsync(role, deny: Permissions.AccessChannels);
-                }
+                this.IsVisible = false;
+                await Game.HideRoom(this as TRoom);
             }
-            return Task.CompletedTask;
         }
 
         /*

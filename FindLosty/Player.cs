@@ -13,7 +13,7 @@ namespace LostAndFound.FindLosty
 
     public class Player : BasePlayerImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IPlayer
     {
-        public Player(DiscordMember name, FindLostyGame game) : base(game, name) { }
+        public Player(FindLostyGame game, string name) : base(game, name) { }
 
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
