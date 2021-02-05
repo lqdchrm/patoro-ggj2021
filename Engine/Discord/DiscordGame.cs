@@ -178,7 +178,7 @@ namespace LostAndFound.Engine.Discord
                 {
                     var discordOverwriteBuilder = builder.For(guild.EveryoneRole).Deny(Permissions.AccessChannels);
                     var overwrites = new[] { discordOverwriteBuilder };
-                    var channel = await guild.CreateChannelAsync($"{player.Emoji}{this.Name}", ChannelType.Text, _ParentChannel, overwrites: overwrites);
+                    var channel = await guild.CreateChannelAsync($"{player.Emoji}{player.Name}", ChannelType.Text, _ParentChannel, overwrites: overwrites);
                     await channel.AddOverwriteAsync(member, Permissions.AccessChannels);
                     _PlayerNameToDiscordChannel.Add(player.NormalizedName, channel);
                 }
@@ -265,12 +265,9 @@ namespace LostAndFound.Engine.Discord
         public override void MovePlayerTo(TPlayer player, TRoom room)
         {
             base.MovePlayerTo(player, room);
-            if (room is BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> romImp)
-            {
-                if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel)
-                    && _PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
-                    channel.PlaceMemberAsync(member);
-            }
+            if (_RoomNameToVoiceChannels.TryGetValue(room.Name, out DiscordChannel channel)
+                && _PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
+                channel.PlaceMemberAsync(member);
         }
 
         #region IDisposable
