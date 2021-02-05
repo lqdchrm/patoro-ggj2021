@@ -16,9 +16,22 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
+        public IReadOnlyDictionary<string, TRoom> Rooms { get; }
         public IReadOnlyDictionary<string, TPlayer> Players { get; }
 
         public void Say(string msg, bool alsoInDefaultChannel = false);
+
+        public Task ShowRoom(TRoom room);
+        public Task HideRoom(TRoom room);
+        public void Mute(TPlayer player);
+        public void Unmute(TPlayer player);
+
+        public bool SendReplyTo(TPlayer player, string msg);
+        public bool SendReplyWithStateTo(TPlayer player, string msg);
+        public bool SendImageTo(TPlayer player, string msg);
+        public bool SendSpeechTo(TPlayer player, string msg);
+
+        public void MovePlayerTo(TPlayer player, TRoom room);
     }
 
     public abstract class BaseGameImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -29,13 +42,6 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        private readonly DiscordClient _Client;
-        private readonly DiscordGuild _Guild;
-        internal DiscordChannel _ParentChannel;
-
-        private readonly Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
-        private readonly Dictionary<ulong, TPlayer> _Players = new Dictionary<ulong, TPlayer>();
-
         public string Name { get; }
         public bool Ready { get; private set; }
 
@@ -56,125 +62,23 @@ namespace LostAndFound.Engine
 
         #endregion
 
-        public BaseGameImpl(string name, DiscordClient client, DiscordGuild guild)
+        public BaseGameImpl(string name)
         {
             this.Name = name;
-            this._Client = client;
-            this._Guild = guild;
-            client.VoiceStateUpdated += VoiceStateUpdated;
-            client.MessageCreated += OnMessageCreated;
-            client.MessageUpdated += OnMessageUpdated;
         }
 
-        public virtual async Task StartAsync()
-        {
-            await CleanupOldAsync();
-            await CreateDefaultChannelsAsync();
-            this.Ready = true;
-            var member = await this._Guild.GetMemberAsync(this._Client.CurrentUser.Id);
-            if (member != null)
-                _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
-#if !DEBUG
-            Say("A new game has started. Please select your channel.", true);
-#endif
-        }
+        public virtual Task StartAsync() { this.Ready = true; return Task.CompletedTask; }
 
-        public async Task CleanupAsync()
-        {
-            Console.Error.WriteLine("[ENGINE] Cleaning up ...");
+        public abstract Task ShowRoom(TRoom room);
+        public abstract Task HideRoom(TRoom room);
 
-            foreach (var child in this._ParentChannel.Children)
-            {
-                await child.DeleteAsync();
-            }
-            await this._ParentChannel.DeleteAsync();
-            Console.Error.WriteLine("[ENGINE] ... cleaned up");
-        }
-
-        public async Task CleanupOldAsync()
-        {
-            Console.Error.WriteLine("[ENGINE] Cleaning up ...");
-            var oldGroup = this._Guild.Channels.Values.FirstOrDefault(c => c.Name == this.Name);
-            if (oldGroup != null)
-            {
-                foreach (var child in oldGroup.Children)
-                {
-                    await child.DeleteAsync();
-                }
-                await oldGroup.DeleteAsync();
-            }
-            Console.Error.WriteLine("[ENGINE] ... cleaned up");
-        }
-
-        private async Task CreateDefaultChannelsAsync()
-        {
-            Console.Error.WriteLine("[ENGINE] Adding default channels ...");
-            this._ParentChannel = await this._Guild.CreateChannelAsync(this.Name, ChannelType.Category);
-            Console.Error.WriteLine("[ENGINE] ... default channels added");
-        }
-
-        private Task VoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs e)
-        {
-            if (e.Guild.Id != this._Guild.Id)
-                return Task.CompletedTask;
-
-            if (!this.Ready)
-                return Task.CompletedTask;
-
-            // handle user info
-            var oldChannel = e.Before?.Channel;
-            var newChannel = e.After?.Channel;
-
-            var oldRoom = (oldChannel != null && this._Rooms.ContainsKey(oldChannel.Name)) ? this._Rooms[oldChannel.Name] : default;
-            var newRoom = (newChannel != null && this._Rooms.ContainsKey(newChannel.Name)) ? this._Rooms[newChannel.Name] : default;
-
-            if (oldRoom == newRoom)
-                return Task.CompletedTask;
-
-            // Do not wait for these
-            Task.Run(async () =>
-            {
-                var member = await this._Guild.GetMemberAsync(e.User.Id);
-                var player = await GetOrCreatePlayer(member);
-                player.Room = newRoom;
-
-                RaisePlayerChangedRoom(player, oldRoom);
-            });
-
-            return Task.CompletedTask;
-        }
-
-        private async Task OnMessage(DiscordClient client, DiscordGuild guild, DiscordUser author, DiscordChannel channel, DiscordMessage message)
-        {
-            if (guild.Id != this._Guild.Id)
-                return;
-
-            var member = await this._Guild.GetMemberAsync(author.Id);
-            if (member == null) return;
-
-            if (channel.Parent != this._ParentChannel)
-                return;
-
-            // if player is not bot
-            if (member != client.CurrentUser)
-            {
-                var player = await GetOrCreatePlayer(member);
-
-                if (player.Room is null)
-                {
-                    player.Reply("Please join a voice channel");
-                }
-                else if (player._UsesChannel(channel))
-                {
-                    var cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, message.Content);
-                    RaiseCommand(cmd);
-                }
-            }
-        }
-
-        private Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
-
-        private Task OnMessageUpdated(DiscordClient client, MessageUpdateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
+        public abstract void Mute(TPlayer player);
+        public abstract void Unmute(TPlayer player);
+        public abstract bool SendReplyTo(TPlayer player, string msg);
+        public virtual bool SendReplyWithStateTo(TPlayer player, string msg) => SendReplyTo(player, $"{msg}\n{player.StatusText}");
+        public abstract bool SendImageTo(TPlayer player, string msg);
+        public abstract bool SendSpeechTo(TPlayer player, string msg);
+        public virtual void MovePlayerTo(TPlayer player, TRoom room) { player.Room = room;}
 
         public void Say(string msg, bool alsoInDefaultChannel = false)
         {
@@ -188,17 +92,18 @@ namespace LostAndFound.Engine
                 }
             });
 
-            if (alsoInDefaultChannel)
-                this._Guild.GetDefaultChannel().SendMessageAsync(msg, true);
+            //if (alsoInDefaultChannel)
+            //    this._Guild.GetDefaultChannel().SendMessageAsync(msg, true);
         }
 
 
-#region Rooms Helpers
-        public async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
+        protected Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
+        public IReadOnlyDictionary<string, TRoom> Rooms => _Rooms;
+
+        public virtual async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
             where TRoomCurrent : BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>, TRoom
         {
             this._Rooms.Add(room.Name, room);
-            room._VoiceChannel = await this._Guild.CreateChannelAsync(room.Name, ChannelType.Voice, this._ParentChannel);
 
             if (visible)
             {
@@ -212,40 +117,12 @@ namespace LostAndFound.Engine
             return room;
         }
 
-        public IReadOnlyDictionary<string, TRoom> Rooms => this._Rooms;
-#endregion
 
+        protected Dictionary<string, TPlayer> _Players = new Dictionary<string, TPlayer>();
+        public IReadOnlyDictionary<string, TPlayer> Players => _Players;
 
-#region Player Helpers
-        public IReadOnlyDictionary<string, TPlayer> Players => this._Players.Values.ToDictionary(p => p.Name);
+        protected abstract TPlayer CreatePlayer(string name);
 
-        protected abstract TPlayer CreatePlayer(DiscordMember member);
-
-        /// <summary>
-        /// returns null, if player cannot be created or a cached player has no channel
-        /// </summary>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        private async Task<TPlayer> GetOrCreatePlayer(DiscordMember member)
-        {
-
-
-            if (!this._Players.TryGetValue(member.Id, out var player))
-            {
-                Console.Error.WriteLine($"[ENGINE] Adding player {member.DisplayName} ...");
-                player = CreatePlayer(member);
-                await player._InitPlayer(this._ParentChannel);
-
-
-                this._Players.Add(member.Id, player);
-                Console.Error.WriteLine($"[ENGINE] ... Player {member.DisplayName} added");
-            }
-            return player;
-        }
-
-#endregion
-
-#region Thing Helpers
 
         /// <summary>
         /// search for a thing
@@ -326,37 +203,7 @@ namespace LostAndFound.Engine
 
             return item;
         }
-#endregion
 
-#region IDisposable
-
-        private bool disposedValue;
-        public bool IsDisposed => this.disposedValue;
-
-        public void Dispose()
-        {
-            if (!this.disposedValue)
-            {
-                this.disposedValue = true;
-
-                // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-                Dispose(disposing: true);
-                GC.SuppressFinalize(this);
-            }
-        }
-
-        protected virtual async void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this._Client.VoiceStateUpdated -= VoiceStateUpdated;
-                this._Client.MessageCreated -= OnMessageCreated;
-
-                // cleanup
-                await CleanupAsync();
-            }
-        }
-
-#endregion
+        public abstract void Dispose();
     }
 }

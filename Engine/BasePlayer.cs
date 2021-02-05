@@ -34,13 +34,6 @@ namespace LostAndFound.Engine
         bool ReplySpeach(string msg);
 
         public void MoveTo(TRoom room);
-
-#pragma warning disable IDE1006 // Naming Styles
-
-        Task _InitPlayer(DiscordChannel parentChannel);
-        bool _UsesChannel(DiscordChannel channel);
-
-#pragma warning restore IDE1006 // Naming Styles
     }
 
     public abstract class BasePlayerImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -51,40 +44,16 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-#pragma warning disable IDE1006 // Naming Styles
-
-        private DiscordChannel _Channel;
-        private DiscordMember _Member { get; set; }
-
-#pragma warning restore IDE1006 // Naming Styles
-
-
         public TRoom Room { get; set; }
         public string NormalizedName => string.Join("", this.Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
 
         public override string Emoji => this.emoji;
 
-        public BasePlayerImpl(TGame game, DiscordMember member) : base(game, false, false, member.DisplayName)
+        public BasePlayerImpl(TGame game, string name) : base(game, false, false, name)
         {
             this.emoji = Emojis.Players.TakeOneRandom();
             this.WasMentioned = true;
-            this._Member = member;
         }
-
-        public async Task _InitPlayer(DiscordChannel parentChannel)
-        {
-            var builder = new DiscordOverwriteBuilder();
-            var guild = this._Member.Guild;
-            if (guild != null)
-            {
-                var discordOverwriteBuilder = builder.For(guild.EveryoneRole).Deny(Permissions.AccessChannels);
-                var overwrites = new[] { discordOverwriteBuilder };
-                var channel = await guild.CreateChannelAsync($"{this.Emoji}{this.Name}", ChannelType.Text, parentChannel, overwrites: overwrites);
-                await channel.AddOverwriteAsync(this._Member, Permissions.AccessChannels);
-                this._Channel = channel;
-            }
-        }
-
 
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
@@ -203,45 +172,38 @@ namespace LostAndFound.Engine
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
-        public void Mute() => this._Member?.ModifyAsync(x => x.Muted = true);
+        public void Mute() => this.Game.Mute(this as TPlayer);
 
-        public void Unmute() => this._Member?.ModifyAsync(x => x.Muted = false);
+        public void Unmute() => this.Game.Unmute(this as TPlayer);
 
-        public bool Reply(string msg)
-        {
-            msg = $"```css\n{msg}```";
-            this._Channel?.SendMessageAsync(msg);
-            return true;
-        }
+        public void MoveTo(TRoom room) => Game.MovePlayerTo(this as TPlayer, room);
 
-        public bool ReplyWithState(string msg)
-        {
-            msg = $"```css\n{msg}\nYour Status: {this.StatusText}```";
-            this._Channel?.SendMessageAsync(msg);
-            return true;
-        }
+        public bool Reply(string msg) => Game.SendReplyTo(this as TPlayer, msg);
+        //{
+        //    msg = $"```css\n{msg}```";
+        //    this._Channel?.SendMessageAsync(msg);
+        //    return true;
+        //}
 
-        public bool ReplyImage(string msg)
-        {
-            msg = $"```\n{msg}\n```";
-            this._Channel?.SendMessageAsync(msg);
-            return true;
-        }
+        public bool ReplyWithState(string msg) => Game.SendReplyWithStateTo(this as TPlayer, msg);
+        //{
+        //    msg = $"```css\n{msg}\nYour Status: {this.StatusText}```";
+        //    this._Channel?.SendMessageAsync(msg);
+        //    return true;
+        //}
 
-        public bool ReplySpeach(string msg)
-        {
-            this._Channel?.SendMessageAsync(msg, true);
-            return true;
-        }
+        public bool ReplyImage(string msg) => Game.SendImageTo(this as TPlayer, msg);
+        //{
+        //    msg = $"```\n{msg}\n```";
+        //    this._Channel?.SendMessageAsync(msg);
+        //    return true;
+        //}
 
-        public void MoveTo(TRoom room)
-        {
-            if (room is not BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> romImp)
-                return;
-            romImp._VoiceChannel.PlaceMemberAsync(this._Member);
-        }
-
-        public bool _UsesChannel(DiscordChannel channel) => channel == this._Channel && channel is not null;
+        public bool ReplySpeach(string msg) => Game.SendSpeechTo(this as TPlayer, msg);
+        //{
+        //    this._Channel?.SendMessageAsync(msg, true);
+        //    return true;
+        //}
 
         /// <summary>
         /// TODO: check if needed
