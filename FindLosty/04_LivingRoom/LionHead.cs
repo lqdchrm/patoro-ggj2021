@@ -1,4 +1,6 @@
-﻿namespace LostAndFound.FindLosty._04_LivingRoom
+﻿using System.Linq;
+
+namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class LionHead : Thing
     {
@@ -14,7 +16,7 @@
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        private bool isMoutOpen = false;
+        public bool IsMoutOpen { get; private set; } = false;
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -23,7 +25,19 @@
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => "The lion look majestic, epically from so close. But its sleeping. You hear it snore." + (this.isMoutOpen ? "The mouth is opend." : "");
+
+        public override void Look(IPlayer sender)
+        {
+            if (this.IsMoutOpen)
+            {
+                sender.Reply("The jaw of the lion is wide open, you look closly and see deep in the throat. Its warm humid breath wafts in your face.");
+                sender.Room.SendText($"You see how {sender} puts his head deep in the mouth of the {this}", sender);
+            }
+            else
+            {
+                sender.Reply("The lion look majestic, epically from so close. But its sleeping. You hear it snore.");
+            }
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -57,14 +71,15 @@
 
         public override void Open(IPlayer sender)
         {
-            if (this.isMoutOpen)
+            if (this.IsMoutOpen)
             {
                 sender.Reply("The mouth is already open.");
             }
             else
             {
                 sender.Reply("You open The mouth of the beast. A warm humid breath blows over your face.");
-                sender.Room.SendText($"{sender} rips open the {this} mouth. You think he maybe want to put his Head in the beast.");
+                sender.Room.SendText($"{sender} rips open the {this} mouth. You think he maybe want to put his Head in the beast.", sender);
+                this.IsMoutOpen = true;
             }
         }
 
@@ -78,14 +93,15 @@
         */
         public override void Close(IPlayer sender)
         {
-            if (this.isMoutOpen)
-            {
-                sender.Reply("The mouth is already shutt.");
-            }
-            else
+            if (this.IsMoutOpen)
             {
                 sender.Reply("You close The mouth of the beast. This smells better.");
                 sender.Room.SendText($"{sender} smashs close the {this} mouth.");
+                this.IsMoutOpen = false;
+            }
+            else
+            {
+                sender.Reply("The mouth is already shutt.");
             }
         }
 
@@ -107,17 +123,18 @@
         ╚═╝      ╚═════╝    ╚═╝   
         */
 
-        public override void Put(IPlayer sender, IThing other)
+
+
+        public void HandleLionPut(IPlayer sender, IThing thing)
         {
-            if (!this.isMoutOpen)
+            if (!this.IsMoutOpen)
                 sender.Reply($"You can't put anything in a closed mouth.");
-            else if (other is _02_DiningRoom.Hamster)
-            {
-                sender.Reply($"You push the {other} in the mouth of the {this}. But it roles out. Now it is a little wet.");
-                sender.Room.SendText($"{sender} push a {other} in the mouth of the {this}. But it roles out.", sender);
-            }
             else
-                base.Put(sender, other);
+            {
+                sender.Reply($"You push the {thing} in the mouth of the {this}. But it roles out. Now it is a little wet.");
+                sender.Room.SendText($"{sender} push a {thing} in the mouth of the {this}. But it roles out.", sender);
+            }
+
         }
 
 

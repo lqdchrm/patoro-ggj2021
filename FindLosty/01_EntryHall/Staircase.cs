@@ -118,12 +118,18 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 }
                 else
                 {
-                    sender.Reply(@"
+                    sender.Reply(@$"
                         You go up the stairs, but half way the stairs break and with a louad squash you fell down.
                         You recive Damage.
-                    ".FormatMultiline());
+                        Under the Staircase is a concreat wall that seems to cover the basement stairs.
+                        A {this.Game.EntryHall.MetalDoor} is blocking the way to the basement.
+                        ".FormatMultiline());
 
-                    sender.Room.SendText(@$"You see how {sender} climbs up the stairs, when suddenly the staircase collapses and {sender} forcfully hits the ground.", sender);
+                    sender.Room.SendText(@$"You see how {sender} climbs up the stairs, when suddenly the staircase collapses and {sender} forcfully hits the ground.
+
+                                            Under the Staircase is a concreat wall that seems to cover the basement stairs.
+                                            A {this.Game.EntryHall.MetalDoor} is blocking the way to the basement.
+                                            ", sender);
                     this.Game.DiningRoom.SendText(@$"You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.");
                     this.Game.LivingRoom.SendText(@$"You hear a load noise. Something seems to be collapsed in the {this.Game.EntryHall}.");
                     this.Game.Kitchen.SendText(@$"You hear a load noise. Something seems to be collapsed in another room.");
