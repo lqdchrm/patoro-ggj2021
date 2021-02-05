@@ -190,11 +190,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
                     {
                         sender.Reply($"The {this} turns on for 30 seconds. Nothing really happens. You wasted some energy. Somewhere in the rain forest a tree dies. Maybe 'put' something inside.");
                     }
-                } else
-                {
-                    sender.Reply($"The {this} doesn't react. There seems to be no power.");
                 }
-            }
+           }
             else 
             {
                 base.Use(sender, other);
