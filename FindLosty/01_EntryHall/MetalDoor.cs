@@ -112,10 +112,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
         public void UseDynamite(IPlayer sender, Dynamite dynamite)
         {
-            if (!open)
+            if (!this.open)
             {
-                open = true;
-                Game.Cellar.Show();
+                this.open = true;
+                this.Game.Cellar.Show();
                 sender.Inventory.Remove(dynamite);
             }
         }

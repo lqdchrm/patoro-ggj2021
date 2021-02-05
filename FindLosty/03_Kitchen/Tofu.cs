@@ -6,7 +6,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
     {
         public override string Emoji => Emojis.Tofu;
 
-        public Tofu(FindLostyGame game) : base(game) { this.WasMentioned = true; }
+        public Tofu(FindLostyGame game) : base(game) => this.WasMentioned = true;
 
 
 
@@ -31,18 +31,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string LookText => this.Frozen ? "A box of frozen tofu." : "A box of warm, smelly tofu.";
 
-
-        public override string LookText
-        {
-            get
-            {
-                if (this.Frozen)
-                    return "A box of frozen tofu.";
-                else
-                    return "A box of warm, smelly tofu.";
-            }
-        }
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝

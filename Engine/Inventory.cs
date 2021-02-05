@@ -14,8 +14,8 @@ namespace LostAndFound.Engine
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         private readonly TContainer Owner;
-        private bool canAcceptNonTransferables;
-        private Dictionary<string, TThing> dict = new Dictionary<string, TThing>();
+        private readonly bool canAcceptNonTransferables;
+        private readonly Dictionary<string, TThing> dict = new Dictionary<string, TThing>();
 
         #region IEnumerable
         public IEnumerator<TThing> GetEnumerator() => this.dict.Values.Where(i => i.WasMentioned).GetEnumerator();
@@ -60,8 +60,7 @@ namespace LostAndFound.Engine
             var key = _BuildKey(name);
             if (!this.dict.ContainsKey(key) || target == null) return false;
 
-            TThing item;
-            if (this.dict.TryGetValue(key, out item))
+            if (this.dict.TryGetValue(key, out TThing item))
             {
                 if (item.WasMentioned && item.CanBeTransfered)
                 {
@@ -96,7 +95,7 @@ namespace LostAndFound.Engine
 
             if (onlyWhenMentioned && !item.WasMentioned)
             {
-                item = default(TThing);
+                item = default;
                 return false;
             }
             return true;
@@ -113,7 +112,7 @@ namespace LostAndFound.Engine
         private bool Has(string token, bool onlyWhenMentioned = true)
         {
             var key = _BuildKey(token);
-            return (this.dict.ContainsKey(key) && (!onlyWhenMentioned || this.dict[key].WasMentioned));
+            return this.dict.ContainsKey(key) && (!onlyWhenMentioned || this.dict[key].WasMentioned);
         }
     }
 }

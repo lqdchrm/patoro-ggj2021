@@ -52,10 +52,7 @@ namespace LostAndFound.Engine
         }
 
         public event EventHandler<BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>> CommandSent;
-        public void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd)
-        {
-            CommandSent?.Invoke(this, cmd);
-        }
+        public void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd) => CommandSent?.Invoke(this, cmd);
 
         #endregion
 

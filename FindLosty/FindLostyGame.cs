@@ -77,15 +77,9 @@ namespace LostAndFound.FindLosty
             CommandSent += OnPlayerCommandSent;
         }
 
-        private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
-        {
-            Console.WriteLine($"[ROOMS] {e}");
-        }
+        private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[ROOMS] {e}");
 
-        private void LogEvent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e)
-        {
-            Console.WriteLine($"[COMMAND] {e}");
-        }
+        private void LogEvent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[COMMAND] {e}");
 
         private void ReportUnknown(IPlayer sender, string token, IThing other)
         {

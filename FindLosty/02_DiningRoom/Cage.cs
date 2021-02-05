@@ -23,7 +23,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        private bool HasHamster => this.Inventory.Has(Hamster, false);
+        private bool HasHamster => this.Inventory.Has(this.Hamster, false);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -37,18 +37,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         {
             get
             {
-                IThing hamster;
-                if (this.Inventory.TryFind("hamster", out hamster, false, false))
-                {
-                    return $"Awwwwww... there's a {hamster} in there.";
-                }
-                return $"There used to be a hamster in here.";
+                return this.Inventory.TryFind("hamster", out IThing hamster, false, false)
+                    ? $"Awwwwww... there's a {hamster} in there."
+                    : $"There used to be a hamster in here.";
             }
-        }
-
-        public override void Look(IPlayer sender)
-        {
-            base.Look(sender);
         }
 
         /*

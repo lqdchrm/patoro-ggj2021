@@ -203,12 +203,11 @@ namespace LostAndFound.Engine
 
         public virtual void PutInto(TPlayer sender, TContainer container)
         {
-            string error;
             if (sender.Inventory == container.Inventory || this == container)
             {
                 sender.Reply($"Not really.");
             }
-            else if (!container.DoesItemFit(this as TThing, out error))
+            else if (!container.DoesItemFit(this as TThing, out string error))
             {
                 sender.ReplyWithState(error);
             }
@@ -246,10 +245,7 @@ namespace LostAndFound.Engine
          ╚═════╝ ╚══════╝╚══════╝
         */
         public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual void Use(TPlayer sender, TThing other)
-        {
-            sender.Reply(UseText);
-        }
+        public virtual void Use(TPlayer sender, TThing other) => sender.Reply(this.UseText);
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

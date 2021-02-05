@@ -47,7 +47,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void Kick(IPlayer sender)
         {
-            sender.Hit(this.ToString());
+            sender.Hit(ToString());
             sender.Reply($"You kick against the {this} and a painful feeling rises from your feet to the hip.");
         }
 

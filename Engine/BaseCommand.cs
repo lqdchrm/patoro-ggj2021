@@ -48,9 +48,6 @@ namespace LostAndFound.Engine
             this.RawArgs = tokens.Skip(1);
         }
 
-        public override string ToString()
-        {
-            return $"{this.Sender}: {this.Command} {string.Join(" ", this.RawArgs)}";
-        }
+        public override string ToString() => $"{this.Sender}: {this.Command} {string.Join(" ", this.RawArgs)}";
     }
 }

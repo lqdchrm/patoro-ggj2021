@@ -85,7 +85,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         {
             error = "";
             IThing thing_inside = this.Inventory.FirstOrDefault();
-            if (thing is Tofu tofu)
+            if (thing is Tofu)
             {
                 return true;
             }

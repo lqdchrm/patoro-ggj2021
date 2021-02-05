@@ -21,7 +21,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        public bool IsNapping => this.Inventory.Has(Game.Kitchen.Fridge.Tofu);
+        public bool IsNapping => this.Inventory.Has(this.Game.Kitchen.Fridge.Tofu);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -110,17 +110,13 @@ namespace LostAndFound.FindLosty._01_EntryHall
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-        public override void TakeFrom(IPlayer sender, IContainer container)
-        {
-            sender.Reply($"You don't really want to mess with the {this}.");
-        }
         public override string UseText => $"You better not touch the {this}.";
 
         public override void Use(IPlayer sender, IThing other)
         {
             if (other is null)
             {
-                sender.Reply(UseText);
+                sender.Reply(this.UseText);
             }
             else
             {

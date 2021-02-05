@@ -46,7 +46,6 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
         public override void Kick(IPlayer sender)
         {
-            var message = $"Nothing happened.";
             var time_of_kick = DateTimeOffset.Now;
 
             var delta = time_of_kick - this.time_of_last_kick;
@@ -79,7 +78,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             }
             else if (this.kick_count > 2 && this.door_life == 1)
             {
-                message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}. The {this} finally opened.";
+                var message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}. The {this} finally opened.";
                 sender.Room.SendText(message);
                 this.door_life -= 1;
                 this.IsOpen = true;

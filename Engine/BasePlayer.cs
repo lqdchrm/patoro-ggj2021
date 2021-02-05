@@ -99,10 +99,7 @@ namespace LostAndFound.Engine
         private TThing thingPlayerIsUsingAndHasToStop;
         public TThing ThingPlayerIsUsingAndHasToStop
         {
-            get
-            {
-                return this.thingPlayerIsUsingAndHasToStop;
-            }
+            get => this.thingPlayerIsUsingAndHasToStop;
             set
             {
                 if (this is TPlayer self)
@@ -204,15 +201,9 @@ namespace LostAndFound.Engine
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
-        public void Mute()
-        {
-            this._Member?.ModifyAsync(x => x.Muted = true);
-        }
+        public void Mute() => this._Member?.ModifyAsync(x => x.Muted = true);
 
-        public void Unmute()
-        {
-            this._Member?.ModifyAsync(x => x.Muted = false);
-        }
+        public void Unmute() => this._Member?.ModifyAsync(x => x.Muted = false);
 
         public bool Reply(string msg)
         {

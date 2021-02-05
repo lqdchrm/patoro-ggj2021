@@ -28,11 +28,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-
-        public override void Look(IPlayer sender)
-        {
-            sender.Reply("The hamster has some barcode printed on its belly.");
-        }
+        public override string LookText => $"The hamster has some barcode printed on its belly.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

@@ -11,16 +11,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         {
         }
 
-        public override string LookText
-        {
-            get
-            {
-                if (this.Burning)
-                    return $"The fire is blazing.";
-                else
-                    return $"The fire is out. The ash is still smoldering.";
-            }
-        }
+        public override string LookText => this.Burning ? $"The fire is blazing." : $"The fire is out. The ash is still smoldering.";
 
         public override bool DoesItemFit(IThing thing, out string error)
         {

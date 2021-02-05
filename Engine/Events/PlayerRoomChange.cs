@@ -10,9 +10,6 @@
         public TPlayer Player { get; internal set; }
         public TRoom OldRoom { get; internal set; }
 
-        public override string ToString()
-        {
-            return $"{Player}: moved from {OldRoom} to {Player.Room}";
-        }
+        public override string ToString() => $"{this.Player}: moved from {this.OldRoom} to {this.Player.Room}";
     }
 }
