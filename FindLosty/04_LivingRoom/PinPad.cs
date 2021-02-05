@@ -123,7 +123,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
                 Task.Run(async () =>
                 {
-                    sender.Reply($"You enter {pin}\n.You hear an pleasant Bing.");
+                    sender.Reply($"You enter {pin}.\nYou hear an pleasant Bing.");
                     sender.Room.SendText($"You hear a Bing from the {gunLocker}.", sender);
                     await Task.Delay(100);
                     sender.Room.SendText($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
@@ -135,7 +135,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             }
             else
             {
-                sender.Reply($"You enter {pin}\n.An unpleasant sound informs you that this was not the correct pin.");
+                sender.Reply($"You enter {pin}.\nAn unpleasant sound informs you that this was not the correct pin.");
                 sender.Room.SendText($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
                 return false;
             }
