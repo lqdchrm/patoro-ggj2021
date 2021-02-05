@@ -45,7 +45,7 @@ namespace LostAndFound.Engine.Discord
             if (member != null)
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
 #if !DEBUG
-            Say("A new game has started. Please select your channel.", true);
+            //Say("A new game has started. Please select your channel.", true);
 #endif
         }
 
