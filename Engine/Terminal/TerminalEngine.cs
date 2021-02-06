@@ -31,6 +31,14 @@ namespace LostAndFound.Engine.Cnsole
         public void SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
         public void SendReplyTo(TPlayer player, string msg) 
         {
+            IEnumerable<string> lines = msg.Replace("\r", "").Replace("\t", "    ").Split("\n");
+            var width = lines.Max(l => l.Length);
+            lines = lines.Select(l => l.PadRight(width));
+            var line = string.Join("", Enumerable.Range(0, width).Select(i => "═"));
+            var first = $"╔{line}╗";
+            var last = $"╚{line}╝";
+
+            msg = $"{first}\n║{string.Join("║\n║", lines)}║\n{last}";
             Console.WriteLine(msg);
         }
 
