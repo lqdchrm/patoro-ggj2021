@@ -22,9 +22,8 @@ namespace LostAndFound
             {
                 var bot = new DiscordBot();
                 await bot.Start(typeof(FindLostyGame));
+                await Task.Delay(-1);
             }
-
-            await Task.Delay(-1);
         }
     }
 }

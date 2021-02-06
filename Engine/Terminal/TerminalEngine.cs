@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LostAndFound.Engine.Cnsole
@@ -22,13 +23,17 @@ namespace LostAndFound.Engine.Cnsole
         public void MovePlayerTo(TPlayer player, TRoom room) { var oldRoom = player.Room; player.Room = room; Game.RaisePlayerChangedRoom(player, oldRoom); }
         public string FormatThing(TThing thing) =>
             !string.IsNullOrWhiteSpace(thing.Emoji)
-            ? $"\\e[31m[{thing.Emoji} {thing.Name}]\\e[0m"
-            : $"\\e[31m[{thing.Name}]\\e[0m";
+            ? $"[{thing.Emoji} {thing.Name}]"
+            : $"[{thing.Name}]";
 
         public void Mute(TPlayer player) { }
         public void Unmute(TPlayer player) { }
         public void SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
-        public void SendReplyTo(TPlayer player, string msg) => Console.WriteLine(msg);
+        public void SendReplyTo(TPlayer player, string msg) 
+        {
+            Console.WriteLine(msg);
+        }
+
         public void SendSpeechTo(TPlayer player, string msg) => SendReplyTo(player, msg);
         public Task ShowRoom(TRoom room) => Task.CompletedTask;
         
@@ -43,7 +48,7 @@ namespace LostAndFound.Engine.Cnsole
             return Console.ReadLine();
         }
 
-        public Task StartEngine()
+        public async Task StartEngine()
         {
             // Create single player
             var player = Game.CreateAndAddPlayer("Player");
@@ -52,7 +57,7 @@ namespace LostAndFound.Engine.Cnsole
             foreach(var p in Game.Players.Values)
                 p.MoveTo(startRoom);
 
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 string input;
                 while ((input = GetPlayerInput(player)) != "exit")
@@ -61,8 +66,6 @@ namespace LostAndFound.Engine.Cnsole
                     Game.RaiseCommand(cmd);
                 }
             });
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -109,7 +109,7 @@ namespace LostAndFound.Engine
                     player.Say(msg);
                     await Task.Delay(50);
                 }
-            });
+            }).Wait();
         }
 
         public void BroadcastMsg(string msg, params TPlayer[] excluded)
@@ -121,7 +121,7 @@ namespace LostAndFound.Engine
                     player.Reply(msg);
                     await Task.Delay(50);
                 }
-            });
+            }).Wait();
         }
 
     #region Room
