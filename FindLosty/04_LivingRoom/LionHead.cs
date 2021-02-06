@@ -2,7 +2,7 @@
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
-    public class LionHead : Thing
+    public class LionHead : Container
     {
         public LionHead(FindLostyGame game) : base(game)
         {
@@ -16,7 +16,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        public bool IsMoutOpen { get; private set; } = false;
+        public bool IsMouthOpen { get; private set; }
+
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
         ██║     ██╔═══██╗██╔═══██╗██║ ██╔╝
@@ -28,14 +29,14 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Look(IPlayer sender)
         {
-            if (this.IsMoutOpen)
+            if (this.IsMouthOpen)
             {
-                sender.Reply("The jaw of the lion is wide open, you look closly and see deep in the throat. Its warm humid breath wafts in your face.");
-                sender.Room.SendText($"You see how {sender} puts his head deep in the mouth of the {this}", sender);
+                sender.Reply("The jaw of the lion is wide open, you look closely and see deep into the throat. Its warm humid breath wafts in your face.");
+                sender.Room.BroadcastMsg($"You see how {sender} puts his head deep in the mouth of the {this}", sender);
             }
             else
             {
-                sender.Reply("The lion look majestic, epically from so close. But its sleeping. You hear it snore.");
+                sender.Reply("The lion look majestic, especially from this close. But it's sleeping. You hear it snore.");
             }
         }
 
@@ -47,7 +48,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => "You should not wake a sleeping Lion.";
+        public override void Kick(IPlayer sender) => sender.Reply($"You should not wake the sleeping {this}.");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -58,7 +59,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override string ListenText => "Yes this lion is sleeping. Trust me.";
+        public override string Noises => "Yes this lion is sleeping. Trust me.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -71,15 +72,15 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Open(IPlayer sender)
         {
-            if (this.IsMoutOpen)
+            if (this.IsMouthOpen)
             {
                 sender.Reply("The mouth is already open.");
             }
             else
             {
-                sender.Reply("You open The mouth of the beast. A warm humid breath blows over your face.");
-                sender.Room.SendText($"{sender} rips open the {this} mouth. You think he maybe want to put his Head in the beast.", sender);
-                this.IsMoutOpen = true;
+                sender.Reply("You open the mouth of the beast. A warm humid breath blows over your face.");
+                sender.Room.BroadcastMsg($"{sender} rips open the {this} mouth. You think he maybe wants to put his head inside the beast.", sender);
+                this.IsMouthOpen = true;
             }
         }
 
@@ -93,15 +94,15 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         */
         public override void Close(IPlayer sender)
         {
-            if (this.IsMoutOpen)
+            if (this.IsMouthOpen)
             {
-                sender.Reply("You close The mouth of the beast. This smells better.");
-                sender.Room.SendText($"{sender} smashs close the {this} mouth.");
-                this.IsMoutOpen = false;
+                sender.Reply("You close the mouth of the beast. This smells better.");
+                sender.Room.BroadcastMsg($"{sender} gently closes the {this}'s mouth.");
+                this.IsMouthOpen = false;
             }
             else
             {
-                sender.Reply("The mouth is already shutt.");
+                sender.Reply("The mouth is already shut.");
             }
         }
 
@@ -113,7 +114,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-        public override string TakeText => $"The {this} is mounted on the Wall. You can't get it off.";
+        public override void TakeFrom(IPlayer sender, IContainer container) =>
+            sender.Reply($"The {this} is mounted onto the wall. You can't get it off.");
+
+
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
@@ -122,21 +126,16 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-
-
-
-        public void HandleLionPut(IPlayer sender, IThing thing)
+        public override void PutIntoThis(IPlayer sender, IThing thing)
         {
-            if (!this.IsMoutOpen)
-                sender.Reply($"You can't put anything in a closed mouth.");
+            if (!this.IsMouthOpen)
+                sender.Reply($"You can't put {thing} into a closed mouth.");
             else
             {
-                sender.Reply($"You push the {thing} in the mouth of the {this}. But it roles out. Now it is a little wet.");
-                sender.Room.SendText($"{sender} push a {thing} in the mouth of the {this}. But it roles out.", sender);
+                sender.Reply($"You push the {thing} in the mouth of the {this}. But it roles back out. Now it is a little wet.");
+                sender.Room.BroadcastMsg($"{sender} push a {thing} in the mouth of the {this}. But it roles back out.", sender);
             }
-
         }
-
 
         /*
         ██╗   ██╗███████╗███████╗

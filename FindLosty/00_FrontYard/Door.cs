@@ -6,7 +6,6 @@ namespace LostAndFound.FindLosty._00_FrontYard
     {
         public override string Emoji => Emojis.Door;
 
-
         public Door(FindLostyGame game) : base(game)
         {
         }
@@ -29,7 +28,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A sturdy wooden {this}.";
+        public override string Description => $"A sturdy wooden {this}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -41,15 +40,14 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override void Kick(IPlayer sender)
         {
+            sender.Hit();
             if (this.IsOpen)
             {
-                sender.Reply($"The open {this} hits the back wall and then swings back and hits your face.");
-                sender.Hit("swinging door");
+                sender.ReplyWithState($"The open {this} hits the back wall and then swings back and hits your face.");
             }
             else
             {
-                sender.Reply($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.' The {this} shakes. You took damage.");
-                sender.Hit($"massive {this}");
+                sender.ReplyWithState($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.' The {this} shakes. You took damage.");
             }
         }
 
@@ -93,7 +91,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-        public override string CloseText => $"Please keep it open for other players. Thanks a lot. --Management";
+        public override void Close(IPlayer sender) => sender.Reply($"Please keep it open for other players. Thanks a lot. --Management");
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

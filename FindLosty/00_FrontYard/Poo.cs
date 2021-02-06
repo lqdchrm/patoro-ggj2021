@@ -1,4 +1,6 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._02_DiningRoom;
+using System;
 
 namespace LostAndFound.FindLosty._00_FrontYard
 {
@@ -25,7 +27,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => OneOf($"It's Mr. Hanky. Heyyyyyy....", $"Disgusting !!!!!!");
+        public override string Description => OneOf($"It's Mr. Hanky. Heyyyyyy....", $"Disgusting !!!!!!");
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -35,7 +37,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => $"{base.KickText}\nNow your shoes are dirty and smelly.";
+        public override void Kick(IPlayer sender) => sender.Reply($"Now your shoes are dirty and smelly.");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -90,17 +92,15 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override string UseText => OneOf($"Disgusting !!!", $"You just didn't... Did you?");
-
+        public override void Use(IPlayer sender) => sender.Reply(OneOf($"Disgusting !!!", $"You just didn't... Did you?"));
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is null)
+            Action action = other switch
             {
-                sender.Reply("You take a big bite .... just kidding.");
-            } else
-            {
-                base.Use(sender, other);
-            }
+                Scanner scanner => () => scanner.ScanPoo(sender, this),
+                _ => () => base.Use(sender, other)
+            };
+            action();
         }
 
         /*

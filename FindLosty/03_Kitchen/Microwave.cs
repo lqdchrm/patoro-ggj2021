@@ -8,7 +8,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
     {
         public override string Emoji => Emojis.Microwave;
 
-        public Microwave(FindLostyGame game) : base(game, false, "Microwave")
+        public Microwave(FindLostyGame game) : base(game)
         {
         }
 
@@ -30,24 +30,22 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText {
+        public override string Description {
             get {
                 var intro = $"You see an old { this}. The years or use have left stains all over it. You wouldn't want to put food in there.";
 
-                var hasCord = this.Game.Kitchen.Inventory.Has(Game.Kitchen.Powercord, false);
+                var hasCord = this.Game.Kitchen.Has(Game.Kitchen.Powercord, false);
                 var cordText = hasCord ? $"\nThere's a long {this.Game.Kitchen.Powercord} dangling on the left side." : "";
 
                 var openText = IsOpen ? "It is open." : "It is closed.";
 
-                IThing thing_inside = this.Inventory.FirstOrDefault();
+                IThing thing_inside = this.FirstOrDefault();
                 bool empty = thing_inside == null;
                 var contentText = empty ? "":"There is a {thing_inside} inside.";
-
 
                 return $"{intro}{cordText}\n{openText}\n{contentText}";
             }
         }
-
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -57,7 +55,6 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -117,7 +114,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-        public override void Take(IPlayer sender, IThing other)
+        public override void TakeFrom(IPlayer sender, IContainer other)
         {
             if (other is not null)
             {
@@ -147,7 +144,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 return false;
             }
 
-            IThing thing_inside = this.Inventory.FirstOrDefault();
+            IThing thing_inside = this.FirstOrDefault();
             bool empty = thing_inside == null;
             if (empty)
             {
@@ -187,7 +184,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
             {
                 bool microwave_door_open = IsOpen;
                 bool power_connected = Game.Kitchen.Powercord.Connected && Game.DiningRoom.Ergometer.CurrentlyInUseBy != null;
-                IThing thing_inside = this.Inventory.FirstOrDefault();
+                IThing thing_inside = this.FirstOrDefault();
                 bool microwave_empty = thing_inside == null;
                 if (microwave_door_open)
                 {
@@ -217,8 +214,8 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 {
                     sender.Reply($"The microwave is about to turn on as the hamster roundhousekicks the door, jumps out of the microwave and runs away.");
                     IsOpen = true;
-                    Room room = Utils.TakeOneRandom<Room>(new Room[]{Game.DiningRoom, Game.Kitchen, Game.EntryHall, Game.FrontYard}.Where(x => x.IsVisible));
-                    this.Inventory.Transfer(hamster, room.Inventory);
+                    Room room = new Room[] { Game.DiningRoom, Game.Kitchen, Game.EntryHall, Game.FrontYard }.Where(x => x.IsVisible).TakeOneRandom();
+                    Transfer(hamster, room);
                 }
             }
             else

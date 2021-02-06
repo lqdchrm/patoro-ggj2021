@@ -4,6 +4,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
 {
     public class Box : Container
     {
+        public override bool CanBeTransfered => true;
         public override string Emoji => Emojis.Box;
 
         public Box(FindLostyGame game) : base(game)

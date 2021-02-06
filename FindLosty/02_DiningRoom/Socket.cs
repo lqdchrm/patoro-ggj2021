@@ -1,8 +1,9 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._03_Kitchen;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
-    public class Socket : Thing
+    public class Socket : Container
     {
         public override string Emoji => Emojis.Socket;
 
@@ -27,7 +28,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"The socket seems to be a power outlet. You could connect a powercord here.";
+        public override string Description => Game.Kitchen.Powercord.Connected
+            ? $"A {Game.Kitchen.Powercord} is connected to {this}."
+            : $"The {this} socket seems to be a power outlet. You could connect a powercord here.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -83,6 +86,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+        public override bool DoesItemFit(IThing thing, out string error)
+        {
+            error = "";
+            return false;
+        }
 
         /*
         ██╗   ██╗███████╗███████╗

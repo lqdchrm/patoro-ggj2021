@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A {this} powercord connected to the {this.Game.Kitchen.Microwave}.";
+        public override string Description => $"{A} {this} powercord connected to the {this.Game.Kitchen.Microwave}.";
 
 
         /*
@@ -77,10 +77,10 @@ namespace LostAndFound.FindLosty._03_Kitchen
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-        public override void Take(IPlayer sender, IThing other)
+        public override void TakeFrom(IPlayer sender, IContainer other)
         {
             Connected = false;
-            base.Take(sender, other);
+            TakeFrom(sender, other);
         }
 
         /*
@@ -91,12 +91,12 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-        public override void Put(IPlayer sender, IThing other)
+        public override void PutInto(IPlayer sender, IContainer other)
         {
             if (other is _02_DiningRoom.Socket socket)
                 Use(sender, socket);
             else
-                base.Put(sender, other);
+                base.PutInto(sender, other);
         }
 
         /*
@@ -107,15 +107,15 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override string UseText => $"That won't fit";
+        public override void Use(IPlayer sender) => sender.Reply($"That won't fit");
         public override void Use(IPlayer sender, IThing other)
         {
             if (other is _02_DiningRoom.Socket)
             {
                 Connected = true;
-                sender.Inventory.Transfer(this, Game.DiningRoom.Inventory);
+                sender.Transfer(this, Game.DiningRoom);
                 sender.Reply($"You connected the {Game.Kitchen.Microwave} with the {Game.DiningRoom.Ergometer}.");
-                sender.Room.SendText($"{sender} connected the {Game.Kitchen.Microwave} with the {Game.DiningRoom.Ergometer}.", sender);
+                Game.BroadcastMsg($"{sender} connected the {Game.Kitchen.Microwave} with the {Game.DiningRoom.Ergometer}.", sender);
             } else
             {
                 base.Use(sender, other);

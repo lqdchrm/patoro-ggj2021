@@ -8,8 +8,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
         }
 
-
-
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
@@ -28,7 +26,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookText => $@"
+        public override string Description => $@"
             The {this} is gas powered, looks like it wasn't used in some time...
             and could need some cleaning.
             ".FormatMultiline();
@@ -52,7 +50,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override string ListenText => "You listen on the gas vale. No gas is leaking.";
+        public override string Noises => "You listen on the gas vale. No gas is leaking.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -98,8 +96,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-
-
         public override void Use(IPlayer sender, IThing other)
         {
             sender.Reply(@"
@@ -107,7 +103,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                     You close valve again. Better safe then sorry...
             ".FormatMultiline());
 
-            sender.Room.SendText($"{sender} is poking in the {this}.", sender);
+            sender.Room.BroadcastMsg($"{sender} is poking in the {this}.", sender);
         }
 
         /*

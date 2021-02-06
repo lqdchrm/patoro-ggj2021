@@ -25,7 +25,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"The {this} can hold many coats and cloaks. But it is empty.";
+        public override string Description => $"The {this} can hold many coats and cloaks. But it is empty.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

@@ -7,10 +7,10 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public override string Emoji => Emojis.Fridge;
 
         public Tofu Tofu { get; }
-        public Fridge(FindLostyGame game) : base(game, false, "Fridge")
+        public Fridge(FindLostyGame game) : base(game)
         {
             Tofu = new Tofu(game);
-            this.Inventory.InitialAdd(Tofu);
+            Add(Tofu);
         }
 
         /*
@@ -30,6 +30,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string Description => $"This is a large {this}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

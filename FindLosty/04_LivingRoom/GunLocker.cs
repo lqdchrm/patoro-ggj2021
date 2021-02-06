@@ -9,12 +9,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
     {
         public Dynamite Dynamite { get; }
 
-        public GunLocker(FindLostyGame game) : base(game, false, "GunLocker")
+        public GunLocker(FindLostyGame game) : base(game)
         {
             this.Dynamite = new Dynamite(game);
         }
-
-
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
@@ -38,7 +36,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             this.opendBy = openingPlayer;
             this.seenWhoOpendIt = openingPlayer.Room.Players.ToArray();
             this.IsOpen = true;
-            this.Game.LivingRoom.Inventory.InitialAdd(this.Dynamite);
+            this.Game.LivingRoom.Add(this.Dynamite);
         }
 
         /*
@@ -52,7 +50,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Look(IPlayer sender)
         {
-
             if (!this.IsOpen)
                 sender.Reply($@"
                         The heavy metal locker is secured in the wall.
@@ -79,8 +76,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                         .FormatMultiline());
         }
 
-
-
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝
@@ -93,7 +88,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         public override void Kick(IPlayer sender)
         {
             sender.Reply($"You kick against the steel. But only your toe throbs.");
-            sender.Room.SendText($"You witness how {sender} tries to open the {this} with a kick. And Fails...", sender);
+            sender.Room.BroadcastMsg($"You witness how {sender} tries to open the {this} with a kick. And fails...", sender);
         }
 
         /*
@@ -114,8 +109,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
 
-
-
         public override void Open(IPlayer sender)
         {
             if (this.IsOpen)
@@ -125,7 +118,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             else
             {
                 sender.Reply("It is locked.");
-                sender.Room.SendText($"{sender} pulls on the Handle of the {this}. But it does not open.", sender);
+                sender.Room.BroadcastMsg($"{sender} pulls on the handle of the {this}. But it does not open.", sender);
             }
         }
 
@@ -137,15 +130,12 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-
-
         public override void Close(IPlayer sender)
         {
-
             if (this.IsOpen)
             {
                 sender.Reply("You close the door, but the lock does not lock again.");
-                sender.Room.SendText($"{sender} trys to close the door of the {this}. But it swings open again.", sender);
+                sender.Room.BroadcastMsg($"{sender} trys to close the door of the {this}. But it swings open again.", sender);
             }
             else
             {
@@ -161,7 +151,11 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-        public override string TakeText => "Even if it would not be secured in the wall. It would still be to heavy.";
+        public override void TakeFrom(IPlayer sender, IContainer container)
+        {
+            sender.Reply($"Even if it would not be secured in the wall. It would still be to heavy.");
+        }
+
         /*
         ██████╗ ██╗   ██╗████████╗
         ██╔══██╗██║   ██║╚══██╔══╝
@@ -170,7 +164,6 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-
         public override bool DoesItemFit(IThing thing, out string error)
         {
             if (!this.IsOpen)

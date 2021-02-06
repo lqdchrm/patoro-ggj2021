@@ -30,9 +30,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => @"
+        public override string Description => @"
             The pin pad is a 10 number pad with additional keys for # and *.
-
             Enter a Pin code with the use command.
             USE PinPad enter <code>
             ".FormatMultiline();
@@ -45,8 +44,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
-        public override string KickText => "Its hard to type with your feet.";
+        public override void Kick(IPlayer sender) => sender.Reply($"Its hard to type with your feet.");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -57,7 +55,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override string ListenText => "You hear the humming of the electronics.";
+        public override string Noises => "You hear the humming of the electronics.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -67,8 +65,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-
-        public override string OpenText => "If you would know more about electronics, this amy be a valid approach.";
+        public override void Open(IPlayer sender) => sender.Reply($"If you would know more about electronics, this may be a valid approach.");
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -87,8 +84,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-
-        public override string TakeText => "Its mounted on an metal locker. Which itself is mountet on the wall. Your shure you can't take it.";
+        public override void TakeFrom(IPlayer sender, IContainer container) =>
+            sender.Reply($"It's mounted onto a metal locker, which itself is mounted onto the wall. Your sure you can't take it.");
 
         /*
         ██████╗ ██╗   ██╗████████╗
@@ -107,8 +104,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-
-        public override string UseText => "You need to enter a PIN";
+        public override void Use(IPlayer sender) => sender.Reply($"You need to enter a PIN");
 
         public bool Use(IPlayer sender, string pin)
         {
@@ -120,7 +116,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                     var correctPinText = "It seems that the pin for closing is different...";
                     sender.Reply($"You enter {pin}\n.An unpleasant sound informs you that this was not the correct pin.{(pin == PIN ? correctPinText : string.Empty)}");
                     await Task.Delay(100);
-                    sender.Room.SendText($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
+                    sender.Room.BroadcastMsg($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
                 });
                 return false;
 
@@ -131,11 +127,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                 Task.Run(async () =>
                 {
                     sender.Reply($"You enter {pin}.\nYou hear an pleasant Bing.");
-                    sender.Room.SendText($"You hear a Bing from the {gunLocker}.", sender);
+                    sender.Room.BroadcastMsg($"You hear a Bing from the {gunLocker}.", sender);
                     await Task.Delay(100);
-                    sender.Room.SendText($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
+                    sender.Room.BroadcastMsg($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
                 });
-
 
                 gunLocker.Unlock(sender);
                 return true;
@@ -143,7 +138,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             else
             {
                 sender.Reply($"You enter {pin}.\nAn unpleasant sound informs you that this was not the correct pin.");
-                sender.Room.SendText($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
+                sender.Room.BroadcastMsg($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
                 return false;
             }
 

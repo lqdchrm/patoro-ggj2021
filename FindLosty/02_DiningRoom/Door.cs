@@ -35,7 +35,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"It seems to be in good shape. But there's no handle. Next to it there's a machine that looks like some kind of {this.Game.DiningRoom.Scanner}.";
+        public override string Description => $"It seems to be in good shape. But there's no handle. Next to it there's a machine that looks like some kind of {this.Game.DiningRoom.Scanner}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -47,8 +47,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void Kick(IPlayer sender)
         {
-            sender.Hit(ToString());
-            sender.Reply($"You kick against the {this} and a painful feeling rises from your feet to the hip.");
+            sender.Hit();
+            sender.ReplyWithState($"You kick against the {this} and a painful feeling rises from your feet to the hip.");
         }
 
 
@@ -78,10 +78,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-
-        public override string OpenText => !this.IsOpen
-            ? "The door does not have a handle. Maybe you find another machanism to open it."
-            : "The door is already opend.";
+        public override void Open(IPlayer sender) => sender.Reply(this.IsOpen
+            ? $"The {this} does not have a handle. Maybe you find another mechanism to open it."
+            : $"The {this} is already open.");
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

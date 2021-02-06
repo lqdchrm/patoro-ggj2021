@@ -30,14 +30,16 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText
+        public override string Description
         {
             get
             {
                 var msg = $"Someone seems to like riding a bike while having breakfast. A strange {this.Game.DiningRoom.Socket} is fitted onto the side.";
                 var usingPlayer = this.CurrentlyInUseBy;
+                
                 if (usingPlayer != null)
                     msg = $"{msg}\n{usingPlayer} is currently kicking the pedals.";
+                
                 return msg;
             }
         }
@@ -105,24 +107,19 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Use(IPlayer sender, IThing other)
+        public override void Use(IPlayer sender)
         {
-            if (other == null)
+            IPlayer otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
+            if (otherUser != null)
             {
-                IPlayer otherUser = sender.Room.Players.FirstOrDefault(p => p.ThingPlayerIsUsingAndHasToStop == this);
-                if (otherUser != null)
-                {
-                    sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
-                    otherUser.Reply($"{sender} is trying to use the {this}. But you are blocking it.");
-                }
-                else
-                {
-                    sender.ThingPlayerIsUsingAndHasToStop = this;
-                    sender.Reply($"You sit down and start to cycle. You hear something crackle.");
-                }
-            } else
+                sender.Reply($"This is not a tandem. {otherUser} is currently using {this}.");
+                otherUser.Reply($"{sender} is trying to use the {this}. But you are blocking it.");
+            }
+            else
             {
-                base.Use(sender, other);
+                sender.ThingPlayerIsUsingAndHasToStop = this;
+                sender.Reply($"You sit down and start to cycle. You hear something crackle.");
+                Game.Kitchen.BroadcastMsg($"{sender} started to use {this} in the room next door.", sender);
             }
         }
 

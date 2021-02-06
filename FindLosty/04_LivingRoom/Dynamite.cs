@@ -1,5 +1,6 @@
 ﻿using LostAndFound.Engine;
 using LostAndFound.FindLosty._01_EntryHall;
+using System;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
@@ -30,7 +31,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookText => $"Its a stick of {this}";
+        public override string Description => $"Its a stick of {this}";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -40,7 +41,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => "This should be against all safty regulations...";
+        public override void Kick(IPlayer sender) => sender.Reply($"This should be against all safty regulations...");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -95,18 +96,14 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-
-
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is MetalDoor door)
+            Action action = other switch
             {
-                door.UseDynamite(sender, this);
-            }
-            else
-            {
-                base.Use(sender, other);
-            }
+                MetalDoor door => () => door.UseDynamite(sender, this),
+                _ => () => base.Use(sender, other)
+            };
+            action();
         }
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

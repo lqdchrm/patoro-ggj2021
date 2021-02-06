@@ -32,7 +32,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText =>
+        public override string Description =>
             (this.IsDynamiteUsed, this.IsOpen) switch
             {
                 (true, false) => $"You see the dynamite burning... RUN",
@@ -50,22 +50,21 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override void Kick(IPlayer sender)
         {
-
             if (this.IsOpen)
             {
-                sender.Reply(@"
-                    You kick the door, it is not so thougt anymore.".FormatMultiline());
-                sender.Room.SendText($"{sender} kicks against the door.", sender);
+                sender.Reply(@"You kick the door, it is not so tough anymore.".FormatMultiline());
+                sender.Room.BroadcastMsg($"{sender} kicks against the door.", sender);
             }
             else
             {
-                sender.Reply(@"
-                    You try to kick open the door, but it is much studier then you thougt.
-                    The pain crawls from your feet up to you hip.
-                    You try to put on a breave face.
+                sender.Hit();
+
+                sender.ReplyWithState(@"
+                    You try to kick open the door, but it is much sturdier then you thought.
+                    The pain crawls from your feet up to you hip. You try to put on a breave face.
                     ".FormatMultiline());
-                sender.Room.SendText($"{sender} kicks against the door. He trys to hide the fact that he hurt himselfe.", sender);
-                sender.Hit(this.Name);
+
+                sender.Room.BroadcastMsg($"{sender} kicks against the door. He trys to hide the fact that he hurt himself.", sender);
             }
         }
 
@@ -77,7 +76,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => $"You hear scratching on the other side of the very massive door.";
+        public override string Noises => $"You hear scratching on the other side of the very massive door.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -90,19 +89,14 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
         public override void Open(IPlayer sender)
         {
-
             if (this.IsOpen)
             {
-                sender.Reply(@"
-                    The door is already open.".FormatMultiline());
-
+                sender.Reply(@"The door is already open.".FormatMultiline());
             }
             else
             {
-                sender.Reply(@"
-                    Its locked.
-                    ".FormatMultiline());
-                sender.Room.SendText($"{sender} pulls on {this}. But it won't open.", sender);
+                sender.Reply(@"Its locked.".FormatMultiline());
+                sender.Room.BroadcastMsg($"{sender} pulls on {this}. But it won't open.", sender);
             }
         }
 
@@ -119,8 +113,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
         {
             if (this.IsOpen)
             {
-                sender.Reply(@"The door was opend with dynamite.
-                                Your not realy thinking it will ever close again.".FormatMultiline());
+                sender.Reply(@"
+                    The door was opened with dynamite.
+                    You don't think it will ever close again.".FormatMultiline()
+                );
             }
             else
             {
@@ -154,20 +150,16 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Use(IPlayer sender) => sender.Reply($"The door feels used and dirty now.");
+
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is null)
+            Action action = other switch
             {
-                sender.Reply($"The door feels dirty now.");
-            }
-            else if (other is Dynamite dynamite)
-            {
-                UseDynamite(sender, dynamite);
-            }
-            else
-            {
-                sender.Reply($"Using {other} has no effect on a large metal door.");
-            }
+                Dynamite dynamite => () => UseDynamite(sender, dynamite),
+                _ => () => sender.Reply($"Using {other} has no effect on a large metal door.")
+            };
+            action();
         }
 
         public async void UseDynamite(IPlayer sender, Dynamite dynamite)
@@ -175,26 +167,26 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (!this.IsDynamiteUsed)
             {
                 this.IsDynamiteUsed = true;
-                sender.Inventory.Remove(dynamite);
+                sender.Remove(dynamite);
 
-                sender.Reply($"You put the {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this}. And Ignite its fuse.");
-                this.Game.EntryHall.SendText($"You see that {sender} puts a stick of {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this} and Ignites it.", sender);
+                sender.Reply($"You put the {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this}  and ignite its fuse.");
+                this.Game.EntryHall.BroadcastMsg($"You see that {sender} puts a stick of {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this} and ignites it.", sender);
 
                 // Dramaturgische pause
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 
-                this.Game.EntryHall.SendText("You should leave the room\nRUN");
+                this.Game.EntryHall.BroadcastMsg("You should leave the room NOW!!!\nRUN!!!");
                 
                 // fuse time
                 await Task.Delay(TimeSpan.FromSeconds(5));
 
                 foreach (var players in this.Game.EntryHall.Players)
-                    players.Hit("explosion", damage: 3);
+                    players.Hit(damage: 3);
 
-                this.Game.EntryHall.SendText("An explosion throws everyone in the room to the ground. Your ears are ringing.");
+                this.Game.EntryHall.BroadcastMsg("An explosion throws everyone in the room to the ground. Your ears are ringing.");
                 
                 foreach (var room in this.Game.Rooms.Values.Except(new[] { this.Game.EntryHall }))
-                    room.SendText($"You hear a loud explosion from the {this.Game.EntryHall}. Everything is jiggles.");
+                    room.BroadcastMsg($"You hear a loud explosion from the {this.Game.EntryHall}. Everything is jiggles.");
 
                 this.IsOpen = true;
                 await this.Game.Cellar.Show();
