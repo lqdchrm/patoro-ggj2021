@@ -7,6 +7,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class GunLocker : Container
     {
+        public override string Emoji => Emojis.GunLocker;
+
         public Dynamite Dynamite { get; }
 
         public GunLocker(FindLostyGame game) : base(game)

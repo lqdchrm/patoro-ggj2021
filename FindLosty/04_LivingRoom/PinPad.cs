@@ -6,6 +6,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
     public class PinPad : Thing
     {
 
+        public override string Emoji => Emojis.PinPad;
 
         public PinPad(FindLostyGame game) : base(game)
         {
@@ -117,7 +118,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                     sender.Reply($"You enter {pin}\n.An unpleasant sound informs you that this was not the correct pin.{(pin == PIN ? correctPinText : string.Empty)}");
                     await Task.Delay(100);
                     sender.Room.BroadcastMsg($"You hear an unpleasant sound from the {gunLocker}. {sender} stands in front of it.", sender);
-                });
+                }).Wait();
                 return false;
 
             }
@@ -130,7 +131,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                     sender.Room.BroadcastMsg($"You hear a Bing from the {gunLocker}.", sender);
                     await Task.Delay(100);
                     sender.Room.BroadcastMsg($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
-                });
+                }).Wait();
 
                 gunLocker.Unlock(sender);
                 return true;

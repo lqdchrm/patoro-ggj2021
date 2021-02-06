@@ -6,6 +6,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class Sofa : Thing
     {
+        public override string Emoji => Emojis.Sofa;
+
         public Sofa(FindLostyGame game) : base(game)
         {
         }

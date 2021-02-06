@@ -42,7 +42,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override string Description => @$"
             You look around in the big living room. The croc is sitting next the door. A big {Sofa} stands on an bright red carpet.
-            Opposing the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
+            Opposing the seating area is an old {Chimney}. Beneath a {LionHead} hanging next to the {Chimney} is a metal {GunLocker}."
             .FormatMultiline();
 
         /*

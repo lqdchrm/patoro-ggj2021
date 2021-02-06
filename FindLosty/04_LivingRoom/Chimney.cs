@@ -4,6 +4,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class Chimney : Thing
     {
+        public override string Emoji => Emojis.Chimney;
         public Chimney(FindLostyGame game) : base(game)
         {
         }
