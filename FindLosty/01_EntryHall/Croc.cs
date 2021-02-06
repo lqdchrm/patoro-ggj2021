@@ -1,6 +1,7 @@
 using LostAndFound.Engine;
 using LostAndFound.FindLosty._02_DiningRoom;
 using LostAndFound.FindLosty._03_Kitchen;
+using System;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -131,6 +132,34 @@ You only see its tail.
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        /*
+        ████████╗ █████╗ ██╗  ██╗███████╗
+        ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝
+           ██║   ███████║█████╔╝ █████╗  
+           ██║   ██╔══██║██╔═██╗ ██╔══╝  
+           ██║   ██║  ██║██║  ██╗███████╗
+           ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+        */
+
+        /*
+        ██████╗ ██╗   ██╗████████╗
+        ██╔══██╗██║   ██║╚══██╔══╝
+        ██████╔╝██║   ██║   ██║   
+        ██╔═══╝ ██║   ██║   ██║   
+        ██║     ╚██████╔╝   ██║   
+        ╚═╝      ╚═════╝    ╚═╝   
+        */
+        public override bool DoesItemFit(IThing thing, out string error)
+        {
+            if (thing is Tofu tofu)
+            {
+                error = "";
+                return true;
+            }
+
+            error = $"The {this} doesn't like {thing}.";
+            return false;
+        }
 
         public override void PutIntoThis(IPlayer sender, IThing thing)
         {
@@ -149,15 +178,15 @@ You only see its tail.
             }
         }
 
-    /*
-    ████████╗ █████╗ ██╗  ██╗███████╗
-    ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝
-       ██║   ███████║█████╔╝ █████╗  
-       ██║   ██╔══██║██╔═██╗ ██╔══╝  
-       ██║   ██║  ██║██║  ██╗███████╗
-       ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
-    */
-    public override void Use(IPlayer sender) => sender.Reply($"You better not touch the {this}.");
+        /*
+        ██╗   ██╗███████╗███████╗
+        ██║   ██║██╔════╝██╔════╝
+        ██║   ██║███████╗█████╗  
+        ██║   ██║╚════██║██╔══╝  
+        ╚██████╔╝███████║███████╗
+            ╚═════╝ ╚══════╝╚══════╝
+        */
+        public override void Use(IPlayer sender) => sender.Reply($"You better not touch the {this}.");
 
         public override void Use(IPlayer sender, IThing other)
         {
