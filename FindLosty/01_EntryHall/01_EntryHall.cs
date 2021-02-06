@@ -51,12 +51,12 @@ namespace LostAndFound.FindLosty._01_EntryHall
             To your left is the {this.Wardrobe} and to your right a small table with a {this.Phone}.
 
             In the middle of the hall, on both sides in the wall, you'll find two doors.
-
             Both the {this.LeftDoor} and the {this.RightDoor} are made of a massive dark wood.
 
-            In the back of the hall is a wide {this.Staircase}. You can also see a {this.Window} on the back of the room if you look past the {this.Staircase}.
+            In the back of the hall is a wide {this.Staircase}. You can also see a {this.Window}
+            on the back of the room if you look past the {this.Staircase}.
 
-            The barking seemns to come from the {this.Staircase}.
+            The barking seems to come from the {this.Staircase}.
         ".FormatMultiline();
 
         /*

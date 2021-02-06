@@ -296,25 +296,17 @@ namespace LostAndFound.FindLosty
                     e.Player?.Reply($"You left your stuff in {oldRoom}.");
                     e.Player.Room = newRoom;
 
-                    oldRoom.BroadcastMsg($"{e.Player} dropped {string.Join(", ", stuff)}.", e.Player);
+                    oldRoom.Game.BroadcastMsg($"{e.Player} left {oldRoom} and dropped {string.Join(", ", stuff)}.", e.Player);
+                } else
+                {
+                    oldRoom.BroadcastMsg($"{e.Player} left {oldRoom}", e.Player);
                 }
-
-                e.Player.Room = oldRoom;
-                e.Player?.Reply($"You left {oldRoom}");
-                e.Player.Room = newRoom;
-
-                oldRoom.BroadcastMsg($"{e.Player} left {oldRoom}", e.Player);
             }
 
             if (newRoom != null)
             {
                 newRoom.BroadcastMsg($"{e.Player} entered {e.Player.Room}", e.Player);
-
-                if (oldRoom == null) {
-                    RaiseCommand(new BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(e.Player, "look"));
-                } else {
-                    e.Player?.ReplyWithState($"You entered {e.Player.Room}");
-                }
+                RaiseCommand(new BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(e.Player, "look"));
             }
         }
     }

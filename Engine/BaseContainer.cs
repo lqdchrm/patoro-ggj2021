@@ -142,9 +142,12 @@ namespace LostAndFound.Engine
         */
         public override void Look(TPlayer sender)
         {
-            var description = Description is not null ? $"{Description} Containing: \n\t" : "\t";
-            var content = string.Join("\n\t", this.Select(i => i.ToString()));
-            sender.Reply($"{description}{content}");
+            // triggers WasMentioned
+            var description = Description?.ToString() ?? "";
+
+            var content = this;
+            var contentText = content.Any() ? $"\t\nContaining: \n\t{string.Join("\n\t", content.Select(i => i.ToString()))}" : "";
+            sender.Reply($"{description}{contentText}");
         }
 
         /*
