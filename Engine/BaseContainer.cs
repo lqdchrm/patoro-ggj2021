@@ -204,5 +204,15 @@ namespace LostAndFound.Engine
                 sender.Reply(OneOf($"You don't have {thing}", $"{thing} not found in inventory."));
             }
         }
+
+        public override void Use(TPlayer sender, TThing other)
+        {
+            if (other != null)
+            {
+                PutIntoThis(sender, other);
+            } else
+                base.Use(sender, other);
+        }
+
     }
 }

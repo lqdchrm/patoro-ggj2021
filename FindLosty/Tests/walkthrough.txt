@@ -1,0 +1,69 @@
+################ ENTER BUILDING #######################
+look mansion
+open door
+
+################ OPEN DININGROOM #######################
+goto entryhall
+kick leftdoor
+kick leftdoor
+kick leftdoor
+kick leftdoor
+kick leftdoor
+take splinters
+
+################ OPEN KITCHEN #######################
+goto diningroom
+look table
+look cage
+take hamster from cage
+look hamster
+look door
+use hamster with scanner
+
+################ GET TOFU UNFROSTED #################
+goto kitchen
+look fridge
+take tofu from fridge
+look microwave
+open microwave
+put tofu in microwave
+close microwave
+take powercord
+goto diningroom
+look ergometer
+use powercord with socket
+use hamster with ergometer
+goto kitchen
+use microwave
+open microwave
+take tofu from microwave
+close microwave
+use splinters with firepit
+use tofu with firepit
+
+################ GET PIN #################
+goto diningroom
+use button
+
+################ FEED CROC #################
+goto entryhall
+open rightdoor
+give tofu to croc
+
+################ GET DYNAMITE #################
+goto livingroom
+look gunlocker
+use pinpad enter #39820
+take DYNAMITE
+
+################ OPEN CELLAR #################
+goto entryhall
+look staircase
+use dynamite with metaldoor
+goto frontyard
+#delay 6000
+goto cellar
+
+############### END ##########################
+exit
+#end

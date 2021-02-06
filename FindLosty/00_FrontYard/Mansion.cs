@@ -1,9 +1,10 @@
-﻿using LostAndFound.Engine;
+﻿using System.Linq;
+using LostAndFound.Engine;
 using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
 {
-    public class Mansion : Thing
+    public class Mansion : Container
     {
         public Door Door { get; private set; }
 
@@ -32,7 +33,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => $"{House}\nThere seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.";
+        public override string Description => $"{House}\nThere seems to be only one way into the building. A large oak {Door}.";
 
         public string ShortDescription()
         {

@@ -37,7 +37,8 @@ namespace LostAndFound.FindLosty
         public Cellar Cellar { get; init; }
 
         public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild) => new FindLostyGame(name, new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
-        public static FindLostyGame Terminal() => new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>());
+        public static FindLostyGame Terminal(string mode) =>
+         new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode));
 
         private FindLostyGame(string name, BaseEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> engine) : base(name, engine)
         {
@@ -59,10 +60,6 @@ namespace LostAndFound.FindLosty
 
         public override async Task InitAsync()
         {
-#if DEBUG
-            PlayerChangedRoom += LogRoomChange;
-            CommandSent += LogEvent;
-#endif
             PlayerChangedRoom += OnPlayerChangedRoom;
             CommandSent += OnPlayerCommandSent;
 
@@ -73,10 +70,6 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(this.Kitchen, false);
             await AddRoomAsync(this.Cellar, false);
         }
-
-        private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[ROOMS] {e}");
-
-        private void LogEvent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[COMMAND] {e}");
 
         private void ReportUnknown(IPlayer sender, string token, IThing other)
         {

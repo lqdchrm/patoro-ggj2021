@@ -1,6 +1,6 @@
-﻿using LostAndFound.Engine;
+﻿using System.Linq;
+using LostAndFound.Engine;
 using LostAndFound.FindLosty._05_Cellar;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LostAndFound.FindLosty._00_FrontYard
@@ -41,7 +41,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
         public override string Description{
             get {
-                List<string> description = {
+                string[] description = {
                     "You're looking at the front yard of 404 Foundleroy Road",
                     Mansion.ShortDescription(),
                     "",

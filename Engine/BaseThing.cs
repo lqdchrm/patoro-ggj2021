@@ -263,12 +263,14 @@ namespace LostAndFound.Engine
                      $"Really?"
                  ));
 
-        public virtual void Use(TPlayer sender, TThing other) =>
+        public virtual void Use(TPlayer sender, TThing other)
+        {
             sender.Reply(
                 OneOf(
                     $"You can't use {this} with {other}.",
                     $"It's not a good idea to use {this} with {other}."
                 ));
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

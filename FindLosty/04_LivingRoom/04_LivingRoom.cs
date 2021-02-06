@@ -1,4 +1,6 @@
-﻿using LostAndFound.Engine;
+﻿using System;
+using System.Linq;
+using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
@@ -43,17 +45,16 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         public override string Description
         {
             get {
-                List<string> description = new List<string>{
-                    $"You look around the big living room. The croc is sitting next the door.",
-                    $"{Sofa.ShortDescription()}",
-                    $"Opposing the seating area is an old {Chimney}.",
-                    $"Beneath a {LionHead}, that's mounted on the wall next to the {Chimney} is a metal {GunLocker}.",
-                    $"{GunLocker.ShortDescription()}",
-                };
+                string[] description = new string[]{
+                        $"You look around the big living room. The croc is sitting next the door.",
+                        $"{Sofa.ShortDescription()}",
+                        $"Opposing the seating area is an old {Chimney}.",
+                        $"Beneath a {LionHead}, that's mounted on the wall next to the {Chimney} is a metal {GunLocker}.",
+                        $"{GunLocker.ShortDescription()}"
+                    };
                 return System.String.Join('\n', description.Where(x => x != null));
             }
         }
-
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

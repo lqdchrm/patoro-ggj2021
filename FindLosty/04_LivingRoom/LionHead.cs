@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty._04_LivingRoom
 {
     public class LionHead : Container
     {
+        public override string Emoji => Emojis.Lion;
+
         public LionHead(FindLostyGame game) : base(game)
         {
         }

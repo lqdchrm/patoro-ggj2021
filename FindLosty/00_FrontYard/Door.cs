@@ -1,4 +1,5 @@
-﻿using LostAndFound.Engine;
+﻿using System.Linq;
+using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty._00_FrontYard
 {
@@ -32,8 +33,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
 
         public string ShortDescription()
         {
-            List<string> description = {
-                $"A sturdy wooden {this}." + (IsOpen() ? "It's open." : ""),
+            string[] description = {
+                $"A sturdy wooden {this}." + (IsOpen ? "It's open." : ""),
             };
             return System.String.Join('\n', description.Where(x => x != null));
         }

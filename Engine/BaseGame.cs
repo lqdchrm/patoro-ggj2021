@@ -21,7 +21,9 @@ namespace LostAndFound.Engine
         IReadOnlyDictionary<string, TRoom> Rooms { get; }
         IReadOnlyDictionary<string, TPlayer> Players { get; }
 
+        event EventHandler<PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing>> PlayerChangedRoom;
         void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom);
+        event EventHandler<BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>> CommandSent;
         void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd);
         TPlayer CreateAndAddPlayer(string name);
 

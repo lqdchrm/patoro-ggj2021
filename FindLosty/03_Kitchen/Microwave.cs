@@ -41,7 +41,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
 
                 IThing thing_inside = this.FirstOrDefault();
                 bool empty = thing_inside == null;
-                var contentText = empty ? "":"There is a {thing_inside} inside.";
+                var contentText = empty ? "" : $"There is a {thing_inside} inside.";
 
                 return $"{intro}{cordText}\n{openText}\n{contentText}";
             }
@@ -177,52 +177,48 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-
-        public override void Use(IPlayer sender, IThing other)
+        public override void Use(IPlayer sender)
         {
-            if (other is null)
+            bool microwave_door_open = IsOpen;
+            bool power_connected =
+                Game.Kitchen.Powercord.Connected && (Game.DiningRoom.Ergometer.CurrentlyInUseBy != null || Game.DiningRoom.Ergometer.Contains(Game.DiningRoom.Cage.Hamster));
+            IThing thing_inside = this.FirstOrDefault();
+            bool microwave_empty = thing_inside == null;
+            if (microwave_door_open)
             {
-                bool microwave_door_open = IsOpen;
-                bool power_connected = Game.Kitchen.Powercord.Connected && Game.DiningRoom.Ergometer.CurrentlyInUseBy != null;
-                IThing thing_inside = this.FirstOrDefault();
-                bool microwave_empty = thing_inside == null;
-                if (microwave_door_open)
+                sender.Reply($"The {this} is still open.");
+            }
+            else if (!power_connected)
+            {
+                sender.Reply($"The {this} needs power.");
+            }
+            else if (microwave_empty)
+            {
+                sender.Reply($"The {this} turns on for 30 seconds. Nothing really happens. You wasted some energy. Somewhere in the rain forest a tree dies. Maybe 'put' something inside.");
+            }
+            else if (thing_inside is Tofu tofu)
+            {
+                if (tofu.Frozen)
                 {
-                    sender.Reply($"The {this} is still open.");
+                    tofu.Frozen = false;
+                    sender.Reply($"The {tofu} immediately unfreezes.");
                 }
-                else if (!power_connected)
+                else
                 {
-                    sender.Reply($"The {this} needs power.");
-                }
-                else if (microwave_empty)
-                {
-                    sender.Reply($"The {this} turns on for 30 seconds. Nothing really happens. You wasted some energy. Somewhere in the rain forest a tree dies. Maybe 'put' something inside.");
-                }
-                else if (thing_inside is Tofu tofu)
-                {
-                    if (tofu.Frozen)
-                    {
-                        tofu.Frozen = false;
-                        sender.Reply($"The {tofu} immediately unfreezes.");
-                    }
-                    else
-                    {
-                        sender.Reply($"The {this} seems to only unfreeze things. The {tofu} still is room temperatured.");
-                    }
-                }
-                else if (thing_inside is Hamster hamster)
-                {
-                    sender.Reply($"The microwave is about to turn on as the hamster roundhousekicks the door, jumps out of the microwave and runs away.");
-                    IsOpen = true;
-                    Room room = new Room[] { Game.DiningRoom, Game.Kitchen, Game.EntryHall, Game.FrontYard }.Where(x => x.IsVisible).TakeOneRandom();
-                    Transfer(hamster, room);
+                    sender.Reply($"The {this} seems to only unfreeze things. The {tofu} still is room temperatured.");
                 }
             }
-            else
+            else if (thing_inside is Hamster hamster)
             {
-                sender.Reply($"You should try 'put'ing something in the microwave and then just 'use'ing it without anything else.");
+                sender.Reply($"The microwave is about to turn on as the hamster roundhousekicks the door, jumps out of the microwave and runs away.");
+                IsOpen = true;
+                Room room = new Room[] { Game.DiningRoom, Game.Kitchen, Game.EntryHall, Game.FrontYard }.Where(x => x.IsVisible).TakeOneRandom();
+                Transfer(hamster, room);
             }
         }
+
+        public override void Use(IPlayer sender, IThing other) => 
+            sender.Reply($"You should try 'put'ing something in the microwave and then just 'use'ing it without anything else.");
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
