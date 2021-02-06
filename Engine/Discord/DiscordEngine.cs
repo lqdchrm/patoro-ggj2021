@@ -251,9 +251,9 @@ namespace LostAndFound.Engine.Discord
 
         public void MovePlayerTo(TPlayer player, TRoom room)
         {
-            if (room is BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> romImp)
+            if (room is BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> roomImpl)
             {
-                if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel)
+                if (_RoomNameToVoiceChannels.TryGetValue(roomImpl.Name, out DiscordChannel channel)
                     && _PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
                     channel.PlaceMemberAsync(member);
             }

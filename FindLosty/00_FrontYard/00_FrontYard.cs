@@ -1,4 +1,5 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._05_Cellar;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,7 +46,9 @@ namespace LostAndFound.FindLosty._00_FrontYard
             A picket fence surrounds the {this.Mansion} in front of you.
             This looks like some kind of maniac lives here.
 
-            You hear barking.
+            You hear barking. Could this be your missing dog {Game.Cellar.Losty}?
+            He ran away two days ago, so you started a rescue mission with your best friends.
+            Maybe he somehow entered the abondoned {Mansion}.
         ".FormatMultiline();
 
         public override void Look(IPlayer sender)

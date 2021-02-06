@@ -41,5 +41,6 @@ namespace LostAndFound.Engine
         public const string Fridge = "❄";
         public const string Firepit = "🔥";
         public const string Book = "📘";
+        public const string Dog = "🐶";
     }
 }

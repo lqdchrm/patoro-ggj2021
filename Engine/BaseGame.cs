@@ -97,7 +97,7 @@ namespace LostAndFound.Engine
         public void SendMsgWithStateTo(TPlayer player, string msg) => SendMsgTo(player, $"{msg}\n{player.StatusText}");
         public void SendImageTo(TPlayer player, string msg) => Engine.SendImageTo(player, msg);
         public void SendSpeechTo(TPlayer player, string msg) => Engine.SendSpeechTo(player, msg);
-        public void MovePlayerTo(TPlayer player, TRoom room) { player.Room = room; Engine.MovePlayerTo(player, room); }
+        public void MovePlayerTo(TPlayer player, TRoom room) { Engine.MovePlayerTo(player, room); player.Room = room; }
         #endregion
 
         public void Say(string msg)

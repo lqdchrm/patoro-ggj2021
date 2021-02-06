@@ -23,15 +23,21 @@ namespace LostAndFound.FindLosty
 
         public override void Look(IPlayer sender)
         {
+            var description = Description.ToString();
+
             var friends = this.Players.Where(p => p != sender);
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()
                 ? friends.Count() == 1
-                ? $"Your friend {friendsNames} is here."
-                : $"Your friends {friendsNames} are here."
-                : "You are alone.";
+                ? $"\tYour friend {friendsNames} is here."
+                : $"\tYour friends {friendsNames} are here."
+                : "\tCurrently you are alone at this place.";
 
-            var content = string.Join(", ", this.Select(i => i.ToString()));
+            var content = this.Select(i => i.ToString());
+            var contentText = content.Any() ? $"\n\tThings: {string.Join(", ", content)}" : "";
+
+            var rooms = Game.Rooms.Values.Where(r => r.IsVisible).Except(sender.Room.Yield());
+            var roomsText = rooms.Any() ? $"\n\tRooms: {string.Join(", ", rooms)}" : "";
 
             Task.Run(async () =>
             {
@@ -40,8 +46,8 @@ namespace LostAndFound.FindLosty
                     sender.Reply($"{Image}");
                     await Task.Delay(50);
                 }
-                sender.Reply($"{Description}\n{friendsText}\n{content}");
-            });
+                sender.Reply($"{description}\n{friendsText}{contentText}{roomsText}");
+            }).Wait();
         }
 
         /*

@@ -308,8 +308,13 @@ namespace LostAndFound.FindLosty
 
             if (newRoom != null)
             {
-                e.Player?.ReplyWithState($"You entered {e.Player.Room}");
                 newRoom.BroadcastMsg($"{e.Player} entered {e.Player.Room}", e.Player);
+
+                if (oldRoom == null) {
+                    RaiseCommand(new BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(e.Player, "look"));
+                } else {
+                    e.Player?.ReplyWithState($"You entered {e.Player.Room}");
+                }
             }
         }
     }

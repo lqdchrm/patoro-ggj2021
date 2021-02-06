@@ -45,6 +45,7 @@ namespace LostAndFound.Engine
         {
             this.RoomNumber = roomNumber;
             this.WasMentioned = true;
+            this.IsVisible = true;
         }
 
         public void BroadcastMsg(string msg, params TPlayer[] excludedPlayers) => BroadcastMsg(msg, excludedPlayers as IEnumerable<TPlayer>);

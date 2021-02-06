@@ -19,8 +19,12 @@ namespace LostAndFound.Engine.Cnsole
         public void Dispose() { }
         public Task HideRoom(TRoom room) => Task.CompletedTask;
         public Task InitRoom(TRoom room) => Task.CompletedTask;
-        public void MovePlayerTo(TPlayer player, TRoom room) { }
-        public string FormatThing(TThing thing) => $"[{thing.Emoji} {thing.Name}]";
+        public void MovePlayerTo(TPlayer player, TRoom room) { var oldRoom = player.Room; player.Room = room; Game.RaisePlayerChangedRoom(player, oldRoom); }
+        public string FormatThing(TThing thing) =>
+            !string.IsNullOrWhiteSpace(thing.Emoji)
+            ? $"\\e[31m[{thing.Emoji} {thing.Name}]\\e[0m"
+            : $"\\e[31m[{thing.Name}]\\e[0m";
+
         public void Mute(TPlayer player) { }
         public void Unmute(TPlayer player) { }
         public void SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
@@ -30,8 +34,23 @@ namespace LostAndFound.Engine.Cnsole
         
         public Task PrepareEngine()
         {
+            return Task.CompletedTask;
+        }
+
+        public string GetPlayerInput(TPlayer player)
+        {
+            Console.Write($"\n{player?.Room?.Name}: {player?.StatusText}> ");
+            return Console.ReadLine();
+        }
+
+        public Task StartEngine()
+        {
             // Create single player
             var player = Game.CreateAndAddPlayer("Player");
+
+            var startRoom = Game.Rooms.Values.First(r => r.IsVisible);
+            foreach(var p in Game.Players.Values)
+                p.MoveTo(startRoom);
 
             Task.Run(() =>
             {
@@ -42,22 +61,6 @@ namespace LostAndFound.Engine.Cnsole
                     Game.RaiseCommand(cmd);
                 }
             });
-            return Task.CompletedTask;
-        }
-
-        public string GetPlayerInput(TPlayer player)
-        {
-            Console.Write($"{player?.Room?.Name}: {player?.StatusText}> ");
-            return Console.ReadLine();
-        }
-
-        public Task StartEngine()
-        {
-            var startRoom = Game.Rooms.Values.First(r => r.IsVisible);
-            foreach(var player in Game.Players.Values)
-            {
-                player.MoveTo(startRoom);
-            }
 
             return Task.CompletedTask;
         }

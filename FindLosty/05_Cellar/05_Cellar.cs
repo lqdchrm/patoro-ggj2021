@@ -4,8 +4,12 @@ namespace LostAndFound.FindLosty._05_Cellar
 {
     public class Cellar : Room
     {
+        public readonly Losty Losty;
+
         public Cellar(FindLostyGame game) : base(game, "05")
         {
+            Losty = new Losty(game);
+            Add(Losty);
         }
 
         /*
@@ -26,26 +30,10 @@ namespace LostAndFound.FindLosty._05_Cellar
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        private const string DOG_IMAGE = @"
-    Wuff!             _                
-                     | \               
-           _         |  \              
-          / \_______/    \             
-         |   |       @    \            
-          \_/              \           
-           \-------         \          
-            _ / / /          \__         
-            \| | | _|                 
-             | | |  \                 
-             \___/                     
-                                       
-                                       
-";
-
         public override void Look(IPlayer sender)
         {
             sender.Reply("You look around in the dark cellar. If you turn on the lights you see your dog. YOU WIN!!!!!!!!!!!!");
-            sender.ReplyImage(DOG_IMAGE);
+            sender.ReplyImage(Losty.Description);
         }
 
         /*

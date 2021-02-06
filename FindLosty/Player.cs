@@ -105,9 +105,10 @@ namespace LostAndFound.FindLosty
         */
         public override void Kick(IPlayer sender)
         {
+            sender.Hit();
             if (this == sender)
             {
-                sender.Reply($"You kicked yourself, Wee Man.");
+                sender.ReplyWithState($"You kicked yourself, Wee Man.");
             }
             else
             {
@@ -117,7 +118,6 @@ namespace LostAndFound.FindLosty
                 sender.Reply($"You kicked {this} {OneOf(hows)}");
 
                 // to kicked
-                Hit();
                 Reply($"{sender} kicked you {OneOf(hows)}");
 
                 // to others

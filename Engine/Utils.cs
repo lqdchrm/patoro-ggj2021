@@ -8,6 +8,13 @@ namespace LostAndFound.Engine
     {
         private static Random rng = new Random();
 
+        #region Object Extensions
+        public static IEnumerable<T> Yield<T>(this T self)
+        {
+            yield return self;
+        }
+        #endregion
+
         #region IEnumerable Extensions
         public static T TakeOneRandom<T>(this IEnumerable<T> list)
         {
