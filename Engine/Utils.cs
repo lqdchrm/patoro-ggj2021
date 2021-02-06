@@ -27,11 +27,13 @@ namespace LostAndFound.Engine
 
         public static string FormatMultiline(this string text)
         {
-            var lines = text.Replace("\r\n", "\n").Split('\n', StringSplitOptions.TrimEntries).ToList();
-            if (lines.Count > 0 && lines[0].Length == 0)
-                lines = lines.Skip(1).ToList();
+            IEnumerable<string> lines = text.Replace("\r\n", "\n").Split('\n', StringSplitOptions.TrimEntries);
+            if (lines.Any() && string.IsNullOrWhiteSpace(lines.First()))
+                lines = lines.Skip(1);
+            if (lines.Any() && string.IsNullOrWhiteSpace(lines.Last()))
+                lines = lines.SkipLast(1);
 
-            return string.Join("\n", lines);
+            return string.Join("\n", lines.ToList());
         }
 
         public static int Levenshtein(this string self, string other)

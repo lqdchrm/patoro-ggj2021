@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine.Discord
 {
@@ -46,7 +47,17 @@ namespace LostAndFound.Engine.Discord
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
         }
 
-        public Task StartEngine() => Task.CompletedTask;
+        public Task StartEngine()
+        {
+            Game.PlayerChangedRoom += LogRoomChange;
+            Game.CommandSent += LogEvent;
+            return Task.CompletedTask;
+        }
+
+        private void LogRoomChange(object sender, PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing> e) => Console.WriteLine($"[ROOMS] {e}");
+
+        private void LogEvent(object sender, BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> e) => Console.WriteLine($"[COMMAND] {e}");
+
 
         private async Task CleanupAsync()
         {
