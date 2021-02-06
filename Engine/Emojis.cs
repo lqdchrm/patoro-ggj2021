@@ -13,6 +13,7 @@ namespace LostAndFound.Engine
         ;
 
         public const string Heart = "💖";
+        public const string EmptyHeart = "🤍";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";
         public const string Poo = "💩";

@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty
         {
             get
             {
-                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health));
+                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health).Concat(Enumerable.Repeat(Emojis.EmptyHeart, PLAYER_MAX_HEALTH - this.Health)));
                 var items = string.Join("", this.Select(i => i.Emoji));
                 var item = this.ThingPlayerIsUsingAndHasToStop?.ToString();
                 var action = item != null ? $"using {item}" : "";
@@ -84,7 +84,7 @@ namespace LostAndFound.FindLosty
 
             if (this == sender)
             {
-                sender.Reply($"You look {OneOf(adjs)})");
+                sender.Reply($"You look {OneOf(adjs)}");
             } else {
                 var header = $"It's {StatusText}, owning:\n\t";
                 var items = string.Join("\n\t", this.Select(i => i.ToString()));
