@@ -76,6 +76,14 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                         .FormatMultiline());
         }
 
+        public string ShortDescription()
+        {
+            string[] description = {
+                $"The gun locker is " + (IsOpen ? "open" : "closed") + ".",
+            };
+            return System.String.Join('\n', description.Where(x => x != null));
+        }
+
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝

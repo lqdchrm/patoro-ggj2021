@@ -30,6 +30,14 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override string Description => $"A sturdy wooden {this}.";
 
+        public string ShortDescription()
+        {
+            List<string> description = {
+                $"A sturdy wooden {this}." + (IsOpen() ? "It's open." : ""),
+            };
+            return System.String.Join('\n', description.Where(x => x != null));
+        }
+
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝
@@ -44,10 +52,12 @@ namespace LostAndFound.FindLosty._00_FrontYard
             if (this.IsOpen)
             {
                 sender.ReplyWithState($"The open {this} hits the back wall and then swings back and hits your face.");
+                sender.Room.BroadcastMsg($"{sender} kicks the open door. It swings back and hits him in the face.", sender);
             }
             else
             {
                 sender.ReplyWithState($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.' The {this} shakes. You took damage.");
+                sender.Room.BroadcastMsg($"{sender} kicks the door. The {this} shakes, and {sender}s foot really hurts.", sender);
             }
         }
 
@@ -78,6 +88,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             {
                 this.IsOpen = true;
                 sender.Reply($"The {this} swings open. Who doesn't lock their front {this}?");
+                sender.Room.BroadcastMsg($"{sender} just opens the door. It wasn't locked?", sender);
                 _ = this.Game.EntryHall.Show();
             }
         }

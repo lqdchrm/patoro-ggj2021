@@ -31,27 +31,33 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => (NUMBER_OF_SEATS - SeatedPlayers.Count() - 1) switch
+        public override string Description
         {
+            get {
+                int number_of_players_sitting = SeatedPlayers.Count();
+                int seats_left = NUMBER_OF_SEATS - number_of_players_sitting;
 
-            int i when i > 1 => @$"
-                The sofa is made of a dark leather. It looks comfortable.
-                {JoinLast(this.SeatedPlayers)} are already enjoying it. {i} seats left.
-                ".FormatMultiline(),
-            int i when i == 1 => @$"
-                The sofa is made of a dark leather. It looks comfortable.
-                {JoinLast(this.SeatedPlayers)} are already enjoying it. Only one seat left.
-                ".FormatMultiline(),
-            int i when i == 0 => @$"
-                The sofa is made of a dark leather. It looks comfortable.
-                {JoinLast(this.SeatedPlayers)} are already enjoying it. There is no seat left. But you think you still would find a place, when you push some.
-                ".FormatMultiline(),
-            int i when i == -1 => @$"
-                The sofa is made of a dark leather. It would look comfortable if not to many people where already sitting on it.
-                {JoinLast(this.SeatedPlayers)} are having an unconfortable time.
-                ".FormatMultiline(),
-            _ => $@"The sofa is made of a dark leather. It looks comfortable. {NUMBER_OF_SEATS} people can at least take place.",
-        };
+                string description = "The sofa is made of a dark leather.";
+
+                bool is_still_comfortable = (seats_left >= 0);
+                description += is_still_comfortable ?
+                    " It looks comfortable." :
+                    " It would look comfortable if not {number_of_players_sitting} where already sitting on it.";
+
+                description += is_still_comfortable ?
+                    $"\n{JoinLast(this.SeatedPlayers)} are already enjoying it." :
+                    $"\n{JoinLast(this.SeatedPlayers)} are really thinking {(-1*seats_left)} people should leave the sofa.";
+                return description;
+            }
+        }
+
+        public string ShortDescription()
+        {
+            string[] description = {
+                $"A big {this} on an bright red carpet with {JoinLast(this.SeatedPlayers)} sitting on it.",
+            };
+            return System.String.Join('\n', description.Where(x => x != null));
+        }
 
         private static string JoinLast<T>(IEnumerable<T> enumerable, string seperator = ", ", string lastSeperator = " and ")
         {

@@ -40,10 +40,20 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string Description => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {Sofa} stands on an bright red carpet.
-            Opposing the seating area is an old {Chimney}. Beneath a {LionHead}, that hangs next to the {Chimney} is a metal {GunLocker}."
-            .FormatMultiline();
+        public override string Description
+        {
+            get {
+                List<string> description = new List<string>{
+                    $"You look around the big living room. The croc is sitting next the door.",
+                    $"{Sofa.ShortDescription()}",
+                    $"Opposing the seating area is an old {Chimney}.",
+                    $"Beneath a {LionHead}, that's mounted on the wall next to the {Chimney} is a metal {GunLocker}.",
+                    $"{GunLocker.ShortDescription()}",
+                };
+                return System.String.Join('\n', description.Where(x => x != null));
+            }
+        }
+
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

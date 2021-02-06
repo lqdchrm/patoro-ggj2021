@@ -5,9 +5,15 @@ namespace LostAndFound.FindLosty._00_FrontYard
 {
     public class Mansion : Thing
     {
+        public Door Door { get; private set; }
+
         public override string Emoji => Emojis.Mansion;
 
-        public Mansion(FindLostyGame game) : base(game) { }
+        public Mansion(FindLostyGame game) : base(game)
+        {
+            this.Door = new Door(game);
+            this.Add(this.Door);
+        }
 
         /*
         ███████╗████████╗ █████╗ ████████╗███████╗
@@ -27,6 +33,16 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string Description => $"{House}\nThere seems to be only one way into the building. A large oak {this.Game.FrontYard.Door}.";
+
+        public string ShortDescription()
+        {
+            string[] description = {
+                $"A worn picket fence surrounds the {this} in front of you.",
+                "The {this} looks like some kind of maniac lives here.",
+                Door.WasMentioned ? $"There seems to be only one way into the building. {Door.ShortDescription()}":null,
+            };
+            return System.String.Join('\n', description.Where(x => x != null));
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗

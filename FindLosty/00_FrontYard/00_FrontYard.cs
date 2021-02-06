@@ -10,16 +10,14 @@ namespace LostAndFound.FindLosty._00_FrontYard
         public Poo Poo { get; private set; }
         public Box Box { get; private set; }
         public Mansion Mansion { get; private set; }
-        public Door Door { get; private set; }
 
         public FrontYard(FindLostyGame game) : base(game, "00")
         {
             this.Poo = new Poo(game);
             this.Box = new Box(game);
             this.Mansion = new Mansion(game);
-            this.Door = new Door(game);
 
-            this.Add(this.Poo, this.Box, this.Mansion, this.Door);
+            this.Add(this.Poo, this.Box, this.Mansion);
         }
 
         /*
@@ -41,15 +39,19 @@ namespace LostAndFound.FindLosty._00_FrontYard
         */
         public override string Image => Mansion.Fence;
 
-        public override string Description => $@"
-            You're looking at the beautiful front yard of 404 Foundleroy Road.
-            A picket fence surrounds the {this.Mansion} in front of you.
-            This looks like some kind of maniac lives here.
-
-            You hear barking. Could this be your missing dog {Game.Cellar.Losty}?
-            He ran away two days ago, so you started a rescue mission with your best friends.
-            Maybe he somehow entered the abondoned {Mansion}.
-        ".FormatMultiline();
+        public override string Description{
+            get {
+                List<string> description = {
+                    "You're looking at the front yard of 404 Foundleroy Road",
+                    Mansion.ShortDescription(),
+                    "",
+                    $"You hear barking. Could this be your missing dog {Game.Cellar.Losty}?",
+                    "He ran away two days ago, so you started a rescue mission with your best friends.",
+                    $"Maybe he somehow entered the abondoned {Mansion}."
+                };
+                return System.String.Join('\n', description.Where(x => x != null));
+            }
+        }
 
         public override void Look(IPlayer sender)
         {
