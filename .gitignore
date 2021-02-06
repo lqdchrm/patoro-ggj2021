@@ -3,3 +3,4 @@ obj/
 .vs/
 .env
 *.csproj.user
+*.stackdump
