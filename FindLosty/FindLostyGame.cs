@@ -154,7 +154,7 @@ namespace LostAndFound.FindLosty
                     {
                         if (other is not null) thing.Take(player, other);                       // two things
                         else if (second is not null) ReportUnknown(player, second, other);      // second thing not found
-                        else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
+                        else if (player.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
                         else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
                     else if (first is not null) ReportUnknown(player, first, other);            // first thing not found
@@ -181,7 +181,7 @@ namespace LostAndFound.FindLosty
                         else if (thing is PinPad pinpad && second is string) pinpad.Use(player, second);
                         else if (thing is Phone phone && second is string) phone.Use(player, second);
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
-                        else thing.Use(player, null);                                       // one thing
+                        else thing.Use(player);                                             // one thing
                     }
                     else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
                     else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
@@ -288,28 +288,28 @@ namespace LostAndFound.FindLosty
                 // drop things if leaving game
                 if (newRoom is null)
                 {
-                    var stuff = e.Player.Inventory.ToList();
+                    var stuff = e.Player.ToList();
                     foreach (var item in stuff)
-                        e.Player.Inventory.Transfer(item, oldRoom.Inventory);
+                        e.Player.Transfer(item, oldRoom);
 
                     e.Player.Room = oldRoom;
                     e.Player?.Reply($"You left your stuff in {oldRoom}.");
                     e.Player.Room = newRoom;
 
-                    oldRoom.SendText($"{e.Player} dropped {string.Join(", ", stuff)}.", e.Player);
+                    oldRoom.BroadcastMsg($"{e.Player} dropped {string.Join(", ", stuff)}.", e.Player);
                 }
 
                 e.Player.Room = oldRoom;
                 e.Player?.Reply($"You left {oldRoom}");
                 e.Player.Room = newRoom;
 
-                oldRoom.SendText($"{e.Player} left {oldRoom}", e.Player);
+                oldRoom.BroadcastMsg($"{e.Player} left {oldRoom}", e.Player);
             }
 
             if (newRoom != null)
             {
                 e.Player?.ReplyWithState($"You entered {e.Player.Room}");
-                newRoom.SendText($"{e.Player} entered {e.Player.Room}", e.Player);
+                newRoom.BroadcastMsg($"{e.Player} entered {e.Player.Room}", e.Player);
             }
         }
     }

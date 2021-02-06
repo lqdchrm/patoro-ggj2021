@@ -20,11 +20,12 @@ namespace LostAndFound.Engine.Cnsole
         public Task HideRoom(TRoom room) => Task.CompletedTask;
         public Task InitRoom(TRoom room) => Task.CompletedTask;
         public void MovePlayerTo(TPlayer player, TRoom room) { }
+        public string FormatThing(TThing thing) => $"[{thing.Emoji} {thing.Name}]";
         public void Mute(TPlayer player) { }
         public void Unmute(TPlayer player) { }
-        public bool SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
-        public bool SendReplyTo(TPlayer player, string msg) { Console.WriteLine(msg); return true; }
-        public bool SendSpeechTo(TPlayer player, string msg) => SendReplyTo(player, msg);
+        public void SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
+        public void SendReplyTo(TPlayer player, string msg) => Console.WriteLine(msg);
+        public void SendSpeechTo(TPlayer player, string msg) => SendReplyTo(player, msg);
         public Task ShowRoom(TRoom room) => Task.CompletedTask;
         
         public Task PrepareEngine()

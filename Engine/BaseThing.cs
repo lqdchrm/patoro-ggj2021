@@ -21,34 +21,28 @@ namespace LostAndFound.Engine
         TGame Game { get; }
         string Name { get; init; }
         string Emoji { get; }
-        bool IsVisible { get; }
         bool WasMentioned { get; set; }
-        bool CanBeTransfered { get; init; }
+        bool CanBeTransfered { get; }
 
-        string LookText { get; }
+        string Description { get; }
         void Look(TPlayer sender);
 
-        string KickText { get; }
         void Kick(TPlayer sender);
 
-        string ListenText { get; }
+        string Noises { get; }
         void Listen(TPlayer sender);
 
-        string OpenText { get; }
         void Open(TPlayer sender);
 
-        string CloseText { get; }
         void Close(TPlayer sender);
 
-        string TakeText { get; }
-        void Take(TPlayer sender, TThing other);
+        void Take(TPlayer sender, TThing thing);
         void TakeFrom(TPlayer sender, TContainer container);
 
-        string PutText { get; }
-        void Put(TPlayer sender, TThing other);
+        void Put(TPlayer sender, TThing thing);
         void PutInto(TPlayer sender, TContainer container);
 
-        string UseText { get; }
+        void Use(TPlayer sender);
         void Use(TPlayer sender, TThing other);
     }
 
@@ -63,22 +57,19 @@ namespace LostAndFound.Engine
         public TGame Game { get; }
         public string Name { get; init; }
         public virtual string Emoji => "";
-        public virtual bool IsVisible { get; protected set; } = true;
         public virtual bool WasMentioned { get; set; } = false;
+        public virtual bool CanBeTransfered => false;
 
-        public bool CanBeTransfered { get; init; }
-
-        public BaseThingImpl(TGame game, bool transferable = false, string name = null)
+        public BaseThingImpl(TGame game, string name = null)
         {
             this.Game = game;
             this.Name = name ?? GetType().Name;
-            this.CanBeTransfered = transferable;
         }
 
         public override string ToString()
         {
             this.WasMentioned = true;
-            return $"[{this.Emoji}{this.Name}]";
+            return Game.FormatThing(this as TThing);
         }
 
         /*
@@ -89,8 +80,16 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public virtual string LookText => OneOf($"It's {this.a} {this}", $"Nice, {this.a} {this}");
-        public virtual void Look(TPlayer sender) => sender.Reply(this.LookText);
+        public virtual string Description => OneOf(
+            $"It's {a} {this}",
+            $"Nice, {a} {this}"
+        );
+
+        public virtual void Look(TPlayer sender)
+        {
+            if (Description is not null)
+                sender.Reply(Description);
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -100,9 +99,10 @@ namespace LostAndFound.Engine
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public virtual string KickText => OneOf($"{this} was kicked.");
-        private string KickSelf => OneOf($"You kicked yourself. WFT!");
-        public virtual void Kick(TPlayer sender) => sender.Reply(this == sender ? this.KickSelf : this.KickText);
+        public virtual void Kick(TPlayer sender) =>
+            sender.Reply(
+                OneOf($"You kicked {this}.")
+            );
 
 
         /*
@@ -113,9 +113,16 @@ namespace LostAndFound.Engine
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-
-        public virtual string ListenText => OneOf($"Nothing to hear from {this}.", $"... ... ...");
-        public virtual void Listen(TPlayer sender) => sender.Reply(this.ListenText);
+        public virtual string Noises => OneOf(
+                $"Nothing to hear from {this}.",
+                $"... ... ..."
+        );
+        
+        public virtual void Listen(TPlayer sender)
+        {
+            if (Noises is not null)
+                sender.Reply(Noises);
+        }
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -125,9 +132,10 @@ namespace LostAndFound.Engine
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-
-        public virtual string OpenText => OneOf($"You can't open {this}.");
-        public virtual void Open(TPlayer sender) => sender.Reply(this.OpenText);
+        public virtual void Open(TPlayer sender) =>
+            sender.Reply(
+                OneOf($"You can't open {this}.")
+            );
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -137,9 +145,10 @@ namespace LostAndFound.Engine
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-
-        public virtual string CloseText => OneOf($"You can't close {this}.");
-        public virtual void Close(TPlayer sender) => sender.Reply(this.CloseText);
+        public virtual void Close(TPlayer sender) =>
+            sender.Reply(
+                OneOf($"You can't close {this}.")
+            );
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
@@ -149,14 +158,14 @@ namespace LostAndFound.Engine
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-
-        public virtual string TakeText => OneOf($"You can't TAKE THAT™.");
-        public virtual void Take(TPlayer sender, TThing other)
+        public void Take(TPlayer sender, TThing other)
         {
-            if (other is TContainer container)
+            if (other is not TContainer container)
+                sender.Reply(
+                    OneOf($"You can't TAKE THAT™.")
+                );
+            else 
                 TakeFrom(sender, container);
-            else
-                sender.Reply(this.TakeText);
         }
 
         public virtual void TakeFrom(TPlayer sender, TContainer container)
@@ -165,17 +174,17 @@ namespace LostAndFound.Engine
             {
                 sender.Reply(OneOf($"{this} can't be taken. How could this even work?"));
             }
-            else if (container.Inventory.Transfer(this as TThing, sender.Inventory))
+            else if (container.Transfer(this as TThing, sender))
             {
                 sender.ReplyWithState(OneOf($"You took {this} from {container}", $"Taken: {this}"));
                 if (container is TPlayer otherPlayer)
                 {
-                    sender.Room.SendText($"{sender} took {this} from {container}", sender, otherPlayer);
-                    otherPlayer.Reply($"{sender} took {this} from you");
+                    sender.Room.BroadcastMsg($"{sender} stole {this} from {container}", sender, otherPlayer);
+                    otherPlayer.Reply($"{sender} has stolen {a} {this} from you.");
                 }
                 else
                 {
-                    sender.Room.SendText($"{sender} took {this} from {container}", sender);
+                    sender.Room.BroadcastMsg($"{sender} took {this} out of {container}", sender);
                 }
             }
             else
@@ -192,42 +201,45 @@ namespace LostAndFound.Engine
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-        public virtual string PutText => $"You can't put that here.";
-        public virtual void Put(TPlayer sender, TThing other)
+        public void Put(TPlayer sender, TThing other)
         {
-            if (other is TContainer container)
-                PutInto(sender, container);
+            if (other is not TContainer container)
+                sender.Reply(
+                    OneOf($"You can't put that here.")
+                );
             else
-                sender.Reply(this.PutText);
+                container.PutIntoThis(sender, this as TThing);
         }
 
         public virtual void PutInto(TPlayer sender, TContainer container)
         {
-            if (sender.Inventory == container.Inventory || this == container)
+            if (sender == container || this == container)
             {
-                sender.Reply($"Not really.");
+                sender.Reply(
+                    OneOf($"Not really.")
+                );
             }
             else if (!container.DoesItemFit(this as TThing, out string error))
             {
                 sender.ReplyWithState(error);
             }
-            else if (sender.Inventory.Transfer(this as TThing, container.Inventory))
+            else if (sender.Transfer(this as TThing, container))
             {
                 if (container is TRoom)
                 {
                     sender.ReplyWithState($"You drop {this} in {container}");
-                    sender.Room.SendText($"{sender} dropped {this} in {container}", sender);
+                    sender.Room.BroadcastMsg($"{sender} dropped {this} in {container}", sender);
                 }
                 else if (container is TPlayer otherPlayer)
                 {
                     sender.ReplyWithState($"You give {this} to {container}");
                     otherPlayer.Reply($"{sender} gave {this} to you");
-                    sender.Room.SendText($"{sender} gave {this} to {container}", sender, otherPlayer);
+                    Game.BroadcastMsg($"{sender} gave {this} to {container}", sender, otherPlayer);
                 }
                 else
                 {
-                    sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You crammed {this} into {container}."));
-                    sender.Room.SendText($"{sender} put {this} into {container}", sender);
+                    sender.ReplyWithState(OneOf($"You put {this} into {container}", $"You packed {this} into {container}."));
+                    sender.Room.BroadcastMsg($"{sender} put {this} into {container}", sender);
                 }
             }
             else
@@ -244,8 +256,19 @@ namespace LostAndFound.Engine
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public virtual string UseText => OneOf($"That won't work.", $"Really?");
-        public virtual void Use(TPlayer sender, TThing other) => sender.Reply(this.UseText);
+        public virtual void Use(TPlayer sender) =>
+            sender.Reply(
+                 OneOf(
+                     $"That won't work.",
+                     $"Really?"
+                 ));
+
+        public virtual void Use(TPlayer sender, TThing other) =>
+            sender.Reply(
+                OneOf(
+                    $"You can't use {this} with {other}.",
+                    $"It's not a good idea to use {this} with {other}."
+                ));
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
@@ -257,7 +280,7 @@ namespace LostAndFound.Engine
         */
         protected static readonly string[] VOCALS = new[] { "A", "E", "I", "O", "U" };
         protected static string OneOf(params string[] texts) => texts.TakeOneRandom();
-        protected string a => VOCALS.Contains(Char.ToUpper(this.Name.First()).ToString()) ? "an" : "a";
-
+        protected string A => VOCALS.Contains(Char.ToUpper(this.Name.First()).ToString()) ? "An" : "A";
+        protected string a => A.ToLowerInvariant();
     }
 }

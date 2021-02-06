@@ -22,15 +22,15 @@ namespace LostAndFound.Engine
         Task ShowRoom(TRoom room);
         Task HideRoom(TRoom room);
 
+        string FormatThing(TThing thing);
+
         void Mute(TPlayer player);
         void Unmute(TPlayer player);
 
-        bool SendReplyTo(TPlayer player, string msg);
-        bool SendImageTo(TPlayer player, string msg);
-        bool SendSpeechTo(TPlayer player, string msg);
+        void SendReplyTo(TPlayer player, string msg);
+        void SendImageTo(TPlayer player, string msg);
+        void SendSpeechTo(TPlayer player, string msg);
 
         void MovePlayerTo(TPlayer player, TRoom room);
     }
-
-
 }

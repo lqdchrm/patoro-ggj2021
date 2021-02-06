@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace LostAndFound.Engine
 {
-
     public interface BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>
         : BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -19,21 +18,21 @@ namespace LostAndFound.Engine
 
         string StatusText { get; }
 
-        public TThing ThingPlayerIsUsingAndHasToStop { get; set; }
+        TThing ThingPlayerIsUsingAndHasToStop { get; set; }
 
         void Mute();
 
         void Unmute();
 
-        bool Reply(string msg);
+        void Reply(string msg);
 
-        bool ReplyWithState(string msg);
+        void ReplyWithState(string msg);
 
-        bool ReplyImage(string msg);
+        void ReplyImage(string msg);
 
-        bool ReplySpeach(string msg);
+        void Say(string msg);
 
-        public void MoveTo(TRoom room);
+        void MoveTo(TRoom room);
     }
 
     public abstract class BasePlayerImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -49,7 +48,7 @@ namespace LostAndFound.Engine
 
         public override string Emoji => this.emoji;
 
-        public BasePlayerImpl(TGame game, string name) : base(game, false, false, name)
+        public BasePlayerImpl(TGame game, string name) : base(game, name)
         {
             this.emoji = Emojis.Players.TakeOneRandom();
             this.WasMentioned = true;
@@ -77,11 +76,11 @@ namespace LostAndFound.Engine
                 {
                     if (this.thingPlayerIsUsingAndHasToStop != null && value == null)
                     {
-                        this.Room.SendText($"{this} stopped using {this.thingPlayerIsUsingAndHasToStop}", self);
+                        this.Room.BroadcastMsg($"{this} stopped using {this.thingPlayerIsUsingAndHasToStop}", self);
                     }
                     else if (value != null && this.thingPlayerIsUsingAndHasToStop != value)
                     {
-                        this.Room.SendText($"{this} started using {value}", self);
+                        this.Room.BroadcastMsg($"{this} started using {value}", self);
                     }
                     this.thingPlayerIsUsingAndHasToStop = value;
                 }
@@ -96,9 +95,6 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookInventoryText => "\nBackpack:\n\t" + string.Join("\n\t", this.Inventory.Select(i => i.ToString()));
-        public virtual string LookStatus => this.StatusText;
-        public override string LookText => $"{this.LookTextHeader}{this.LookInventoryText}\n{this.LookStatus}";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -108,7 +104,6 @@ namespace LostAndFound.Engine
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -178,45 +173,12 @@ namespace LostAndFound.Engine
 
         public void MoveTo(TRoom room) => Game.MovePlayerTo(this as TPlayer, room);
 
-        public bool Reply(string msg) => Game.SendReplyTo(this as TPlayer, msg);
-        //{
-        //    msg = $"```css\n{msg}```";
-        //    this._Channel?.SendMessageAsync(msg);
-        //    return true;
-        //}
+        public void Reply(string msg) => Game.SendMsgTo(this as TPlayer, msg);
 
-        public bool ReplyWithState(string msg) => Game.SendReplyWithStateTo(this as TPlayer, msg);
-        //{
-        //    msg = $"```css\n{msg}\nYour Status: {this.StatusText}```";
-        //    this._Channel?.SendMessageAsync(msg);
-        //    return true;
-        //}
+        public void ReplyWithState(string msg) => Game.SendMsgWithStateTo(this as TPlayer, msg);
 
-        public bool ReplyImage(string msg) => Game.SendImageTo(this as TPlayer, msg);
-        //{
-        //    msg = $"```\n{msg}\n```";
-        //    this._Channel?.SendMessageAsync(msg);
-        //    return true;
-        //}
+        public void ReplyImage(string msg) => Game.SendImageTo(this as TPlayer, msg);
 
-        public bool ReplySpeach(string msg) => Game.SendSpeechTo(this as TPlayer, msg);
-        //{
-        //    this._Channel?.SendMessageAsync(msg, true);
-        //    return true;
-        //}
-
-        /// <summary>
-        /// TODO: check if needed
-        /// </summary>
-        /// <param name="room"></param>
-        /// <returns></returns>
-        //public virtual async Task MoveTo(BaseRoom room)
-        //{
-        //    var oldChanel = this.Room.VoiceChannel;
-        //    await room.VoiceChannel.AddOverwriteAsync(this.User, DSharpPlus.Permissions.AccessChannels);
-        //    await room.VoiceChannel.PlaceMemberAsync(this.User);
-        //    await oldChanel.AddOverwriteAsync(this.User, deny: DSharpPlus.Permissions.AccessChannels);
-
-        //}
+        public void Say(string msg) => Game.SendSpeechTo(this as TPlayer, msg);
     }
 }

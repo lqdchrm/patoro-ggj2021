@@ -181,6 +181,8 @@ namespace LostAndFound.Engine.Discord
             return player;
         }
 
+        public string FormatThing(TThing thing) => $"[{thing.Emoji}{thing.Name}]";
+
         public async Task ShowRoom(TRoom room)
         {
             if (_RoomNameToVoiceChannels.TryGetValue(room.Name, out DiscordChannel channel))
@@ -221,36 +223,30 @@ namespace LostAndFound.Engine.Discord
             }
         }
 
-        public bool SendReplyTo(TPlayer player, string msg)
+        public void SendReplyTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 msg = $"```css\n{msg}```";
                 channel.SendMessageAsync(msg);
-                return true;
             }
-            return false;
         }
 
-        public bool SendImageTo(TPlayer player, string msg)
+        public void SendImageTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 msg = $"```\n{msg}\n```";
                 channel.SendMessageAsync(msg);
-                return true;
             }
-            return false;
         }
 
-        public bool SendSpeechTo(TPlayer player, string msg)
+        public void SendSpeechTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 channel.SendMessageAsync(msg, true);
-                return true;
             }
-            return false;
         }
 
         public void MovePlayerTo(TPlayer player, TRoom room)

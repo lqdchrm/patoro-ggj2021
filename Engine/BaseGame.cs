@@ -16,26 +16,29 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        public string Name { get; }
+        string Name { get; }
 
-        public IReadOnlyDictionary<string, TRoom> Rooms { get; }
-        public IReadOnlyDictionary<string, TPlayer> Players { get; }
+        IReadOnlyDictionary<string, TRoom> Rooms { get; }
+        IReadOnlyDictionary<string, TPlayer> Players { get; }
 
-        public void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom);
-        public void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd);
-        public TPlayer CreateAndAddPlayer(string name);
+        void RaisePlayerChangedRoom(TPlayer player, TRoom oldRoom);
+        void RaiseCommand(BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> cmd);
+        TPlayer CreateAndAddPlayer(string name);
 
-        public void Say(string msg, bool alsoInDefaultChannel = false);
-
+        #region Engine delegation
+        string FormatThing(TThing thing);
         Task ShowRoom(TRoom room);
         Task HideRoom(TRoom room);
         void Mute(TPlayer player);
         void Unmute(TPlayer player);
-        bool SendReplyTo(TPlayer player, string msg);
-        bool SendReplyWithStateTo(TPlayer player, string msg);
-        bool SendImageTo(TPlayer player, string msg);
-        bool SendSpeechTo(TPlayer player, string msg);
-        public void MovePlayerTo(TPlayer player, TRoom room);
+        void Say(string msg);
+        void BroadcastMsg(string msg, params TPlayer[] excluded);
+        void SendMsgTo(TPlayer player, string msg);
+        void SendMsgWithStateTo(TPlayer player, string msg);
+        void SendImageTo(TPlayer player, string msg);
+        void SendSpeechTo(TPlayer player, string msg);
+        void MovePlayerTo(TPlayer player, TRoom room);
+        #endregion
     }
 
     public abstract class BaseGameImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -73,6 +76,7 @@ namespace LostAndFound.Engine
             this.Engine.Game = this;
         }
 
+        #region Init
         public async Task StartAsync()
         {
             await Engine.PrepareEngine();
@@ -81,36 +85,48 @@ namespace LostAndFound.Engine
         }
 
         public abstract Task InitAsync();
+        #endregion 
 
+        #region Engine delegation
+        public string FormatThing(TThing thing) => Engine.FormatThing(thing);
         public Task ShowRoom(TRoom room) => Engine.ShowRoom(room);
         public Task HideRoom(TRoom room) => Engine.HideRoom(room);
-
         public void Mute(TPlayer player) => Engine.Mute(player);
         public void Unmute(TPlayer player) => Engine.Unmute(player);
-        public bool SendReplyTo(TPlayer player, string msg) => Engine.SendReplyTo(player, msg);
-        public bool SendReplyWithStateTo(TPlayer player, string msg) => SendReplyTo(player, $"{msg}\n{player.StatusText}");
-        public bool SendImageTo(TPlayer player, string msg) => Engine.SendImageTo(player, msg);
-        public bool SendSpeechTo(TPlayer player, string msg) => Engine.SendSpeechTo(player, msg);
+        public void SendMsgTo(TPlayer player, string msg) => Engine.SendReplyTo(player, msg);
+        public void SendMsgWithStateTo(TPlayer player, string msg) => SendMsgTo(player, $"{msg}\n{player.StatusText}");
+        public void SendImageTo(TPlayer player, string msg) => Engine.SendImageTo(player, msg);
+        public void SendSpeechTo(TPlayer player, string msg) => Engine.SendSpeechTo(player, msg);
         public void MovePlayerTo(TPlayer player, TRoom room) { player.Room = room; Engine.MovePlayerTo(player, room); }
+        #endregion
 
-        public void Say(string msg, bool alsoInDefaultChannel = false)
+        public void Say(string msg)
         {
-            var rooms = this.Rooms.Values.ToList();
             Task.Run(async () =>
             {
-                foreach (var room in rooms)
+                foreach (var player in Players.Values)
                 {
-                    room.Say(msg);
-                    await Task.Delay(150);
+                    player.Say(msg);
+                    await Task.Delay(50);
                 }
             });
-
-            //if (alsoInDefaultChannel)
-            //    this._Guild.GetDefaultChannel().SendMessageAsync(msg, true);
         }
 
+        public void BroadcastMsg(string msg, params TPlayer[] excluded)
+        {
+            Task.Run(async () =>
+            {
+                foreach (var player in Players.Values.Except(excluded))
+                {
+                    player.Reply(msg);
+                    await Task.Delay(50);
+                }
+            });
+        }
 
-        protected Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
+    #region Room
+
+    protected Dictionary<string, TRoom> _Rooms = new Dictionary<string, TRoom>();
         public IReadOnlyDictionary<string, TRoom> Rooms => _Rooms;
 
         public virtual async Task<TRoomCurrent> AddRoomAsync<TRoomCurrent>(TRoomCurrent room, bool visible)
@@ -131,45 +147,38 @@ namespace LostAndFound.Engine
 
             return room;
         }
+        #endregion
 
+
+        #region Player
 
         protected Dictionary<string, TPlayer> _Players = new Dictionary<string, TPlayer>();
 
         public IReadOnlyDictionary<string, TPlayer> Players => _Players;
 
         public abstract TPlayer CreateAndAddPlayer(string name);
+        
+        #endregion
 
-
-        /// <summary>
-        /// search for a thing
-        /// 
-        /// first search in player's inventory
-        /// then search room's inventory
-        /// then search player by name
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="token"></param>
-        /// <returns></returns>
         public TThing GetThing(TPlayer sender, string token, TContainer other = default, bool showHelp = false)
         {
             bool helpCalculated = false;
             if (token is null) return default;
 
             // find in inventory
-            if (sender.Inventory.TryFind(token, out TThing item)) return item;
+            if (sender.TryFind(token, out TThing item)) return item;
 
             // find in room
-            if (sender.Room.Inventory.TryFind(token, out item)) return item;
+            if (sender.Room.TryFind(token, out item)) return item;
 
             // find in other inventory
-            if (other?.Inventory.TryFind(token, out item) ?? false) return item;
+            if (other?.TryFind(token, out item) ?? false) return item;
 
             // find in all containers in room to show some help
             if (showHelp)
             {
-                var containerContainingToken = sender.Room?.Inventory.OfType<TContainer>()
-                    .FirstOrDefault(c => c.Inventory.Any(i => i.Name.ToLowerInvariant().Equals(token?.ToLowerInvariant())));
+                var containerContainingToken = sender.Room?.OfType<TContainer>()
+                    .FirstOrDefault(c => c.Any(i => i.Name.ToLowerInvariant().Equals(token?.ToLowerInvariant())));
                 if (containerContainingToken != null)
                 {
                     sender.Reply($"There is no {token} here. Maybe you should try it with {containerContainingToken}."); // first thing not found
@@ -204,10 +213,10 @@ namespace LostAndFound.Engine
             // show possible solutions
             if (!helpCalculated && showHelp)
             {
-                var available = sender.Inventory.ToDictionary(i => i.Name);                     // own inventory
+                var available = sender.ToDictionary(i => i.Name);                     // own inventory
                 if (other is not null)                                                          // other inventory
-                    available = available.Merge(other.Inventory.ToDictionary(i => i.Name));
-                available = available.Merge(sender.Room.Inventory.ToDictionary(i => i.Name));   // room inventory
+                    available = available.Merge(other.ToDictionary(i => i.Name));
+                available = available.Merge(sender.Room.ToDictionary(i => i.Name));   // room inventory
                 available = available.Merge(sender.Room.Players.ToDictionary(_ => _.NormalizedName));    // player names
 
                 var distances = available.Keys.Select(key => (key, value: token.Levenshtein(key)));
@@ -239,13 +248,6 @@ namespace LostAndFound.Engine
                 disposedValue = true;
             }
         }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~BaseGameImpl()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

@@ -15,18 +15,17 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        public string RoomNumber { get; }
-        public IEnumerable<TPlayer> Players { get; }
+        string RoomNumber { get; }
+        IEnumerable<TPlayer> Players { get; }
 
-        public void SendText(string msg, IEnumerable<TPlayer> excludedPlayers);
-        public void SendText(string msg, params TPlayer[] excludedPlayers);
+        void BroadcastMsg(string msg, IEnumerable<TPlayer> excludedPlayers);
+        void BroadcastMsg(string msg, params TPlayer[] excludedPlayers);
 
-        public void Say(string msg, IEnumerable<TPlayer> excludedPlayers);
-        public void Say(string msg, params TPlayer[] excludedPlayers);
+        void Say(string msg);
 
-        public Task Show(bool silent = false);
-
-        public Task Hide(bool silent = false);
+        bool IsVisible { get; }
+        Task Show(bool silent = false);
+        Task Hide(bool silent = false);
     }
 
     public abstract class BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>
@@ -37,35 +36,28 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        // private DiscordChannel _VoiceChannel { get; set; }
-
         public string RoomNumber { get; init; }
+        public IEnumerable<TPlayer> Players => this.Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
+        public bool IsVisible { get; private set; }
+        public override bool CanAcceptNonTransferables => true;
 
-        public BaseRoomImpl(TGame game, string roomNumber, string name = null) : base(game, false, true, name)
+        public BaseRoomImpl(TGame game, string roomNumber, string name = null) : base(game, name)
         {
             this.RoomNumber = roomNumber;
             this.WasMentioned = true;
         }
 
-        public void SendText(string msg, params TPlayer[] excludedPlayers) => SendText(msg, excludedPlayers as IEnumerable<TPlayer>);
-        public void SendText(string msg, IEnumerable<TPlayer> excludedPlayers)
-        {
-            Send(msg, false, excludedPlayers);
-        }
+        public void BroadcastMsg(string msg, params TPlayer[] excludedPlayers) => BroadcastMsg(msg, excludedPlayers as IEnumerable<TPlayer>);
+        public void BroadcastMsg(string msg, IEnumerable<TPlayer> excludedPlayers) => Send(msg, false, excludedPlayers);
 
-        public void Say(string msg, params TPlayer[] excludedPlayers) => Say(msg, excludedPlayers as IEnumerable<TPlayer>);
-        public void Say(string msg, IEnumerable<TPlayer> excludedPlayers)
-        {
-            msg = $"{msg}";
-            Send(msg, true, excludedPlayers);
-        }
+        public void Say(string msg) => Send(msg, true, Array.Empty<TPlayer>());
 
         private void Send(string msg, bool tts, IEnumerable<TPlayer> excludedPlayers)
         {
             foreach (var player in this.Players.Where(p => !excludedPlayers.Contains(p)))
             {
                 if (tts)
-                    player.ReplySpeach(msg);
+                    player.Say(msg);
                 else
                     player.Reply(msg);
             }
@@ -79,7 +71,6 @@ namespace LostAndFound.Engine
         ███████║   ██║   ██║  ██║   ██║   ███████╗
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
-        public IEnumerable<TPlayer> Players => this.Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
 
         public async Task Show(bool silent = false)
         {
@@ -89,7 +80,7 @@ namespace LostAndFound.Engine
                 await Game.ShowRoom(this as TRoom);
 
                 if (!silent)
-                    this.Game.Say($"The new Room {this.Name} has appeared. You can switch Voice channels now.");
+                    this.Game.Say($"Door opened.");
             }
         }
 
@@ -110,16 +101,7 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public virtual string LookIntroText(TPlayer sender) => $"You are at {this}.";
-        public override string LookInventoryText => string.Join(", ", this.Inventory.Where(i => i.CanBeTransfered));
-
-        public override void Look(TPlayer sender)
-        {
-            var intro = LookIntroText(sender);
-            var content = this.LookInventoryText;
-
-            sender.ReplyWithState($"{intro}\n{content}\n");
-        }
+        public override string Description => $"This is the {this}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -129,7 +111,6 @@ namespace LostAndFound.Engine
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => OneOf($"You kicked into thin air.");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
