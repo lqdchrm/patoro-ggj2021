@@ -28,7 +28,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"The hamster has some barcode printed on its belly.";
+        public override string Description => $"The hamster has some barcode printed on its belly.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -38,8 +38,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-
-        public override string KickText => $"The {this} looks at you with big sad eys. You can't kick it...";
+        public override void Kick(IPlayer sender)
+        {
+            sender.Reply($"The {this} looks at you with big sad eys. You can't kick it...");
+            Game.BroadcastMsg($"{sender} tried to kick the {this}. Shame shame shame...", sender);
+        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -49,7 +52,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => "Its heart beats fast.";
+        public override string Noises => "Its heart beats fast.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -97,12 +100,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is Croc croc)
+            if (other is IContainer container)
             {
-                croc.RefuseToEatHamster(sender, this);
-            } else if (other is Scanner scanner)
-            {
-                scanner.ScanHamster(sender, this);
+                container.Use(sender, this);
             } else
             {
                 base.Use(sender, other);

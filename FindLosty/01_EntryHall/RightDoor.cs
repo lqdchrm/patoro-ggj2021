@@ -18,7 +18,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => this.IsOpen
+        public override string Description => this.IsOpen
             ? DoorImage
             : this.Game.EntryHall.Croc.IsNapping
                 ? this.Game.EntryHall.Croc.CrocSleepImage
@@ -34,9 +34,13 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => this.IsOpen
-            ? $"Do not disturb the {this.Game.EntryHall.Croc}"
-            : base.KickText;
+        public override void Kick(IPlayer sender)
+        {
+            if (this.IsOpen)
+                sender.Reply($"Do not disturb the {this.Game.EntryHall.Croc}");
+            else
+                base.Kick(sender);
+        }
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -46,10 +50,16 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-
-        public override string ListenText => this.IsOpen
-            ? base.ListenText
-            : "You hear something breatihg";
+        public override void Listen(IPlayer sender)
+        {
+            if (IsOpen)
+            {
+                sender.Reply("You hear something breathing.");
+            } else
+            {
+                base.Listen(sender);
+            }
+        }
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -61,11 +71,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override void Open(IPlayer sender)
         {
-
             if (!this.IsOpen)
             {
                 sender.Reply(DoorImage);
-                sender.Room.SendText($"{sender} opens the {this}...startling.", sender);
+                sender.Room.BroadcastMsg($"{sender} opens the {this}...startling.", sender);
                 sender.Reply($"You open the door and look into the eyes of an hungry {this.Game.EntryHall.Croc}");
                 this.IsOpen = true;
             }
@@ -121,8 +130,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
                     You smash the {this}.
                     It is safe now. Is it?"
                     .FormatMultiline());
-                sender.Room.SendText($"{sender} closes the {this} with a smash.", sender);
-                this.Game.DiningRoom.SendText($"You hear a loud bang from the {this.Game.EntryHall}.");
+                sender.Room.BroadcastMsg($"{sender} closes the {this} with a smash.", sender);
+                this.Game.DiningRoom.BroadcastMsg($"You hear a loud bang from the {this.Game.EntryHall}.");
                 this.IsOpen = false;
                 this.Game.EntryHall.Croc.WasMentioned = false;
             }

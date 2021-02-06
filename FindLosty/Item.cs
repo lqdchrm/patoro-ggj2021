@@ -2,7 +2,8 @@
 {
     public abstract class Item : Thing
     {
-        public Item(FindLostyGame game) : this(game, null) { }
-        public Item(FindLostyGame game, string name) : base(game, true, name) { }
+        public override bool CanBeTransfered => true;
+
+        public Item(FindLostyGame game, string name = null) : base(game, name) { }
     }
 }

@@ -8,11 +8,12 @@ namespace LostAndFound.Engine
     public static partial class Emojis
     {
         public static readonly string[] Players = //new[] { string.Join("",
-            new[] { "👮‍", "🕵", "💂‍", "👷‍", "🧛‍", "🦸‍", "🧟‍", "🧚‍", "🦹‍" }
+            new[] { "‍👮", "🕵", "💂", "👷", "🧛", "🦸", "🧟", "🧚", "🦹" }
             //) }
         ;
 
         public const string Heart = "💖";
+        public const string EmptyHeart = "🖤";
         public const string Keys = "🔑";
         public const string Hamster = "🐹";
         public const string Poo = "💩";
@@ -38,7 +39,15 @@ namespace LostAndFound.Engine
         public const string Microwave = "♨";
         public const string Powercord = "🔌";
         public const string Fridge = "❄";
+        public const string LowFire = "🏮";
         public const string Firepit = "🔥";
         public const string Book = "📘";
+        public const string Dog = "🐶";
+        public const string Shelves = "📚";
+        public const string Sofa = "🛋";
+        public const string Lion = "🦁";
+        public const string Chimney = "🕋";
+        public const string GunLocker = "🗄️";
+        public const string PinPad = "📠";
     }
 }

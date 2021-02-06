@@ -37,7 +37,8 @@ namespace LostAndFound.FindLosty
         public Cellar Cellar { get; init; }
 
         public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild) => new FindLostyGame(name, new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
-        public static FindLostyGame Terminal() => new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>());
+        public static FindLostyGame Terminal(string mode) =>
+         new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode));
 
         private FindLostyGame(string name, BaseEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> engine) : base(name, engine)
         {
@@ -59,10 +60,6 @@ namespace LostAndFound.FindLosty
 
         public override async Task InitAsync()
         {
-#if DEBUG
-            PlayerChangedRoom += LogRoomChange;
-            CommandSent += LogEvent;
-#endif
             PlayerChangedRoom += OnPlayerChangedRoom;
             CommandSent += OnPlayerCommandSent;
 
@@ -73,10 +70,6 @@ namespace LostAndFound.FindLosty
             await AddRoomAsync(this.Kitchen, false);
             await AddRoomAsync(this.Cellar, false);
         }
-
-        private void LogRoomChange(object sender, PlayerRoomChange<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[ROOMS] {e}");
-
-        private void LogEvent(object sender, BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> e) => Console.WriteLine($"[COMMAND] {e}");
 
         private void ReportUnknown(IPlayer sender, string token, IThing other)
         {
@@ -102,7 +95,7 @@ namespace LostAndFound.FindLosty
 
             var room = player.Room;
             var other = GetThing(player, second);
-            var thing = GetThing(player, first, other as IContainer);
+            var thing = GetThing(player, first, other as IContainer) ?? GetThing(player, prepo);
 
             // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
@@ -154,7 +147,7 @@ namespace LostAndFound.FindLosty
                     {
                         if (other is not null) thing.Take(player, other);                       // two things
                         else if (second is not null) ReportUnknown(player, second, other);      // second thing not found
-                        else if (player.Inventory.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
+                        else if (player.Contains(thing)) player.Reply($"You already have {thing}");   // in own inventory
                         else thing.Take(player, room);                                          // one thing => try to take it from room
                     }
                     else if (first is not null) ReportUnknown(player, first, other);            // first thing not found
@@ -181,7 +174,7 @@ namespace LostAndFound.FindLosty
                         else if (thing is PinPad pinpad && second is string) pinpad.Use(player, second);
                         else if (thing is Phone phone && second is string) phone.Use(player, second);
                         else if (second is not null) ReportUnknown(player, second, other);  // second thing not found
-                        else thing.Use(player, null);                                       // one thing
+                        else thing.Use(player);                                             // one thing
                     }
                     else if (first is not null) ReportUnknown(player, first, other);                                    // first thing not found
                     else player.Reply("What do you want to use? Please use eg. use item or use hamster with cage");     // no args
@@ -288,28 +281,25 @@ namespace LostAndFound.FindLosty
                 // drop things if leaving game
                 if (newRoom is null)
                 {
-                    var stuff = e.Player.Inventory.ToList();
+                    var stuff = e.Player.ToList();
                     foreach (var item in stuff)
-                        e.Player.Inventory.Transfer(item, oldRoom.Inventory);
+                        e.Player.Transfer(item, oldRoom);
 
                     e.Player.Room = oldRoom;
                     e.Player?.Reply($"You left your stuff in {oldRoom}.");
                     e.Player.Room = newRoom;
 
-                    oldRoom.SendText($"{e.Player} dropped {string.Join(", ", stuff)}.", e.Player);
+                    oldRoom.Game.BroadcastMsg($"{e.Player} left {oldRoom} and dropped {string.Join(", ", stuff)}.", e.Player);
+                } else
+                {
+                    oldRoom.BroadcastMsg($"{e.Player} left {oldRoom}", e.Player);
                 }
-
-                e.Player.Room = oldRoom;
-                e.Player?.Reply($"You left {oldRoom}");
-                e.Player.Room = newRoom;
-
-                oldRoom.SendText($"{e.Player} left {oldRoom}", e.Player);
             }
 
             if (newRoom != null)
             {
-                e.Player?.ReplyWithState($"You entered {e.Player.Room}");
-                newRoom.SendText($"{e.Player} entered {e.Player.Room}", e.Player);
+                newRoom.BroadcastMsg($"{e.Player} entered {e.Player.Room}", e.Player);
+                RaiseCommand(new BaseCommand<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(e.Player, "look"));
             }
         }
     }

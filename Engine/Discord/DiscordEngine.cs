@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LostAndFound.Engine.Events;
 
 namespace LostAndFound.Engine.Discord
 {
@@ -46,7 +47,17 @@ namespace LostAndFound.Engine.Discord
                 _ = member.ModifyAsync(x => x.Nickname = "GameMaster");
         }
 
-        public Task StartEngine() => Task.CompletedTask;
+        public Task StartEngine()
+        {
+            Game.PlayerChangedRoom += LogRoomChange;
+            Game.CommandSent += LogEvent;
+            return Task.CompletedTask;
+        }
+
+        private void LogRoomChange(object sender, PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing> e) => Console.WriteLine($"[ROOMS] {e}");
+
+        private void LogEvent(object sender, BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing> e) => Console.WriteLine($"[COMMAND] {e}");
+
 
         private async Task CleanupAsync()
         {
@@ -181,6 +192,8 @@ namespace LostAndFound.Engine.Discord
             return player;
         }
 
+        public string FormatThing(TThing thing) => $"[{thing.Emoji}{thing.Name}]";
+
         public async Task ShowRoom(TRoom room)
         {
             if (_RoomNameToVoiceChannels.TryGetValue(room.Name, out DiscordChannel channel))
@@ -221,43 +234,37 @@ namespace LostAndFound.Engine.Discord
             }
         }
 
-        public bool SendReplyTo(TPlayer player, string msg)
+        public void SendReplyTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 msg = $"```css\n{msg}```";
                 channel.SendMessageAsync(msg);
-                return true;
             }
-            return false;
         }
 
-        public bool SendImageTo(TPlayer player, string msg)
+        public void SendImageTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 msg = $"```\n{msg}\n```";
                 channel.SendMessageAsync(msg);
-                return true;
             }
-            return false;
         }
 
-        public bool SendSpeechTo(TPlayer player, string msg)
+        public void SendSpeechTo(TPlayer player, string msg)
         {
             if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel))
             {
                 channel.SendMessageAsync(msg, true);
-                return true;
             }
-            return false;
         }
 
         public void MovePlayerTo(TPlayer player, TRoom room)
         {
-            if (room is BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> romImp)
+            if (room is BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing> roomImpl)
             {
-                if (_PlayerNameToDiscordChannel.TryGetValue(player.NormalizedName, out DiscordChannel channel)
+                if (_RoomNameToVoiceChannels.TryGetValue(roomImpl.Name, out DiscordChannel channel)
                     && _PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
                     channel.PlaceMemberAsync(member);
             }

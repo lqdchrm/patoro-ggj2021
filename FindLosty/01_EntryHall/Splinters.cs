@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A bunch of {this}. They are fairly dry.";
+        public override string Description => $"A bunch of {this}. They are fairly dry.";
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
         ██║ ██╔╝██║██╔════╝██║ ██╔╝
@@ -38,7 +38,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override string KickText => $"You kick the {this} on the floor. Nothing happens.";
+        public override void Kick(IPlayer sender) => sender.Reply($"You kick the {this} on the floor. Nothing happens.");
 
 
         /*
@@ -98,8 +98,9 @@ namespace LostAndFound.FindLosty._01_EntryHall
         {
             if (other is null)
             {
-                sender.Reply("You play with the splinters. One gets stuck in your finger.");
-                sender.Room.SendText($"{sender} has a splinter in this finger now.", sender);
+                sender.Hit();
+                sender.ReplyWithState("You play with the splinters. One gets stuck in your finger.");
+                sender.Room.BroadcastMsg($"{sender} has a splinter in this finger now.", sender);
             } else if (other is FirePit firepit)
             {
                 firepit.BurnSplinters(sender, this);

@@ -1,5 +1,7 @@
 bin/
 obj/
+logs/
 .vs/
 .env
 *.csproj.user
+*.stackdump

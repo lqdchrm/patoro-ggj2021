@@ -4,14 +4,14 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 {
     public class Cage : Container
     {
-
         public override string Emoji => Emojis.Cage;
+
         public readonly Hamster Hamster;
 
         public Cage(FindLostyGame game) : base(game)
         {
             this.Hamster = new Hamster(game);
-            this.Inventory.InitialAdd(this.Hamster);
+            this.Add(this.Hamster);
         }
 
         /*
@@ -23,7 +23,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
 
-        private bool HasHamster => this.Inventory.Has(this.Hamster, false);
+        private bool HasHamster => Has(Hamster, false);
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -33,15 +33,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookTextHeader
-        {
-            get
-            {
-                return this.Inventory.TryFind("hamster", out IThing hamster, false, false)
-                    ? $"Awwwwww... there's a {hamster} in there."
-                    : $"There used to be a hamster in here.";
-            }
-        }
+        public override string Description =>
+            TryFind("hamster", out IThing hamster, false, false)
+                ? $"Awwwwww... there's a {hamster} in there."
+                : $"There used to be a hamster in here.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -61,7 +56,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string ListenText => this.HasHamster ? $"You hear something squeak." : base.ListenText;
+        public override string Noises => this.HasHamster ? $"You hear something squeak." : "Silence";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗

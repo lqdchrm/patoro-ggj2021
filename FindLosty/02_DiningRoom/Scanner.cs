@@ -3,7 +3,7 @@ using LostAndFound.FindLosty._00_FrontYard;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
-    public class Scanner : Thing
+    public class Scanner : Container
     {
         public override string Emoji => Emojis.Scanner;
 
@@ -28,7 +28,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => $"A green pulsing light is emitted from the {this} and shines on everything you hold in front of it. You probably need a barcode to use it.";
+        public override string Description =>
+            $"A green pulsing light is emitted from the {this} and shines on everything you hold in front of it. You probably need a barcode to use it.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -41,8 +42,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 
         public override void Kick(IPlayer sender)
         {
-            sender.Reply($"You Kick against {this}. But is a sturdy case.");
-            sender.Room.SendText($"Raging {sender} kicks against the {this}", sender);
+            sender.Reply($"You Kick against {this}. But it has a sturdy case.");
+            sender.Room.BroadcastMsg($"Raging {sender} kicks against the {this}", sender);
         }
 
         /*
@@ -62,7 +63,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override string OpenText => $"You can't open the {this} without tools.";
+        public override void Open(IPlayer sender) => sender.Reply($"You can't open the {this} without tools.");
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -81,8 +82,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
-
-        public override string TakeText => "It is secured in the wall. You don't think you can take this.";
+        public override bool DoesItemFit(IThing thing, out string error) { error = ""; return false; }
+        public override void TakeFrom(IPlayer sender, IContainer container) => sender.Reply($"It is secured in the wall. You don't think you can take this.");
 
         /*
         ██████╗ ██╗   ██╗████████╗
@@ -108,7 +109,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             {
                 ScanHamster(sender, hamster);
             }
-            else if (other is _00_FrontYard.Poo poo)
+            else if (other is Poo poo)
             {
                 ScanPoo(sender, poo);
             }
@@ -120,13 +121,13 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         {
             if (this.Game.DiningRoom.Door.IsOpen)
             {
-                sender.Reply($"You hold the {hamster} in front of the {this}. A short beep sounds.");
-                sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep sounds.", sender);
+                sender.Reply($"You hold the {hamster} in front of the {this}. A short beep can be heard.");
+                Game.BroadcastMsg($"{sender} holds the {hamster} in front of the {this}. A short beep can be heard.", sender);
             }
             else
             {
-                sender.Reply($"You hold the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.");
-                sender.Room.SendText($"{sender} holds the {hamster} in front of the {this}. A short beep. and the {this.Game.DiningRoom.Door} jumps open.", sender);
+                sender.Reply($"You hold the {hamster} in front of the {this}. A short beep, and the {this.Game.DiningRoom.Door} jumps open.");
+                Game.BroadcastMsg($"{sender} holds the {hamster} in front of the {this}. A short beep, and the {this.Game.DiningRoom.Door} jumps open.", sender);
                 this.Game.DiningRoom.Door.Unlock();
             }
         }
@@ -134,7 +135,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public void ScanPoo(IPlayer sender, Poo poo)
         {
             sender.Reply($"You hold the {poo} into the green light. It shimmers green.");
-            sender.Room.SendText($"{sender} does something strange with the {this}. Maybe leave him alone for now?", sender);
+            sender.Room.BroadcastMsg($"{sender} does something strange with the {this}. Maybe leave him alone for now?", sender);
         }
 
         /*

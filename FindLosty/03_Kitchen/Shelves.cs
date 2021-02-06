@@ -1,13 +1,16 @@
-﻿namespace LostAndFound.FindLosty._03_Kitchen
+﻿using LostAndFound.Engine;
+namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Shelves : Container
     {
+
+        public override string Emoji => Emojis.Shelves;
         public Book Book;
 
-        public Shelves(FindLostyGame game) : base(game, false, "Shelves")
+        public Shelves(FindLostyGame game) : base(game)
         {
             Book = new Book(game);
-            this.Inventory.InitialAdd(Book);
+            Add(Book);
         }
 
         /*
@@ -27,7 +30,7 @@
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => OneOf($"Such a beautiful shelf.", "This is the best shelf ever.");
+        public override string Description => OneOf($"Such a beautiful shelf.", "This is the best shelf ever.");
 
 
         /*
@@ -93,8 +96,6 @@
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override string UseText => $"YOU JUST USED ME. POLICE. {LookText}";
-
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗

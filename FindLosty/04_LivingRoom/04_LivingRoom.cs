@@ -19,7 +19,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             this.GunLocker = new GunLocker(game);
             this.PinPad = new PinPad(game);
 
-            this.Inventory.InitialAdd(this.Sofa, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
+            this.Add(this.Sofa, this.Chimney, this.LionHead, this.GunLocker, this.PinPad);
         }
 
         /*
@@ -40,9 +40,9 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookIntroText(IPlayer sender) => @$"
-            You look around in the big living room. The croc is sitting next the door. A big {this.Sofa} stands on an bright red carpet.
-            Opposite the seating area is an old {this.Chimney}. Beneath a {this.LionHead}, that hangs next to the {this.Chimney} is a metal {this.GunLocker}."
+        public override string Description => @$"
+            You look around in the big living room. The croc is sitting next the door. A big {Sofa} stands on an bright red carpet.
+            Opposing the seating area is an old {Chimney}. Beneath a {LionHead} hanging next to the {Chimney} is a metal {GunLocker}."
             .FormatMultiline();
 
         /*

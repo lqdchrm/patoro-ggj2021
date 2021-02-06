@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "coenraads.bracket-pair-colorizer",
+        "ms-dotnettools.csharp",
+        "bitbelt.converttoasciiart",
+        "editorconfig.editorconfig",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "spmeesseman.vscode-taskexplorer",
+        "actboy168.tasks",
+        "vscode-icons-team.vscode-icons"
+    ]
+}

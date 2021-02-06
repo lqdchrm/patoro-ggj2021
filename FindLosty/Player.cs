@@ -8,23 +8,13 @@ namespace LostAndFound.FindLosty
     {
         bool OmniPotentPowerOfShelf {get; set;}
         int Health { get; set; }
-        bool Hit(string by = null, IPlayer byPlayer = null, int damage = 1);
-        bool Heal(string by = null, IPlayer byPlayer = null);
+        bool Hit(int damage = 1);
     }
 
     public class Player : BasePlayerImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IPlayer
     {
         public Player(FindLostyGame game, string name) : base(game, name) { }
 
-        private bool omniPotentPowerOfShelf = false;
-
-        public bool OmniPotentPowerOfShelf {
-            get => this.omniPotentPowerOfShelf;
-            set
-            {
-                this.omniPotentPowerOfShelf = value;
-            }
-        }
         /*
          ███████╗████████╗ █████╗ ████████╗███████╗
          ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
@@ -33,17 +23,18 @@ namespace LostAndFound.FindLosty
          ███████║   ██║   ██║  ██║   ██║   ███████╗
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
+        public bool OmniPotentPowerOfShelf { get; set; }
+
         public override string StatusText
         {
             get
             {
-                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health));
-                var items = string.Join("", this.Inventory.Select(i => i.Emoji));
+                var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health).Concat(Enumerable.Repeat(Emojis.EmptyHeart, PLAYER_MAX_HEALTH - this.Health)));
+                var items = string.Join("", this.Select(i => i.Emoji));
                 var item = this.ThingPlayerIsUsingAndHasToStop?.ToString();
                 var action = item != null ? $"using {item}" : "";
-                var super_powers_start =  OmniPotentPowerOfShelf ? "🔥🌎🔥":"";
-                var super_powers_end = OmniPotentPowerOfShelf ? "🔥🌎🔥":"";
-                return $"[{super_powers_start} {this.Emoji}{this.Name} {super_powers_end}] {health} {items} {action}";
+                var super_powers =  OmniPotentPowerOfShelf ? " and has the 🔥🌎🔥omnipotent power of shelf🔥🌎🔥" : "";
+                return $"[{this.Emoji}{this.Name}] {health} {items} {action} {super_powers}";
             }
         }
 
@@ -87,20 +78,21 @@ namespace LostAndFound.FindLosty
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookTextHeader
-        {
-            get
-            {
-                var adj = OneOf("nice", "beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous");
-                return $"{this} looks {adj}.";
-            }
-        }
-
         public override void Look(IPlayer sender)
         {
-            base.Look(sender);
-            var verb = OneOf("staring at", "looking at", "admiring", "peeping on");
-            Reply($"{sender} is {verb} you.");
+            var adjs = new[] { "nice", "beautiful", "scary", "awesome", "strange", "marvelous", "anxious", "fabulous" };
+
+            if (this == sender)
+            {
+                sender.Reply($"You look {OneOf(adjs)}");
+            } else {
+                var header = $"It's {StatusText}, owning:\n\t";
+                var items = string.Join("\n\t", this.Select(i => i.ToString()));
+                sender.Reply($"{header}{items}");
+
+                var verbs = new[] { "staring at", "looking at", "admiring", "peeping on" };
+                Reply($"{sender} is {OneOf(verbs)} you.");
+            }
         }
 
         /*
@@ -113,9 +105,24 @@ namespace LostAndFound.FindLosty
         */
         public override void Kick(IPlayer sender)
         {
-            base.Kick(sender);
-            var how = OneOf("hard", "in your butt", "with love", "and you deserved it");
-            Reply($"{sender} kicked you {how}");
+            sender.Hit();
+            if (this == sender)
+            {
+                sender.ReplyWithState($"You kicked yourself, Wee Man.");
+            }
+            else
+            {
+                var hows = new[] { "hard", "in the butt", "with no mercy", "where it hurts" };
+
+                // to kicker
+                sender.Reply($"You kicked {this} {OneOf(hows)}");
+
+                // to kicked
+                Reply($"{sender} kicked you {OneOf(hows)}");
+
+                // to others
+                sender.Room.BroadcastMsg($"{sender} kicked {this} {OneOf(hows)}", this, sender);
+            }
         }
 
 
@@ -129,8 +136,23 @@ namespace LostAndFound.FindLosty
         */
         public override void Listen(IPlayer sender)
         {
-            base.Listen(sender);
-            Reply($"{sender} is listening to you...");
+            if (this == sender)
+            {
+                if (OmniPotentPowerOfShelf)
+                {
+                    sender.Reply($"You hear the power of million shelves.");
+                }
+                else
+                {
+                    sender.Reply($"You listen to your inner self.");
+                }
+            }
+            else
+            {
+                var verbs = new[] { "is mumbling", "keeps silent" };
+                sender.Reply($"{this} {OneOf(verbs)}");
+                Reply($"{sender} is listening to you...");
+            }
         }
 
         /*
@@ -141,6 +163,24 @@ namespace LostAndFound.FindLosty
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+        public override void Open(IPlayer sender)
+        {
+            if (this == sender)
+            {
+                if (OmniPotentPowerOfShelf)
+                {
+                    sender.Reply($"You unleash the power of million shelves.");
+                    Game.BroadcastMsg($"{sender} unleashed the power of million shelves.");
+                }
+                else
+                {
+                    sender.Reply($"You open up your mind.");
+                }
+            } else
+            {
+                base.Open(sender);
+            }
+        }
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -150,6 +190,16 @@ namespace LostAndFound.FindLosty
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Close(IPlayer sender)
+        {
+            if (sender == this)
+            {
+                sender.Reply("You straighten up.");
+            } else
+            {
+                base.Close(sender);
+            }
+        }
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗
@@ -177,6 +227,23 @@ namespace LostAndFound.FindLosty
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
+        public override void Use(IPlayer sender)
+        {
+            if (sender == this)
+            {
+                if (!sender.Room.Players.Skip(1).Any())
+                {
+                    sender.Reply("Nobody is here. So you start \"using\" yourself");
+                } else
+                {
+                    sender.Reply("Here are other people. You are too shy to \"use\" yourself here.");
+                }
+            } else
+            {
+                sender.Reply($"{this} doesn't want to be \"used\".");
+                Reply($"{sender} tried to use you.");
+            }
+        }
 
         /*
         ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ ███████╗
@@ -187,71 +254,14 @@ namespace LostAndFound.FindLosty
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
 
-        public bool Hit(string by = null, IPlayer byPlayer = null, int damage = 1)
+        public bool Hit(int damage = 1)
         {
             if (this.Health > 0)
             {
                 this.Health = System.Math.Max(this.Health - damage, 0);
-
-
-
-                var msg = "You were hit";
-
-                if (by != null)
-                {
-                    msg += $" by {by}";
-                }
-                else if (byPlayer != null)
-                {
-                    byPlayer.Reply($"You hit [{this}] really hard.");
-                    msg += $" by [{byPlayer}], but it was probably deserved";
-                }
-
-                if(Health == 0)
-                {
-                    msg += " (Your dead)";
-                }
-
-                ReplyWithState(msg);
                 return true;
-            }
-            else
-            {
-                if (byPlayer != null)
-                {
-                    byPlayer.Reply("Why are you hitting dead people?");
-                    byPlayer.Room.SendText($"[{byPlayer}] is hitting dead [{this}]. Give a big BOOOO.....", byPlayer);
-                }
             }
             return false;
-        }
-
-        public bool Heal(string by = null, IPlayer byPlayer = null)
-        {
-            if (this.Health < PLAYER_MAX_HEALTH)
-            {
-                this.Health++;
-
-                var msg = "You were healed";
-
-                if (by != null)
-                {
-                    msg += $" by {by}";
-                }
-                else if (byPlayer != null)
-                {
-                    byPlayer.Reply($"You healed [{this}].");
-                    msg += $" by [{byPlayer}]. You really got some friends here.";
-                }
-
-                ReplyWithState(msg);
-                return true;
-            }
-            else
-            {
-                Reply("You need no healing.");
-                return false;
-            }
         }
     }
 }

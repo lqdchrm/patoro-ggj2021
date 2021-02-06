@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string LookText => this.door_life == 0
+        public override string Description => this.door_life == 0
             ? "Someone realy did not like this door. It is shattered."
             : $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
 
@@ -63,7 +63,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
 
             if (this.door_life == 0)
             {
-                if (this.Game.EntryHall.Inventory.Has(this.Game.EntryHall.Splinters))
+                if (this.Game.EntryHall.Has(this.Game.EntryHall.Splinters))
                 {
                     this.Game.EntryHall.Splinters.Kick(sender);
                 }
@@ -88,7 +88,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             else if (this.kick_count > 2 && this.door_life == 1)
             {
                 var message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}. The {this} finally opened.";
-                sender.Room.SendText(message);
+                sender.Room.BroadcastMsg(message);
                 this.door_life -= 1;
                 this.IsOpen = true;
                 _ = this.Game.DiningRoom.Show();
@@ -112,9 +112,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override string OpenText => this.IsOpen
+        public override void Open(IPlayer sender) => sender.Reply(
+            this.IsOpen
             ? "There is not much left that could be opened"
-            : $"The door is jammed. It might need united force to break it open.";
+            : $"The door is jammed. It might need united force to break it open."
+        );
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -124,9 +126,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-        public override string CloseText => this.IsOpen
+        public override void Close(IPlayer sender) => sender.Reply(
+            this.IsOpen
             ? "You don't think the remains can close anything."
-            : "Its already Closed.";
+            : "Its already Closed."
+        );
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

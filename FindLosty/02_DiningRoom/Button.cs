@@ -28,7 +28,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string LookText => $"Its a big red {this}!";
+        public override string Description => $"Its a big red {this}!";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -38,20 +38,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(IPlayer sender)
-        {
-            sender.Reply($"You kick the button hard, a buzzer from the {this.Game.EntryHall} is hearable.");
-            sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
-
-            this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
-            this.Game.EntryHall.SendText($"You're spooked by a buzzer from the {this.Game.EntryHall.RightDoor}.");
-            this.Game.LivingRoom.SendText($@"
-                A loud buzzer sounds from the wall.
-                You look around and can see barely a sign showing the numbers #39820 before they vanish."
-                .FormatMultiline());
-
-        }
-
+        public override void Kick(IPlayer sender) => Use(sender);
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -106,24 +93,17 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Use(IPlayer sender, IThing other)
+        public override void Use(IPlayer sender)
         {
-            if (other is null)
-            {
-                sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
-                sender.Room.SendText($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
+            sender.Reply($"You push the button, a buzzer from the {this.Game.EntryHall} is hearable.");
+            sender.Room.BroadcastMsg($"You hear a a buzzer from the {this.Game.EntryHall}.", sender);
 
-                this.Game.Kitchen.SendText($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
-                this.Game.EntryHall.SendText($"You're spooked by a buzzer from behind the {this.Game.EntryHall.RightDoor}.");
-                this.Game.LivingRoom.SendText($@"
-                    A loud buzzer sounds from the wall.
-                    You look around and can see barely a sign showing the numbers #39820 before they vanish."
-                    .FormatMultiline());
-            }
-            else
-            {
-                base.Use(sender, other);
-            }
+            this.Game.Kitchen.BroadcastMsg($"You hear a a faint buzzer from the {this.Game.DiningRoom}.");
+            this.Game.EntryHall.BroadcastMsg($"You're spooked by a buzzer from behind the {this.Game.EntryHall.RightDoor}.");
+            this.Game.LivingRoom.BroadcastMsg($@"
+                A loud buzzer sounds from the wall.
+                You look around and can see barely a sign showing the numbers #39820 before they vanish."
+                .FormatMultiline());
         }
 
         /*
