@@ -102,7 +102,7 @@ namespace LostAndFound.Engine
             var result = true;
             foreach (var thing in things)
             {
-                if (CanAcceptNonTransferables || this.CanBeTransfered)
+                if (CanAcceptNonTransferables || thing.CanBeTransfered)
                 {
                     var key = _BuildKey(thing.Name);
                     if (!dict.ContainsKey(key))
@@ -110,8 +110,10 @@ namespace LostAndFound.Engine
                         dict.Add(key, thing);
                         result &= true;
                     }
+                } else
+                {
+                    result &= false;
                 }
-                result &= false;
             }
             return result;
         }
