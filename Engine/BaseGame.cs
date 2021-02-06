@@ -165,6 +165,9 @@ namespace LostAndFound.Engine
             bool helpCalculated = false;
             if (token is null) return default;
 
+            if (token.ToLowerInvariant() == "me")
+                return sender;
+
             // find in inventory
             if (sender.TryFind(token, out TThing item)) return item;
 

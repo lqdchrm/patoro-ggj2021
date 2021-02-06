@@ -102,7 +102,7 @@ namespace LostAndFound.FindLosty
 
             var room = player.Room;
             var other = GetThing(player, second);
-            var thing = GetThing(player, first, other as IContainer);
+            var thing = GetThing(player, first, other as IContainer) ?? GetThing(player, prepo);
 
             // check if player is using something at the moment
             var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
