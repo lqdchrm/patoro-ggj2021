@@ -40,7 +40,7 @@ namespace LostAndFound.FindLosty
                     sender.Reply($"{Image}");
                     await Task.Delay(50);
                 }
-                sender.Reply($"{Description}\n{friends}\n{content}");
+                sender.Reply($"{Description}\n{friendsText}\n{content}");
             });
         }
 
@@ -52,7 +52,6 @@ namespace LostAndFound.FindLosty
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public virtual string Noises => null;
         public override void Listen(IPlayer sender)
         {
             if (Noises is not null)
