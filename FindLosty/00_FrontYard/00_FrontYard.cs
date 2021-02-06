@@ -38,6 +38,8 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public override string Image => Mansion.Fence;
+
         public override string Description => $@"
             You're looking at the beautiful front yard of 404 Foundleroy Road.
             A picket fence surrounds the {this.Mansion} in front of you.
