@@ -80,7 +80,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
         public override void TakeFrom(IPlayer sender, IContainer other)
         {
             Connected = false;
-            TakeFrom(sender, other);
+            base.TakeFrom(sender, other);
         }
 
         /*

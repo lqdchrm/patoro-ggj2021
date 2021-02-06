@@ -11,7 +11,6 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         public Scanner Scanner { get; init; }
         public Table Table { get; init; }
         public Socket Socket { get; init; }
-
         public DiningRoom(FindLostyGame game) : base(game, "02")
         {
             this.Button = new Button(game);

@@ -1,7 +1,10 @@
-﻿namespace LostAndFound.FindLosty._03_Kitchen
+﻿using LostAndFound.Engine;
+namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class Shelves : Container
     {
+
+        public override string Emoji => Emojis.Shelves;
         public Book Book;
 
         public Shelves(FindLostyGame game) : base(game)

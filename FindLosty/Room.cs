@@ -29,9 +29,9 @@ namespace LostAndFound.FindLosty
             var friendsNames = string.Join(", ", friends.Select(p => $"{p}"));
             var friendsText = friends.Any()
                 ? friends.Count() == 1
-                ? $"\tYour friend {friendsNames} is here."
-                : $"\tYour friends {friendsNames} are here."
-                : "\tCurrently you are alone at this place.";
+                ? $"\n\tYour friend {friendsNames} is here."
+                : $"\n\tYour friends {friendsNames} are here."
+                : "\n\tCurrently you are alone at this place.";
 
             var content = this.Select(i => i.ToString());
             var contentText = content.Any() ? $"\n\tThings: {string.Join(", ", content)}" : "";

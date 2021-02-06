@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
-    public class Ergometer : Thing
+    public class Ergometer : Container
     {
         public override string Emoji => Emojis.Bike;
 
@@ -98,6 +98,16 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+        public override bool DoesItemFit(IThing thing, out string error)
+        {
+            if (thing is Hamster) {
+                error = "";
+                return true;
+            } else {
+                error = $"You can't put {thing} on the {this}.";
+                return false;
+            }
+        }
 
         /*
         ██╗   ██╗███████╗███████╗

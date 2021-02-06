@@ -7,7 +7,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
 {
     public class FirePit : Container
     {
-        public override string Emoji => Emojis.Firepit;
+        public override string Emoji => Burning ? Emojis.Firepit : Emojis.LowFire;
 
         public FirePit(FindLostyGame game) : base(game)
         {
@@ -104,7 +104,11 @@ namespace LostAndFound.FindLosty._03_Kitchen
             return false;
         }
 
-        public override void Use(IPlayer sender) => sender.Reply($"You sit down next to the {this}. You feel warm and cosy now.");
+        public override void Use(IPlayer sender) => sender.Reply(
+            Burning
+            ? $"You sit down next to the {this}. You feel warm and cosy now."
+            : $"You sit down next to the {this}, but it doesn't really heat you as it has burnt down."
+            );
 
         public override void Use(IPlayer sender, IThing other)
         {
@@ -136,7 +140,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
             {
                 sender.Reply($"The cold {this} does absolutely nothing to your {tofu}.");
             }
-            Game.BroadcastMsg($"{sender} put {tofu} into {this} in the {Game.Kitchen}");
+            Game.BroadcastMsg($"{sender} put {tofu} into {this} in the {Game.Kitchen}", sender);
         }
 
         public void BurnSplinters(IPlayer sender, Splinters splinters)

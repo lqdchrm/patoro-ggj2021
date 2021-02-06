@@ -100,9 +100,9 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is IContainer)
+            if (other is IContainer container)
             {
-                Put(sender, this);
+                container.Use(sender, this);
             } else
             {
                 base.Use(sender, other);
