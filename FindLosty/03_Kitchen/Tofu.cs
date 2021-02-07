@@ -96,27 +96,30 @@ namespace LostAndFound.FindLosty._03_Kitchen
         */
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is null)
-            {
-                if (this.Frozen)
-                {
-                    sender.Reply("You lick the frozen tofu. Besides a strange taste in your mouth nothing happens.");
-                    sender.Room.BroadcastMsg($"{sender} licked tofu", sender);
-                }
-                else
-                {
-                    sender.Reply(OneOf(
-                        $"You take a bite of tofu. It tastes good.",
-                        $"There is not much tofu left and you feel like you might need some tofu later."
-                    ));
-                    sender.Room.BroadcastMsg($"{sender} tastes tofu", sender);
-                }
-            } else if (other is FirePit firepit)
+            if (other is FirePit firepit)
             {
                 firepit.Use(sender, this);
-            } else
+            }
+            else
             {
                 base.Use(sender, other);
+            }
+        }
+
+        public override void Use(IPlayer sender)
+        {
+            if (this.Frozen)
+            {
+                sender.Reply("You lick the frozen tofu. Besides a strange taste in your mouth nothing happens.");
+                sender.Room.BroadcastMsg($"{sender} licked tofu", sender);
+            }
+            else
+            {
+                sender.Reply(OneOf(
+                    $"You take a bite of tofu. It tastes good.",
+                    $"There is not much tofu left and you feel like you might need some tofu later."
+                ));
+                sender.Room.BroadcastMsg($"{sender} tastes tofu", sender);
             }
         }
 

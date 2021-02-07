@@ -96,18 +96,21 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override void Use(IPlayer sender, IThing other)
         {
-            if (other is null)
-            {
-                sender.Hit();
-                sender.ReplyWithState("You play with the splinters. One gets stuck in your finger.");
-                sender.Room.BroadcastMsg($"{sender} has a splinter in this finger now.", sender);
-            } else if (other is FirePit firepit)
+            if (other is FirePit firepit)
             {
                 firepit.BurnSplinters(sender, this);
-            } else
+            }
+            else
             {
                 base.Use(sender, other);
             }
+        }
+
+        public override void Use(IPlayer sender)
+        {
+            sender.Hit();
+            sender.ReplyWithState("You play with the splinters. One gets stuck in your finger.");
+            sender.Room.BroadcastMsg($"{sender} has a splinter in this finger now.", sender);
         }
 
         /*
