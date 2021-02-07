@@ -1,11 +1,15 @@
-﻿using LostAndFound.Engine;
+﻿using System;
+using LostAndFound.Engine;
 using LostAndFound.FindLosty._01_EntryHall;
 
 namespace LostAndFound.FindLosty._02_DiningRoom
 {
     public class Hamster : Item
     {
+        private Random random = new Random();
+
         public override string Emoji => Emojis.Hamster;
+        public IPlayer person_that_let_hamster_go = null;
 
         public Hamster(FindLostyGame game) : base(game)
         {
@@ -80,6 +84,30 @@ namespace LostAndFound.FindLosty._02_DiningRoom
            ██║   ██║  ██║██║  ██╗███████╗
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
+        public override void TakeFrom(IPlayer sender, IContainer container)
+        {
+            if (container is Cage cage)
+            {
+                base.Take(sender, container);
+                this.person_that_let_hamster_go = null;
+            }
+            else
+            {
+                double number = random.Next(0, 10000);
+                if (number <= 3000)
+                {
+                    base.Take(sender, container);
+                    this.person_that_let_hamster_go = null;
+                }
+                else
+                {
+                    string scold = $"\n{number}It would be nice if {person_that_let_hamster_go} hadn't let it run free.";
+                    sender.Reply($"The hamster slips away. You need to try 'take'ing it again.{scold}");
+                    sender.Room.BroadcastMsg($"{sender} tries to pick up the hamster. But the hamster wins this battle.\n{scold}", sender);
+                }
+                    
+            }
+        }
 
         /*
         ██████╗ ██╗   ██╗████████╗
@@ -89,6 +117,14 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+        public void Put(IPlayer sender, IThing other)
+        {
+            if (other is not Cage)
+            {
+                person_that_let_hamster_go = sender;
+            }
+            base.Put(sender, other);
+        }
 
         /*
         ██╗   ██╗███████╗███████╗
@@ -103,10 +139,19 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             if (other is IContainer container)
             {
                 container.Use(sender, this);
+            } else if (other is Splinters splinter)
+            {
+                StickSplintersIn(sender);
             } else
             {
                 base.Use(sender, other);
             }
+        }
+
+        public void StickSplintersIn(IPlayer sender)
+        {
+            sender.Reply($"You now have a hedgehog... Just kidding you would never hurt a hamster.");
+            sender.Room.BroadcastMsg($"{sender} looks like he is about to stick splinters into the hamster.\nEveryone looks at him menacingly.", sender);
         }
 
         /*

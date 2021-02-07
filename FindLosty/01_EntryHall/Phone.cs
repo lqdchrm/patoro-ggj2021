@@ -69,6 +69,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+        public override void Open(IPlayer sender)
+        {
+            sender.TheThingThatAskedAQuestion = this;
+            sender.Reply($"You open the phone.\nAre you an electrical engineer?");
+        }
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -106,7 +111,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Use(IPlayer sender) => sender.Reply("Yeah, but what number?");
+        public override void Use(IPlayer sender) => sender.Reply("Did you mean 'use phone call 123456'");
 
         public void Use(IPlayer sender, string second)
         {
@@ -118,11 +123,14 @@ namespace LostAndFound.FindLosty._01_EntryHall
             {
                 var response = second switch
                 {
-                    //Spider Murphy Gang
                     "32168" => "Hallo hier ist Rosi, was kann ich heute für dich tun?",
                     "5668678661" => "I told you many times. Stop calling me",
-                    "666" => "Welcom to #@!~$§, all our lines are currently busy. Pleas hold the line...",
-                    _ => "There is no such number"
+                    "666" => "Welcome to #@!~$§, all our lines are currently busy. Please hold the line...",
+                    "123456" => "Really? That was just an example. At least you know how to use a phone.",
+                    "911" => "911 what's your emergency? Missing dog? Please, this line is for emergencies only.\nThey won't help you.",
+                    "110" => "911 what's your emergency? Missing dog? Please, this line is for emergencies only.\nThey won't help you.",
+                    "404" => "You call the number.... Nobody answers the phone.\nWell what did you expect calling a street number?",
+                    _ => "You call the number.... Nobody answers the phone."
                 };
                 sender.Reply(response);
             }
@@ -136,6 +144,21 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+        public override void answer(IPlayer player, string yes_or_no)
+        {
+            if (player.TheThingThatAskedAQuestion == this)
+            {
+                if (yes_or_no == "yes")
+                {
+                    player.Reply("You use your electronics knowledge to analyse the circuitry.\nI'ts really a phone. Nothing else.\nYou put everything back to together.\nThe phone better than before.");
+                }
+                else
+                {
+                    player.Reply("There is complicated electronics inside. You try to put everything back together.\nSomehow you now have spare parts.");
+                }
+            }
+            player.TheThingThatAskedAQuestion = null;
+        }
 
     }
 }

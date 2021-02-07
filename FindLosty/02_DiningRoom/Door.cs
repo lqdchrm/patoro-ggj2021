@@ -69,6 +69,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
+        public override void Open(IPlayer sender) => sender.Reply(
+            this.IsOpen ?
+            $"The {this} is already open." :
+            $"The {this} does not have a handle. Maybe you find another mechanism to open it."
+        );
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -78,9 +83,6 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ╚██████╗███████╗╚██████╔╝███████║███████╗
          ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Open(IPlayer sender) => sender.Reply(this.IsOpen
-            ? $"The {this} does not have a handle. Maybe you find another mechanism to open it."
-            : $"The {this} is already open.");
 
         /*
         ████████╗ █████╗ ██╗  ██╗███████╗

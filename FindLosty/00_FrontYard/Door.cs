@@ -29,7 +29,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => $"A sturdy wooden {this}.";
+        public override string Description => $"{ShortDescription()}";
 
         public string ShortDescription()
         {
@@ -57,7 +57,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             }
             else
             {
-                sender.ReplyWithState($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.' The {this} shakes. You took damage.");
+                sender.ReplyWithState($"As the old saying goes: 'This will hurt you a lot more than it will hurt the {this}.'\nThe {this} shakes. You took damage.");
                 sender.Room.BroadcastMsg($"{sender} kicks the door. The {this} shakes, and {sender}s foot really hurts.", sender);
             }
         }

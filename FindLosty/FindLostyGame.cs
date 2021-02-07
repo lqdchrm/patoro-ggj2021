@@ -98,7 +98,7 @@ namespace LostAndFound.FindLosty
             var thing = GetThing(player, first, other as IContainer) ?? GetThing(player, prepo);
 
             // check if player is using something at the moment
-            var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use" };
+            var commandsUnusableDuringUse = new[] { "kick", "open", "close", "drop", "give", "put", "use", "yes" };
 
             if (player.ThingPlayerIsUsingAndHasToStop != null && commandsUnusableDuringUse.Contains(cmd))
             {
@@ -231,6 +231,27 @@ namespace LostAndFound.FindLosty
                     {
                         if (this.EntryHall.MetalDoor.IsDynamiteUsed && !this.EntryHall.MetalDoor.IsOpen)
                             player.MoveTo(new IRoom[] { this.FrontYard, this.DiningRoom, this.LivingRoom }.TakeOneRandom());
+                    }
+                    break;
+                case "no":
+                case "yes":
+                    {
+                        if (first is not null)
+                        {
+                            player.Reply("What? Just 'yes' or 'no' usually is enough.");
+                        }
+                        else
+                        {
+                            var the_thing_that_asked = player.TheThingThatAskedAQuestion;
+                            if (the_thing_that_asked == null)
+                            {
+                                player.Reply($"What exactly are you saying {cmd} to?");
+                            }
+                            else
+                            {
+                                the_thing_that_asked.answer(player, cmd);
+                            }
+                        }
                     }
                     break;
 

@@ -37,6 +37,11 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
+        public override void Kick(IPlayer sender)
+        {
+            sender.Reply($"You hear squeeking noises. You should take a close 'look'.");
+            Game.BroadcastMsg($"{sender} kicked the {this}. You hear squeeking noises. You should take a close 'look'.", sender);
+        }
 
 
         /*

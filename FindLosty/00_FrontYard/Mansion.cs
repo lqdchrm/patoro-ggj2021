@@ -36,7 +36,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
             string[] description = {
                 $"A worn picket fence surrounds the {this} in front of you.",
                 $"The {this} looks like some kind of maniac lives here.",
-                Game.FrontYard.Door.WasMentioned ? $"There seems to be only one way into the building. {Game.FrontYard.Door.ShortDescription()}":null,
+                Game.FrontYard.Door.WasMentioned ? $"There seems to be only one way into the building.\n{Game.FrontYard.Door.ShortDescription()}":null,
             };
             return System.String.Join('\n', description.Where(x => x != null));
         }

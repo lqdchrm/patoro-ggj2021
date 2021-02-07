@@ -48,7 +48,7 @@ namespace LostAndFound.Engine.Cnsole
                 var last = $"╚{line}╝";
 
                 msg = $"\n{first}\n║ {string.Join(" ║\n║ ", lines)} ║\n{last}";
-                Console.WriteLine(msg);
+                Console.WriteLine(msg.Replace("\n", "\r\n"));
 
                 if (Mode == "script")
                     await Task.Delay(50);

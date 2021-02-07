@@ -7,6 +7,7 @@ namespace LostAndFound.FindLosty
     public interface IPlayer : BasePlayer<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IContainer
     {
         bool OmniPotentPowerOfShelf {get; set;}
+        Thing TheThingThatAskedAQuestion { get; set; }
         int Health { get; set; }
         bool Hit(int damage = 1);
     }
@@ -24,6 +25,7 @@ namespace LostAndFound.FindLosty
          ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
          */
         public bool OmniPotentPowerOfShelf { get; set; }
+        public Thing TheThingThatAskedAQuestion { get; set; }
 
         public override string StatusText
         {

@@ -1,5 +1,6 @@
 ﻿using LostAndFound.Engine;
 using LostAndFound.FindLosty._03_Kitchen;
+using LostAndFound.FindLosty._02_DiningRoom;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
@@ -99,6 +100,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
             if (other is FirePit firepit)
             {
                 firepit.BurnSplinters(sender, this);
+            }
+            else if (other is Hamster hamster)
+            {
+                hamster.StickSplintersIn(sender);
             }
             else
             {
