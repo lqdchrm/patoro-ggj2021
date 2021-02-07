@@ -1,5 +1,11 @@
 # About **🐶Find Losty**
-This is an old-school-like text adventure for multiple players, which can be played via Discord.
+[Find Losty](https://globalgamejam.org/2021/games/find-losty-5) is an old-school-like text adventure
+for multiple players, which can be played via Discord.
+
+The idea was born at the [2021 Global Game Jam in Trier](https://globalgamejam.org/2021/jam-sites/trier),
+where we participated as a group of three developers.
+
+A video of the presentation can be watched here (in German): [Twitch](https://www.twitch.tv/videos/895590427?t=01h10m07s);
 
 ## 📖Story
 Your dog **[🐶Losty]** ran away and somehow entered the scary abandoned **[🏡mansion]** down the road.
@@ -39,9 +45,9 @@ After joining, each player gets a personal *TextChannel* where the adventure tak
 
 ### ✨Getting a token for the bot
 The game aka **[🤖Bot]** needs to identify to Discord via a **[✨ token]** at startup. Therefore
-you need to get a **[✨token}** for your **[🤖Bot]** from Discord.
+you need to get a **[✨token]** for your **[🤖Bot]** from Discord.
 
-The process of obtaining a **[✨token}** works roughly as follows:
+The process of obtaining a **[✨token]** works roughly as follows:
 * create a new app at the [Discord developer page](https://discord.com/developers/applications),
 this gives you a *client-id* 
 * create a new **[🤖Bot]** inside this app, which gives you the **[✨ token]**
