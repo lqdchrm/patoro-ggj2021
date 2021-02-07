@@ -28,7 +28,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         public bool IsOpen { get; private set; }
 
         private IPlayer openedBy;
-        private IPlayer[] seenWhoOpendIt = Array.Empty<Player>();
+        private IPlayer[] seenWhoOpenedIt = Array.Empty<Player>();
 
         public void Unlock(IPlayer openingPlayer)
         {
@@ -36,7 +36,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                 return;
 
             this.openedBy = openingPlayer;
-            this.seenWhoOpendIt = openingPlayer.Room.Players.ToArray();
+            this.seenWhoOpenedIt = openingPlayer.Room.Players.ToArray();
             this.IsOpen = true;
             this.Game.LivingRoom.Add(this.Dynamite);
         }
@@ -58,11 +58,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                         There is no way to force your way in or move it.
                         A {this.Game.LivingRoom.PinPad} is mounted under the handle."
                     .FormatMultiline();
-
             else if (sender == this.openedBy)
                 message += $@"You have opened the door.";
 
-            else if (this.seenWhoOpendIt.Contains(sender))
+            else if (this.seenWhoOpenedIt.Contains(sender))
                 message += $@"{this.openedBy} was able to open it.";
             else
                 message += $@"Someone was able to open it.";
@@ -88,7 +87,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Kick(IPlayer sender)
         {
-            sender.Reply($"You kick against the steel. But only your toe throbs.");
+            sender.Reply($"You kick against the steel. But you only succeed in hurting your toe.");
             sender.Room.BroadcastMsg($"You witness how {sender} tries to open the {this} with a kick. And fails...", sender);
         }
 
@@ -114,7 +113,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
             if (this.IsOpen)
             {
-                sender.Reply("The door is already opend");
+                sender.Reply("The door is already open");
             }
             else
             {
