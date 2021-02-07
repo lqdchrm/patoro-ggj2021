@@ -5,7 +5,7 @@ for multiple players, which can be played via Discord.
 The idea was born at the [2021 Global Game Jam in Trier](https://globalgamejam.org/2021/jam-sites/trier),
 where we participated as a group of three developers.
 
-A video of the presentation can be watched here (in German): [Twitch](https://www.twitch.tv/videos/895590427?t=01h10m07s);
+A video of the presentation can be watched here (in German): [Twitch](https://www.twitch.tv/videos/895590427?t=01h10m07s)
 
 ## 📖Story
 Your dog **[🐶Losty]** ran away and somehow entered the scary abandoned **[🏡mansion]** down the road.
@@ -91,6 +91,22 @@ For debugging purpose the Game-Engine contains a local mode, which can be starte
 Warning: You need to run this in a unicode/utf-8 enabled **[💻terminal]**.
 
 Now you can go crazy, eg. by piping **[📜script files]** with commands to the locally running process. See `./test.sh` for an example.
+
+# 🧝‍♂️Links
+* [Global Game Jam 2021 Trier](https://globalgamejam.org/2021/jam-sites/trier)
+* [Find Losty at GGJ2012](https://globalgamejam.org/2021/games/find-losty-5)
+* [Presentation-Video at Twitch (in german)](https://www.twitch.tv/videos/895590427?t=01h10m07s)
+
+# Contributors
+
+* ![](https://github.com/lqdchrm.png?size=24)
+  [lqdchrm](https://github.com/lqdchrm): aka Liquidchrome, aka Rob
+
+* ![](https://github.com/LokiMidgard.png?size=24)
+  [LokiMidgard](https://github.com/LokiMidgard), aka Patrick
+
+* ![](https://github.com/krumholt.png?size=24)
+  [krumholt](https://github.com/krumholt), aka Tobi
 
 # License
 This game is published under the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/), which basically means:
