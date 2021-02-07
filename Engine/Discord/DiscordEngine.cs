@@ -25,7 +25,7 @@ namespace LostAndFound.Engine.Discord
         private DiscordChannel _ParentChannel;
 
         private Dictionary<string, DiscordChannel> _RoomNameToVoiceChannels = new Dictionary<string, DiscordChannel>();
-        
+
         private Dictionary<ulong, TPlayer> _PlayerIdToPlayer = new Dictionary<ulong, TPlayer>();
         private Dictionary<string, DiscordMember> _PlayerNameToDiscordMember = new Dictionary<string, DiscordMember>();
         private Dictionary<string, DiscordChannel> _PlayerNameToDiscordChannel = new Dictionary<string, DiscordChannel>();
@@ -105,7 +105,7 @@ namespace LostAndFound.Engine.Discord
         private Task OnMessageCreated(DiscordClient client, MessageCreateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
 
         private Task OnMessageUpdated(DiscordClient client, MessageUpdateEventArgs e) => OnMessage(client, e.Guild, e.Author, e.Channel, e.Message);
-        
+
         private async Task OnMessage(DiscordClient client, DiscordGuild guild, DiscordUser author, DiscordChannel channel, DiscordMessage message)
         {
             if (guild.Id != this._Guild.Id)
@@ -175,12 +175,18 @@ namespace LostAndFound.Engine.Discord
 
                 _PlayerNameToDiscordMember.Add(player.NormalizedName, member);
 
-                var builder = new DiscordOverwriteBuilder();
                 var guild = member.Guild;
                 if (guild != null)
                 {
-                    var discordOverwriteBuilder = builder.For(guild.EveryoneRole).Deny(Permissions.AccessChannels);
-                    var overwrites = new[] { discordOverwriteBuilder };
+
+                    var overwrites = new[] {
+                        new DiscordOverwriteBuilder()
+                            .For(guild.CurrentMember)
+                            .Allow(Permissions.AccessChannels|Permissions.ManageChannels| Permissions.SendMessages|Permissions.SendTtsMessages),
+                        new DiscordOverwriteBuilder()
+                            .For(guild.EveryoneRole)
+                            .Deny(Permissions.AccessChannels),
+                    };
                     var channel = await guild.CreateChannelAsync($"{player.Emoji}{player.Name}", ChannelType.Text, _ParentChannel, overwrites: overwrites);
                     await channel.AddOverwriteAsync(member, Permissions.AccessChannels);
                     _PlayerNameToDiscordChannel.Add(player.NormalizedName, channel);
