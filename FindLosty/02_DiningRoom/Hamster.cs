@@ -86,8 +86,8 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void TakeFrom(IPlayer sender, IContainer container)
         {
-            double number = random.Next(0, 10000);
-            if (number <= 3000 || container is not IRoom)
+            double number = random.Next(0, 8_000);
+            if (number <= 3_000 || container is not IRoom)
             {
                 base.TakeFrom(sender, container);
                 this.person_that_let_hamster_go = null;
