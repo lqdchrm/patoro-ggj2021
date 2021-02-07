@@ -1,35 +1,49 @@
-# About the game
-**🐶Find Losty** is an old-school-like text adventure for multiple players, which can be played via Discord.
+# About **🐶Find Losty**
+This is an old-school-like text adventure for multiple players, which can be played via Discord.
 
 ## 📖Story
-Your dog **[🐶Losty]** ran away and somehow entered the scary abandoned **[🏡mansion]** down the road. You gather a few friends and start a recue mission.
+Your dog **[🐶Losty]** ran away and somehow entered the scary abandoned **[🏡mansion]** down the road.
+You gather a few friends and start a rescue mission.
 
 The game starts directly in front of the **[🏡mansion]**.
 
 ## 🎮Controls
-The game is controlled by a virtual GameMaster aka **[🤖Bot]** (this is some kind of AI if you will). This **[🤖Bot]** gives you a textual representation of the things happening in-game.
-Each location in the game happens inside a specific Discord-*VoiceChannel*, which you join. This way you can only talk to and hear the persons staying with you at the same location.
+The game is controlled by a virtual GameMaster aka **[🤖Bot]** (this is some kind of AI if you will).
+This **[🤖Bot]** gives you a textual representation of the things happening in-game.
 
-To take action, each player gets a dedicated Discord-*TextChannel*. You can act in the game by typing in commands like eg. `open door`. For each command you get textual feedback,
-which can contain **[🧻new things to interact with]**, **[🏠new rooms to explore]** and **[❓challenging riddles to solve]**. Some riddles require cooperation with other players.
+Each location in the game happens inside a specific Discord-*VoiceChannel*, which you join.
+This way you can only talk to and hear the persons staying with you at the same location.
 
-For a start try to type `help` inside your personal *Text-Channel*, which lists all available commands, or type `look` to get information about your surroundings. You can change rooms either by changing you Discord-*VoiceChannel* or by typing the `goto`-command eg. `goto kitchen`.
+To take action, each player gets a dedicated Discord-*TextChannel*. You can act in the game by typing
+in commands like eg. `open door`. For each command you get textual feedback, which can contain
+**[🧻new things to interact with]**, **[🏠new rooms to explore]** and **[❓challenging riddles to solve]**.
+Some riddles require cooperation with other players.
+
+For a start try to type `help` inside your personal *Text-Channel*, which lists all available commands,
+or type `look` to get information about your surroundings. You can change rooms either by changing you
+Discord-*VoiceChannel* or by typing the `goto`-command eg. `goto kitchen`.
 
 ## 🚦How to start
-In order to use the Game with Discord, you have to invite the **[🤖Bot]** to your Server (see [🔧Preparation](#🔧Preparation)). You start the executable and a new section **`FindLosty`** should appear on the left side in Discord.
+In order to use the Game with Discord, you have to invite the **[🤖Bot]** to your Server
+(see [🔧Preparation](#🔧Preparation)). You start the executable and a new section **`FindLosty`**
+should appear on the left side in Discord.
 
-Inside this section there are the various *VoiceChannels*, one per room you discovered. `FrontYard` is the game's starting location. Players can join this *Voice-Channel* to join the game.
+Inside this section there are the various *VoiceChannels*, one per room you discovered. `FrontYard`
+is the game's starting location. Players can join this *Voice-Channel* to join the game.
+
 After joining, each player gets a personal *TextChannel* where the adventure takes place.
 
-
 # 👩‍💻For developers
+
 ## 🔧Preparation
 
 ### ✨Getting a token for the bot
-The game aka **[🤖Bot]** needs to identify to Discord via a **[✨ token]** at startup. Therefore you need to get a **[✨token}** for your **[🤖Bot]** from Discord.
+The game aka **[🤖Bot]** needs to identify to Discord via a **[✨ token]** at startup. Therefore
+you need to get a **[✨token}** for your **[🤖Bot]** from Discord.
 
 The process of obtaining a **[✨token}** works roughly as follows:
-* create a new app at the [Discord developer page](https://discord.com/developers/applications), this gives you a *client-id*
+* create a new app at the [Discord developer page](https://discord.com/developers/applications),
+this gives you a *client-id* 
 * create a new **[🤖Bot]** inside this app, which gives you the **[✨ token]**
 
 Then you need to create a new file called `.env` or you could rename the existing file `.env.sample` to `.env`.
