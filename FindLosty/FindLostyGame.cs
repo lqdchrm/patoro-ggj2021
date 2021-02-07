@@ -106,6 +106,9 @@ namespace LostAndFound.FindLosty
                 return;
             }
 
+            if (cmd != "yes" && cmd != "no")
+                player.TheThingThatAskedAQuestion = null;
+
             // Main command selection
             switch (cmd)
             {

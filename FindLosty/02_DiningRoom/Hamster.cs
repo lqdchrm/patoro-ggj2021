@@ -86,7 +86,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void TakeFrom(IPlayer sender, IContainer container)
         {
-            double number = random.Next(0, 8_000);
+            int number = random.Next(0, 8_000);
             if (number <= 3_000 || container is not IRoom)
             {
                 base.TakeFrom(sender, container);
