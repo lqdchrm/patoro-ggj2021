@@ -108,13 +108,14 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
-        public void Put(IPlayer sender, IThing other)
+
+        public override void PutInto(IPlayer sender, IContainer container)
         {
-            if (other is not Cage)
+            if (container is IRoom)
             {
                 person_that_let_hamster_go = sender;
             }
-            base.Put(sender, other);
+            base.PutInto(sender, container);
         }
 
         /*
