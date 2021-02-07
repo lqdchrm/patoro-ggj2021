@@ -15,7 +15,7 @@ namespace LostAndFound
 
             if (args.Any())
             {
-                var game = FindLostyGame.Terminal(args[0]);
+                var game = FindLostyGame.Terminal(args.FirstOrDefault(), args.ElementAtOrDefault(1));
                 await game.StartAsync();
             }
             else

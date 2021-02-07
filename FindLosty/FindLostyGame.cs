@@ -12,6 +12,7 @@ using LostAndFound.FindLosty._04_LivingRoom;
 using LostAndFound.FindLosty._05_Cellar;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,8 +38,11 @@ namespace LostAndFound.FindLosty
         public Cellar Cellar { get; init; }
 
         public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild) => new FindLostyGame(name, new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
-        public static FindLostyGame Terminal(string mode) =>
-         new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode));
+        public static FindLostyGame Terminal(string mode, string filePath = null)
+        {
+            var script = filePath != null ? File.ReadAllLines(filePath) : null;
+            return new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode, script));
+        }
 
         private FindLostyGame(string name, BaseEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> engine) : base(name, engine)
         {

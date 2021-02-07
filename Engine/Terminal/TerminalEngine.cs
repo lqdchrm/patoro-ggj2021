@@ -18,10 +18,20 @@ namespace LostAndFound.Engine.Cnsole
         public BaseGame<TGame, TPlayer, TRoom, TContainer, TThing> Game { get; set; }
 
         private string Mode;
-        public TerminalEngine(string mode) {
+        private readonly List<string> commands = null;
+
+        public TerminalEngine(string mode, IEnumerable<string> commands = null) {
             if (mode != "interactive" && mode != "script")
                 throw new Exception("Illegal terminal mode: ${mode}. Should be [interactive, script]");
+            
             this.Mode = mode;
+            this.commands = commands != null
+                ? new List<string>(
+                    commands.Where(line =>
+                        !string.IsNullOrWhiteSpace(line)
+                        && !line.StartsWith("##")
+                    ))
+                : null;
         }
 
         public void Dispose() { }
@@ -89,10 +99,20 @@ namespace LostAndFound.Engine.Cnsole
                         if (string.IsNullOrWhiteSpace(cmd.Command))
                             continue;
 
+                        if (input == "." && commands?.Any() is not null)
+                        {
+                            input = commands.FirstOrDefault();
+                            if (input is not null)
+                            {
+                                commands.RemoveAt(0);
+                                cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, input);
+                            }
+                        }
+
                         if (cmd.Command == "#end")
                             Mode = "interactive";
 
-                        Console.Error.WriteLine($"{cmd.Command} {string.Join(" ", cmd.RawArgs)}");
+                        Console.Error.WriteLine($"📜 {cmd.Command} {string.Join(" ", cmd.RawArgs)}");
 
                         if (cmd.Command.StartsWith("#delay"))
                         {
