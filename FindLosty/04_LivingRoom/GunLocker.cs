@@ -27,15 +27,15 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public bool IsOpen { get; private set; }
 
-        private IPlayer opendBy;
+        private IPlayer openedBy;
         private IPlayer[] seenWhoOpendIt = Array.Empty<Player>();
 
         public void Unlock(IPlayer openingPlayer)
         {
-            if (this.opendBy is not null)
+            if (this.openedBy is not null)
                 return;
 
-            this.opendBy = openingPlayer;
+            this.openedBy = openingPlayer;
             this.seenWhoOpendIt = openingPlayer.Room.Players.ToArray();
             this.IsOpen = true;
             this.Game.LivingRoom.Add(this.Dynamite);
@@ -52,30 +52,21 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Look(IPlayer sender)
         {
+            var message = "The heavy metal locker is secured in the wall.\n";
             if (!this.IsOpen)
-                sender.Reply($@"
-                        The heavy metal locker is secured in the wall.
+                message += $@"
                         There is no way to force your way in or move it.
                         A {this.Game.LivingRoom.PinPad} is mounted under the handle."
-                    .FormatMultiline());
+                    .FormatMultiline();
 
-            else if (sender == this.opendBy)
-                sender.Reply($@"
-                        The heavy metal locker is secured in the wall.
-                        You have opend its door."
-                        .FormatMultiline());
+            else if (sender == this.openedBy)
+                message += $@"You have opened the door.";
 
             else if (this.seenWhoOpendIt.Contains(sender))
-                sender.Reply($@"
-                        The heavy metal locker is secured in the wall.
-                        {this.opendBy} was able to open it."
-                        .FormatMultiline());
-
+                message += $@"{this.openedBy} was able to open it.";
             else
-                sender.Reply($@"
-                        The heavy metal locker is secured in the wall.
-                        Someone was able to open it."
-                        .FormatMultiline());
+                message += $@"Someone was able to open it.";
+            sender.Reply(message);
         }
 
         public string ShortDescription()
