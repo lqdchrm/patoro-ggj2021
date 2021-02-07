@@ -98,7 +98,7 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 {
                     sender.OmniPotentPowerOfShelf = true;
                     sender.ReplyWithState("You read the book and all of the sudden you seem to understand yourshelf better.");
-                    Game.BroadcastMsg($"{sender} has read the book of Shelf-Help and now has near omnipotent powers.\n You feel a shelfish craving to kill him and take his book.");
+                    Game.BroadcastMsg($"{sender} has read the book of Shelf-Help and now has near omnipotent powers.\n You feel a shelfish craving to kill him and take his book.", sender);
                 }
                 else if (TheHolderOfPower == sender)
                 {
