@@ -30,8 +30,8 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
         public override string Description => this.door_life == 0
-            ? "Someone realy did not like this door. It is shattered."
-            : $"The massive door made of dark wood must have been once very beautiful. You see some water marks on the side where the door has swollen up a little.";
+            ? "Someone really did not like this door. It is shattered."
+            : $"The door is made of dark wood and must have been once very beautiful.\nNow it looks like a single kick might shatter it into a thousand splinters.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -78,16 +78,16 @@ namespace LostAndFound.FindLosty._01_EntryHall
             }
             else if (this.kick_count == 2)
             {
-                sender.Reply($"The combined force shake the door and there are cracking sounds. But it feels like you need more force.");
+                sender.Reply($"The combined forces shake the door and there are cracking sounds. But it feels like you need more force.");
             }
             else if (this.kick_count > 2 && this.door_life > 1)
             {
-                sender.Reply($"The combined force shake the door and you can feel it crack. You definitely destroyed it a little.");
+                sender.Reply($"The combined forces shake the door and you can feel it crack. You definitely destroyed it a little.");
                 this.door_life -= 1;
             }
             else if (this.kick_count > 2 && this.door_life == 1)
             {
-                var message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}. The {this} finally opened.";
+                var message = $"The combined forces shatter the door into {this.Game.EntryHall.Splinters}.\nThe {this} finally opened.";
                 sender.Room.BroadcastMsg(message);
                 this.door_life -= 1;
                 this.IsOpen = true;

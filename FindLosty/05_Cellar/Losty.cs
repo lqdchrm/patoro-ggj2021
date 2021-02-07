@@ -24,4 +24,16 @@ public class Losty : Item
                                        
                                        
 ";
+        public override void Use(IPlayer sender, IThing other)
+        {
+            if (other is BottomlessPit pit)
+            {
+                pit.ThrowInLosty(sender);
+            }
+            else
+            {
+                base.Use(sender, other);
+            }
+        }
+
 }

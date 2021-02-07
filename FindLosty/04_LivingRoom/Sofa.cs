@@ -135,7 +135,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
            ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
         */
         public override void TakeFrom(IPlayer sender, IContainer container) =>
-            sender.Reply($"Yeah why not. Its not like you may want to keep your back in one piece.");
+            sender.Reply($"Yeah why not. Its not like you want to keep your back in one piece.");
 
         /*
         ██████╗ ██╗   ██╗████████╗

@@ -54,7 +54,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         {
             if (IsOpen)
             {
-                sender.Reply("You hear something breathing.");
+                sender.Reply("You hear something breathing behinde the door.");
             } else
             {
                 base.Listen(sender);
@@ -75,7 +75,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             {
                 sender.Reply(DoorImage);
                 sender.Room.BroadcastMsg($"{sender} opens the {this}...startling.", sender);
-                sender.Reply($"You open the door and look into the eyes of an hungry {this.Game.EntryHall.Croc}");
+                sender.Reply($"You open the door and look into the eyes of a hungry {this.Game.EntryHall.Croc}");
                 this.IsOpen = true;
             }
             else
@@ -83,7 +83,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 var crocText = this.Game.EntryHall.Croc.IsNapping
                     ? string.Empty
                     : $"\nAnd the {this.Game.EntryHall.Croc} is still staring at you.";
-                sender.Reply($"The door is already opend.{crocText}");
+                sender.Reply($"The door is already open.{crocText}");
                 if (!this.Game.EntryHall.Croc.IsNapping)
                 {
                     sender.Reply(DoorImage);
@@ -127,11 +127,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
             else
             {
                 sender.Reply($@"
-                    You smash the {this}.
+                    You slam the {this} shut.
                     It is safe now. Is it?"
                     .FormatMultiline());
-                sender.Room.BroadcastMsg($"{sender} closes the {this} with a smash.", sender);
-                this.Game.DiningRoom.BroadcastMsg($"You hear a loud bang from the {this.Game.EntryHall}.");
+                sender.Room.BroadcastMsg($"{sender} slams the {this} shut.", sender);
+                this.Game.DiningRoom.BroadcastMsg($"You hear a loud bang from the {this.Game.EntryHall}. Did someone slam a door?");
                 this.IsOpen = false;
                 this.Game.EntryHall.Croc.WasMentioned = false;
             }

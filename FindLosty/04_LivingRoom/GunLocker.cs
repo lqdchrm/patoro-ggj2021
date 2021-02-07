@@ -52,7 +52,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
         public override void Look(IPlayer sender)
         {
-            var message = "The heavy metal locker is secured in the wall.\n";
+            var message = "The heavy metal locker is secured on the wall.\n";
             if (!this.IsOpen)
                 message += $@"
                         There is no way to force your way in or move it.
@@ -113,7 +113,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
             if (this.IsOpen)
             {
-                sender.Reply("The door is already open");
+                sender.Reply("The door is already open.");
             }
             else
             {
@@ -134,7 +134,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
             if (this.IsOpen)
             {
-                sender.Reply("You close the door, but the lock does not lock again.");
+                sender.Reply("You close the door, but it will not lock again.");
                 sender.Room.BroadcastMsg($"{sender} trys to close the door of the {this}. But it swings open again.", sender);
             }
             else
@@ -153,7 +153,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         */
         public override void TakeFrom(IPlayer sender, IContainer container)
         {
-            sender.Reply($"Even if it would not be secured in the wall. It would still be to heavy.");
+            sender.Reply($"Even if it was not secured on the wall. It would still be to heavy.");
         }
 
         /*
@@ -168,7 +168,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
             if (!this.IsOpen)
             {
-                error = $"You can't put {thing} in {this} as long as it is closed.";
+                error = $"You can't put {thing} in {this} as long as it's closed.";
                 return false;
             }
             return base.DoesItemFit(thing, out error);

@@ -31,16 +31,16 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public override string Description => this.isBroken
             
             ? @$"
-                Like many elements in this room the stairs are made of dark wood.
-                But the lower stairs are broken... you can no longer use the {this}.
+            Like many elements in this room the {this} are made of dark wood.
+                But the lower stairs are broken... you can no longer use them.
                 
                 Under the {this} is a concret wall that seems to cover the basement stairs.
-                {A} {this.Game.EntryHall.MetalDoor} is blocking the way to the basement.".FormatMultiline()
+                {A} {this.Game.EntryHall.MetalDoor} is blocking your way into the basement.".FormatMultiline()
             
             : @$"
                 Like many elements in this room the stairs are made of a dark wood.
-                But it looks old and ... not in a good way. It could be hazardous.
-                In the side of the {this} is {a} {this.Game.EntryHall.MetalDoor}.".FormatMultiline();
+                It looks old and ... not in a good way. It could be hazardous.
+                Below the {this} is {a} {this.Game.EntryHall.MetalDoor}.".FormatMultiline();
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -110,7 +110,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         {
             if (this.isBroken)
             {
-                sender.Reply("There is not enogh left of the stairs to climb up.");
+                sender.Reply("There is not enough of the stairs left to climb up.");
             }
             else
             {

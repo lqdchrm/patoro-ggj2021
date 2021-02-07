@@ -167,10 +167,7 @@ You only see its tail.
             {
                 var crocAteTofu = TryToEatTofu(sender, tofu);
                 IContainer target = crocAteTofu ? this : sender.Room;
-                if (!sender.Transfer(this, target))
-                {
-                    sender.Reply($"You don't posses a {this}.");
-                }
+                sender.Transfer(this, target);
             }
             else
             {

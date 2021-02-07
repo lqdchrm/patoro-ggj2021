@@ -38,7 +38,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
             }
             else
             {
-                sender.Reply("The lion look majestic, especially from this close. But it's sleeping. You hear it snore.");
+                sender.Reply("The lion looks majestic, especially from up close. But it's sleeping. You hear it snore.");
             }
         }
 
@@ -134,8 +134,8 @@ namespace LostAndFound.FindLosty._04_LivingRoom
                 sender.Reply($"You can't put {thing} into a closed mouth.");
             else
             {
-                sender.Reply($"You push the {thing} in the mouth of the {this}. But it roles back out. Now it is a little wet.");
-                sender.Room.BroadcastMsg($"{sender} push a {thing} in the mouth of the {this}. But it roles back out.", sender);
+                sender.Reply($"You push the {thing} in the mouth of the {this}, But it roles back out. Now it is a little wet.");
+                sender.Room.BroadcastMsg($"{sender} push a {thing} in the mouth of the {this}, but it roles back out.", sender);
             }
         }
 

@@ -46,9 +46,9 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         {
             get {
                 string[] description = new string[]{
-                        $"You look around the big living room. The croc is sitting next the door.",
+                        $"You look around the big living room. The croc is sitting next to the door.",
                         $"{Sofa.ShortDescription()}",
-                        $"Opposing the seating area is an old {Chimney}.",
+                        $"Opposite the {Sofa} is an old {Chimney}.",
                         $"Beneath a {LionHead}, that's mounted on the wall next to the {Chimney} is a metal {GunLocker}.",
                         $"{GunLocker.ShortDescription()}"
                     };

@@ -45,7 +45,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(IPlayer sender) => sender.Reply($"Its hard to type with your feet.");
+        public override void Kick(IPlayer sender) => sender.Reply($"It's hard to type with your feet.");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
@@ -56,7 +56,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
 
-        public override string Noises => "You hear the humming of the electronics.";
+        public override string Noises => "You hear the humming of electronics inside.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -66,7 +66,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝██║     ███████╗██║ ╚████║
          ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
         */
-        public override void Open(IPlayer sender) => sender.Reply($"If you would know more about electronics, this may be a valid approach.");
+        public override void Open(IPlayer sender) => sender.Reply($"If you knew more about electronics, this might be a valid approach.");
 
         /*
          ██████╗██╗      ██████╗ ███████╗███████╗
@@ -105,7 +105,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚██████╔╝███████║███████╗
          ╚═════╝ ╚══════╝╚══════╝
         */
-        public override void Use(IPlayer sender) => sender.Reply($"You need to enter a PIN");
+        public override void Use(IPlayer sender) => sender.Reply($"You need to enter a PIN.");
 
         public bool Use(IPlayer sender, string pin)
         {
@@ -127,10 +127,10 @@ namespace LostAndFound.FindLosty._04_LivingRoom
 
                 Task.Run(async () =>
                 {
-                    sender.Reply($"You enter {pin}.\nYou hear an pleasant Bing.");
-                    sender.Room.BroadcastMsg($"You hear a Bing from the {gunLocker}.", sender);
+                    sender.Reply($"You enter {pin}.\nYou hear a pleasant bing.");
+                    sender.Room.BroadcastMsg($"You hear a pleasant bing from the {gunLocker}.", sender);
                     await Task.Delay(100);
-                    sender.Room.BroadcastMsg($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite}is rolling on the floor.");
+                    sender.Room.BroadcastMsg($"The door of the {gunLocker} swings open and a pack of {gunLocker.Dynamite} drops on the floor.");
                 }).Wait();
 
                 gunLocker.Unlock(sender);

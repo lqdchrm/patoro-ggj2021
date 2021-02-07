@@ -35,7 +35,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public override string Description =>
             (this.IsDynamiteUsed, this.IsOpen) switch
             {
-                (true, false) => $"You see the dynamite burning... RUN",
+                (true, false) => $"You see the dynamite burning... RUN.",
                 (_, true) => "Dark burn marks are on the door. The explosion deformed it. It can no longer close.",
                 _ => $"A very study door. It would be a blast to open it."
             };
@@ -60,11 +60,11 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 sender.Hit();
 
                 sender.ReplyWithState(@"
-                    You try to kick open the door, but it is much sturdier then you thought.
-                    The pain crawls from your feet up to you hip. You try to put on a breave face.
+                    You try to kick open the door, but it is much sturdier than you thought.
+                    The pain goes from your feet to you hip. You try to put on a brave face.
                     ".FormatMultiline());
 
-                sender.Room.BroadcastMsg($"{sender} kicks against the door. He trys to hide the fact that he hurt himself.", sender);
+                sender.Room.BroadcastMsg($"{sender} kicks against the door. He tries to hide the fact that he hurt himself.", sender);
             }
         }
 
@@ -76,7 +76,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ███████╗██║███████║   ██║   ███████╗██║ ╚████║
         ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝
         */
-        public override string Noises => $"You hear scratching on the other side of the very massive door.";
+        public override string Noises => $"You hear scratching on the other side of the very massive metal door.";
 
         /*
          ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -120,7 +120,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
             }
             else
             {
-                sender.Reply("It is already closed.");
+                sender.Reply("It's already closed. Which is the whole problem.");
             }
         }
 
@@ -169,27 +169,31 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 this.IsDynamiteUsed = true;
                 sender.Remove(dynamite);
 
-                sender.Reply($"You put the {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this}  and ignite its fuse.");
+                sender.Reply($"You put the {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this} and ignite its fuse.");
                 this.Game.EntryHall.BroadcastMsg($"You see that {sender} puts a stick of {this.Game.LivingRoom.GunLocker.Dynamite} in front of the {this} and ignites it.", sender);
 
                 // Dramaturgische pause
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(3));
                 
-                this.Game.EntryHall.BroadcastMsg("You should leave the room NOW!!!\nRUN!!!");
+                this.Game.EntryHall.BroadcastMsg("You should realy not be standing here. Leave the room NOW!!!\nRUN!!!");
                 
                 // fuse time
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(10));
 
-                foreach (var players in this.Game.EntryHall.Players)
-                    players.Hit(damage: 3);
-
-                this.Game.EntryHall.BroadcastMsg("An explosion throws everyone in the room to the ground. Your ears are ringing.");
                 
-                foreach (var room in this.Game.Rooms.Values.Except(new[] { this.Game.EntryHall }))
-                    room.BroadcastMsg($"You hear a loud explosion from the {this.Game.EntryHall}. Everything is jiggles.");
-
-                this.IsOpen = true;
-                await this.Game.Cellar.Show();
+                this.Game.Cellar.Show();
+                foreach (Room room in this.Game.Rooms.Values)
+                {
+                    room.Hide();
+                }
+                foreach (Player player in  Game.Players.Values)
+                {
+                    player.Reply($"An earth-shattering explosion destroys the complete {Game.FrontYard.Mansion}.\n" +
+                                 $"The only thing still standing is the large metal door.\n" +
+                                 $"The last thing you see, is {Game.Cellar.Losty} emerging from the rubble.\n" +
+                                 $"Right behind him is a myriad of black tentacles that grab him, all your friends and you and drag you into the {Game.Cellar}.");
+                    player.MoveTo(Game.Cellar);
+                }
             }
         }
 

@@ -31,7 +31,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
 
-        public override string Description => $"Its a stick of {this}";
+        public override string Description => $"It's a stick of {this}";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -41,7 +41,7 @@ namespace LostAndFound.FindLosty._04_LivingRoom
         ██║  ██╗██║╚██████╗██║  ██╗
         ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
         */
-        public override void Kick(IPlayer sender) => sender.Reply($"This should be against all safty regulations...");
+        public override void Kick(IPlayer sender) => sender.Reply($"This should be against all safety regulations...");
 
         /*
         ██╗     ██╗███████╗████████╗███████╗███╗   ██╗
