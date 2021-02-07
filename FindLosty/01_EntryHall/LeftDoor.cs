@@ -114,7 +114,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         */
         public override void Open(IPlayer sender) => sender.Reply(
             this.IsOpen
-            ? "There is not much left that could be opened"
+            ? "There is not much left that could be opened."
             : $"The door is jammed. It might need united force to break it open."
         );
 
@@ -129,7 +129,7 @@ namespace LostAndFound.FindLosty._01_EntryHall
         public override void Close(IPlayer sender) => sender.Reply(
             this.IsOpen
             ? "You don't think the remains can close anything."
-            : "Its already Closed."
+            : "It's already closed."
         );
 
         /*
