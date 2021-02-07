@@ -86,26 +86,17 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         */
         public override void TakeFrom(IPlayer sender, IContainer container)
         {
-            if (container is Cage cage)
+            double number = random.Next(0, 10000);
+            if (number <= 3000 || container is not IRoom)
             {
-                base.Take(sender, container);
+                base.TakeFrom(sender, container);
                 this.person_that_let_hamster_go = null;
             }
             else
             {
-                double number = random.Next(0, 10000);
-                if (number <= 3000)
-                {
-                    base.Take(sender, container);
-                    this.person_that_let_hamster_go = null;
-                }
-                else
-                {
-                    string scold = $"\n{number}It would be nice if {person_that_let_hamster_go} hadn't let it run free.";
-                    sender.Reply($"The hamster slips away. You need to try 'take'ing it again.{scold}");
-                    sender.Room.BroadcastMsg($"{sender} tries to pick up the hamster. But the hamster wins this battle.\n{scold}", sender);
-                }
-                    
+                string scold = $"\nIt would be nice if {person_that_let_hamster_go} hadn't let it run free.";
+                sender.Reply($"The hamster slips away. You need to try 'take'ing it again.{scold}");
+                sender.Room.BroadcastMsg($"{sender} tries to pick up the hamster. But the hamster wins this battle.\n{scold}", sender);
             }
         }
 
@@ -139,10 +130,12 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             if (other is IContainer container)
             {
                 container.Use(sender, this);
-            } else if (other is Splinters splinter)
+            }
+            else if (other is Splinters splinter)
             {
                 StickSplintersIn(sender);
-            } else
+            }
+            else
             {
                 base.Use(sender, other);
             }
