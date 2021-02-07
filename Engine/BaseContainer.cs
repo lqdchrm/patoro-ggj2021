@@ -211,7 +211,7 @@ namespace LostAndFound.Engine
             {
                 PutIntoThis(sender, other);
             } else
-                base.Use(sender, other);
+                base.Use(sender);
         }
 
     }
