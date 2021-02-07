@@ -1,4 +1,4 @@
-﻿using LostAndFound.Engine;
+using LostAndFound.Engine;
 
 namespace LostAndFound.FindLosty._03_Kitchen
 {
@@ -17,9 +17,10 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
         */
 
-        public bool Frozen = true;
-        public bool Warm = false;
-        public int UseCount = 0;
+        private const int MAX_USE_COUNT = 4;
+        public bool Frozen { get; set; } = true;
+        public bool Warm { get; set; } = false;
+        public int UseCount { get; private set; } = 0;
 
         /*
         ██╗      ██████╗  ██████╗ ██╗  ██╗
@@ -29,7 +30,20 @@ namespace LostAndFound.FindLosty._03_Kitchen
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => this.Frozen ? "A box of frozen tofu." : "A box of warm, smelly tofu.";
+        public override string Description => (this.Frozen, this.Warm, this.UseCount) switch
+        {
+            (true, _, _) => "A box of frozen tofu.",
+
+            (false, true, <= 0) => "A box of warm, smelly tofu.",
+            (false, true, > 0 and < MAX_USE_COUNT - 1) => "A box of warm, smelly tofu. Someone already took a bite.",
+            (false, true, < MAX_USE_COUNT) => "A box of warm, smelly tofu. Someone already took a big bite.",
+            (false, true, >= MAX_USE_COUNT) => "A box of warm, smelly tofu. But there is not much left.",
+
+            (false, false, <= 0) => "A box of tofu.",
+            (false, false, > 0 and < MAX_USE_COUNT - 1) => "A box of tofu. Someone already took a bite.",
+            (false, false, < MAX_USE_COUNT) => "A box of tofu. Someone already took a big bite.",
+            (false, false, >= MAX_USE_COUNT) => "A box of tofu. It probably tastes good if it is warm. But there is not much left.",
+        };
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -113,13 +127,18 @@ namespace LostAndFound.FindLosty._03_Kitchen
                 sender.Reply("You lick the frozen tofu. Besides a strange taste in your mouth nothing happens.");
                 sender.Room.BroadcastMsg($"{sender} licked tofu", sender);
             }
+            else if (this.UseCount >= MAX_USE_COUNT)
+            {
+                sender.Reply($"There is not much tofu left and you feel like you might need some tofu later.");
+            }
             else
             {
-                sender.Reply(OneOf(
-                    $"You take a bite of tofu. It tastes good.",
-                    $"There is not much tofu left and you feel like you might need some tofu later."
-                ));
+                if (this.Warm)
+                    sender.Reply($"You take a bite of tofu. It tastes good.");
+                else
+                    sender.Reply($"You take a bite of tofu. You think it could taste good if warmed.");
                 sender.Room.BroadcastMsg($"{sender} tastes tofu", sender);
+                this.UseCount += 1;
             }
         }
 
