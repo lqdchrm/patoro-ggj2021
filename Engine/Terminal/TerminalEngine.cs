@@ -75,7 +75,10 @@ namespace LostAndFound.Engine.Cnsole
 
         public string GetPlayerInput(TPlayer player)
         {
-            Console.Write($"\n{player?.Room?.Name}: {player?.StatusText}> ");
+            var next = commands?.FirstOrDefault();
+            next = next != null ? $" <📜 {next}>" : null;
+
+            Console.Write($"\n@{player?.Room?.Name} {player?.StatusText}{next} : ");
             return Console.ReadLine();
         }
 
@@ -94,6 +97,7 @@ namespace LostAndFound.Engine.Cnsole
                 while ((input = GetPlayerInput(player)) != "exit")
                 {
                     var cmd = new BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>(player, input);
+                    
                     if (Mode == "script")
                     {
                         if (string.IsNullOrWhiteSpace(cmd.Command))
