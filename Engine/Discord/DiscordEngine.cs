@@ -226,18 +226,20 @@ namespace LostAndFound.Engine.Discord
 
         public void Mute(TPlayer player)
         {
-            if (_PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
-            {
-                member.ModifyAsync(x => x.Muted = true);
-            }
+            // Disabled: Server mute can't be unmuted by player himself
+            //if (_PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
+            //{
+            //    member.ModifyAsync(x => x.Muted = true);
+            //}
         }
 
         public void Unmute(TPlayer player)
         {
-            if (_PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
-            {
-                member.ModifyAsync(x => x.Muted = false);
-            }
+            // Disabled: Server mute can't be unmuted by player himself
+            //if (_PlayerNameToDiscordMember.TryGetValue(player.NormalizedName, out DiscordMember member))
+            //{
+            //    member.ModifyAsync(x => x.Muted = false);
+            //}
         }
 
         public void SendReplyTo(TPlayer player, string msg)
