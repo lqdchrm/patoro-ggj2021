@@ -10,7 +10,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/net5.0/LostAndFound.dll",
-            "args": ["script"], // "D:\\Projects\\GameJam2021\\laf-ggj2021\\FindLosty\\Tests\\walkthrough.txt"],
+            "args": ["script", ".\\FindLosty\\Tests\\walkthrough.txt"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "stopAtEntry": false

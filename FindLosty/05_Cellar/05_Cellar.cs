@@ -47,8 +47,8 @@ namespace LostAndFound.FindLosty._05_Cellar
                 {
                     if (FirstLookWithLightsOff)
                     {
-                        return($"You open your eyes. You feel like your still alive. You can hear your friends.\nBut it's pitch black you can't see your hand in front of your eyes.\nAbove you is a small speck of light.");
                         FirstLookWithLightsOff = false;
+                        return ($"You open your eyes. You feel like your still alive. You can hear your friends.\nBut it's pitch black you can't see your hand in front of your eyes.\nAbove you is a small speck of light.");
                     }
                     else
                     {

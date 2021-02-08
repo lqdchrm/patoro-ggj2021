@@ -181,10 +181,10 @@ namespace LostAndFound.FindLosty._01_EntryHall
                 await Task.Delay(TimeSpan.FromSeconds(10));
 
                 
-                this.Game.Cellar.Show();
+                _ = this.Game.Cellar.Show();
                 foreach (Room room in this.Game.Rooms.Values)
                 {
-                    room.Hide();
+                    _ = room.Hide();
                 }
                 foreach (Player player in  Game.Players.Values)
                 {

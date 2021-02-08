@@ -30,19 +30,31 @@ namespace LostAndFound.FindLosty
 
     public class FindLostyGame : BaseGameImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IFindLostyGame
     {
+        #region Game Factory
+
+        public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild)
+        {
+            return new FindLostyGame(name,
+                new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
+        }
+
+        public static FindLostyGame Terminal(string mode, string filePath = null)
+        {
+            IEnumerable<string> scriptLines = null;
+            if (filePath != null && File.Exists(filePath))
+                scriptLines = File.ReadAllLines(filePath);
+
+            return new FindLostyGame("FindLosty",
+                new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode, scriptLines));
+        }
+        #endregion
+
         public FrontYard FrontYard { get; init; }
         public EntryHall EntryHall { get; init; }
         public DiningRoom DiningRoom { get; init; }
         public LivingRoom LivingRoom { get; init; }
         public Kitchen Kitchen { get; init; }
         public Cellar Cellar { get; init; }
-
-        public static FindLostyGame Discord(string name, DiscordClient client, DiscordGuild guild) => new FindLostyGame(name, new DiscordEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(client, guild));
-        public static FindLostyGame Terminal(string mode, string filePath = null)
-        {
-            var script = filePath != null ? File.ReadAllLines(filePath) : null;
-            return new FindLostyGame("FindLosty", new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode, script));
-        }
 
         private FindLostyGame(string name, BaseEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> engine) : base(name, engine)
         {
