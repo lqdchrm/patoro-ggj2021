@@ -10,6 +10,7 @@ namespace LostAndFound.FindLosty._02_DiningRoom
 
         public override string Emoji => Emojis.Hamster;
         public IPlayer person_that_let_hamster_go = null;
+        public bool power_of_chuck_norris = false;
 
         public Hamster(FindLostyGame game) : base(game)
         {
@@ -32,7 +33,14 @@ namespace LostAndFound.FindLosty._02_DiningRoom
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => $"The hamster has some barcode printed on its belly.";
+        public override string Description {
+            get {
+                string message = $"The hamster has some barcode printed on its belly.";
+                if (power_of_chuck_norris)
+                    message += "He also wears sunglasses and it feels like he is ready to kick ass.";
+                return message;
+            }
+        }
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -91,6 +99,10 @@ namespace LostAndFound.FindLosty._02_DiningRoom
             {
                 base.TakeFrom(sender, container);
                 this.person_that_let_hamster_go = null;
+                if (container is Wardrobe)
+                {
+                    sender.Reply($"For some reason the {this} is now wearing sunglasses.");
+                }
             }
             else
             {

@@ -20,6 +20,7 @@ namespace LostAndFound.FindLosty
 {
     public interface IFindLostyGame : BaseGame<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>
     {
+        bool GameEnded { get; set; }
         FrontYard FrontYard { get; }
         EntryHall EntryHall { get; }
         DiningRoom DiningRoom { get; }
@@ -49,6 +50,15 @@ namespace LostAndFound.FindLosty
         }
         #endregion
 
+        private bool gameEnded = false;
+        public bool GameEnded {
+            get {
+                return gameEnded;
+            }
+            set {
+                gameEnded = value;
+            }
+        }
         public FrontYard FrontYard { get; init; }
         public EntryHall EntryHall { get; init; }
         public DiningRoom DiningRoom { get; init; }
@@ -122,6 +132,11 @@ namespace LostAndFound.FindLosty
                 return;
             }
 
+            if (GameEnded)
+            {
+                player.Reply($"This is the end of the game.");
+                return;
+            }
             if (cmd != "yes" && cmd != "no")
                 player.TheThingThatAskedAQuestion = null;
 

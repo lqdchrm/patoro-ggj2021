@@ -1,8 +1,9 @@
 ﻿using LostAndFound.Engine;
+using LostAndFound.FindLosty._02_DiningRoom;
 
 namespace LostAndFound.FindLosty._01_EntryHall
 {
-    public class Wardrobe : Thing
+    public class Wardrobe : Container
     {
         public override string Emoji => Emojis.Wardrobe;
         public Wardrobe(FindLostyGame game) : base(game)
@@ -81,6 +82,14 @@ namespace LostAndFound.FindLosty._01_EntryHall
         ██║     ╚██████╔╝   ██║   
         ╚═╝      ╚═════╝    ╚═╝   
         */
+        public override void PutIntoThis(IPlayer sender, IThing thing)
+        {
+            if (thing is Hamster hamster)
+            {
+                hamster.power_of_chuck_norris = true;
+            }
+            base.PutIntoThis(sender, thing);
+        }
 
         /*
         ██╗   ██╗███████╗███████╗

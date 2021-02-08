@@ -10,17 +10,17 @@ public class Losty : Item
     }
 
     public override string Description => @"
-    Wuff!             _                
-                     | \               
-           _         |  \              
-          / \_______/    \             
-         |   |       @    \            
-          \_/              \           
-           \-------         \          
-            _ / / /          \__         
-            \| | | _|                 
-             | | |  \                 
-             \___/                     
+    Wuff!            __               
+                     ) \               
+           _         )  \              
+          /`\_______/    \             
+         |   |       (@   \            
+          \_/              \~           
+           \-------         \~         
+            _ / , /          \~__         
+            \| ; | _|                 
+             | ; ,   \                 
+             \__/                     
                                        
                                        
 ";
@@ -29,6 +29,10 @@ public class Losty : Item
             if (other is BottomlessPit pit)
             {
                 pit.ThrowInLosty(sender);
+            }
+            else if (other is Hole hole)
+            {
+                hole.ThrowInLosty(sender);
             }
             else
             {
