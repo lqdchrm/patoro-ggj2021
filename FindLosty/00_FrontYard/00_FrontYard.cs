@@ -49,7 +49,7 @@ namespace LostAndFound.FindLosty._00_FrontYard
                     $"",
                     $"You hear barking. Could this be your missing dog {Game.Cellar.Losty}?",
                     $"He ran away two days ago, so you started a rescue mission with your best friends.",
-                    $"Maybe he somehow entered the abondoned {Mansion}."
+                    $"Maybe he somehow entered the abandoned {Mansion}."
                 };
                 return System.String.Join('\n', description.Where(x => x != null));
             }
