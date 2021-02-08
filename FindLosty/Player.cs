@@ -32,11 +32,11 @@ namespace LostAndFound.FindLosty
             get
             {
                 var health = string.Join("", Enumerable.Repeat(Emojis.Heart, this.Health).Concat(Enumerable.Repeat(Emojis.EmptyHeart, PLAYER_MAX_HEALTH - this.Health)));
-                var items = string.Join("", this.Select(i => i.Emoji));
+                var items = this.Any() ? " [" + string.Join("", this.Select(i => i.Emoji)) + "]" : "";
                 var item = this.ThingPlayerIsUsingAndHasToStop?.ToString();
-                var action = item != null ? $"using {item}" : "";
+                var action = item != null ? $" using {item}" : "";
                 var super_powers =  OmniPotentPowerOfShelf ? " and has the 🔥🌎🔥omnipotent power of shelf🔥🌎🔥" : "";
-                return $"[{this.Emoji}{this.Name}] {health} {items} {action} {super_powers}";
+                return $"{Game.FormatThing(this)} {health}{items}{action}{super_powers}";
             }
         }
 
