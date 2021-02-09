@@ -1,16 +1,17 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-
         {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/net5.0/LostAndFound.dll",
-            "args": ["script", ".\\FindLosty\\Tests\\walkthrough.txt"],
+            "program": "${workspaceFolder}/FindLosty/bin/Debug/net5.0/FindLosty.dll",
+            "args": [
+                "script",
+                ".\\FindLosty\\Tests\\walkthrough.txt"
+            ],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "stopAtEntry": false
