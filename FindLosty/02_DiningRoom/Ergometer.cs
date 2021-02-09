@@ -1,7 +1,8 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
+
 using System.Linq;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+namespace FindLosty._02_DiningRoom
 {
     public class Ergometer : Container
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine.Cnsole
+namespace Patoro.TAE.Terminal
 {
     public class TerminalEngine<TGame, TPlayer, TRoom, TContainer, TThing>
         : BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public interface BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing> : IDisposable
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>

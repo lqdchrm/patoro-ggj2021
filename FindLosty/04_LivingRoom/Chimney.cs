@@ -1,6 +1,7 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 
-namespace LostAndFound.FindLosty._04_LivingRoom
+
+namespace FindLosty._04_LivingRoom
 {
     public class Chimney : Thing
     {

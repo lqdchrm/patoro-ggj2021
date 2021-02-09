@@ -3,8 +3,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>LostAndFound</RootNamespace>
-    <AssemblyName>LostAndFound</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetEnv" Version="2.0.0" />
-    <PackageReference Include="DSharpPlus" Version="4.0.0-rc1" />
+    <ProjectReference Include="..\Patoro.TAE.Discord\Patoro.TAE.Discord.csproj" />
+    <ProjectReference Include="..\Patoro.TAE.Terminal\Patoro.TAE.Terminal.csproj" />
+    <ProjectReference Include="..\Patoro.TAE\Patoro.TAE.csproj" />
   </ItemGroup>
 
 </Project>

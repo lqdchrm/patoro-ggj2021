@@ -1,15 +1,17 @@
-using LostAndFound.Engine;
-using LostAndFound.FindLosty;
+using Patoro.TAE;
 
-public class Losty : Item
+
+namespace FindLosty._05_Cellar
 {
-    public override string Emoji => Emojis.Dog;
-
-    public Losty(FindLostyGame game) : base(game)
+    public class Losty : Item
     {
-    }
+        public override string Emoji => Emojis.Dog;
 
-    public override string Description => @"
+        public Losty(FindLostyGame game) : base(game)
+        {
+        }
+
+        public override string Description => @"
     Wuff!            __               
                      ) \               
            _         )  \              
@@ -40,4 +42,5 @@ public class Losty : Item
             }
         }
 
+    }
 }

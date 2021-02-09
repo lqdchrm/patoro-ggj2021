@@ -9,7 +9,7 @@ using System.Linq;
  * https://marketplace.visualstudio.com/items?itemName=BitBelt.converttoasciiart
 */
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public interface BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>

@@ -1,9 +1,10 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
+
 using System;
 using System.Linq;
 
 
-namespace LostAndFound.FindLosty._04_LivingRoom
+namespace FindLosty._04_LivingRoom
 {
     public class GunLocker : Container
     {

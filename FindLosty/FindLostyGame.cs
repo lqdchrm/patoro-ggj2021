@@ -1,22 +1,22 @@
 using DSharpPlus;
-using DSharpPlus.Entities;
-using LostAndFound.Engine;
-using LostAndFound.Engine.Cnsole;
-using LostAndFound.Engine.Discord;
-using LostAndFound.Engine.Events;
-using LostAndFound.FindLosty._00_FrontYard;
-using LostAndFound.FindLosty._01_EntryHall;
-using LostAndFound.FindLosty._02_DiningRoom;
-using LostAndFound.FindLosty._03_Kitchen;
-using LostAndFound.FindLosty._04_LivingRoom;
-using LostAndFound.FindLosty._05_Cellar;
+using Patoro.TAE;
+using Patoro.TAE.Terminal;
+using Patoro.TAE.Discord;
+using Patoro.TAE.Events;
+using FindLosty._00_FrontYard;
+using FindLosty._01_EntryHall;
+using FindLosty._02_DiningRoom;
+using FindLosty._03_Kitchen;
+using FindLosty._04_LivingRoom;
+using FindLosty._05_Cellar;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DSharpPlus.Entities;
 
-namespace LostAndFound.FindLosty
+namespace FindLosty
 {
     public interface IFindLostyGame : BaseGame<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>
     {

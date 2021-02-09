@@ -1,6 +1,7 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+
+namespace FindLosty._02_DiningRoom
 {
     public class Button : Thing
     {

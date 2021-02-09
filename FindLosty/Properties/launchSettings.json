@@ -5,7 +5,11 @@
     },
     "FindLosty-Terminal": {
       "commandName": "Project",
-      "commandLineArgs": "terminal"
+      "commandLineArgs": "interactive"
+    },
+    "FindLosty-Webserver": {
+      "commandName": "Project",
+      "commandLineArgs": "webserver 8080"
     }
   }
 }

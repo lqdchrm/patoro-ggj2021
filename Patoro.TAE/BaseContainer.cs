@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public interface BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
         : BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>, IEnumerable<TThing>

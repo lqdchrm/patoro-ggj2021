@@ -1,6 +1,7 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 
-namespace LostAndFound.FindLosty._03_Kitchen
+
+namespace FindLosty._03_Kitchen
 {
     public class Kitchen : Room
     {

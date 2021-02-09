@@ -1,16 +1,18 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine.Discord
+namespace Patoro.TAE.Discord
 {
-    class DiscordBot
+    public class DiscordBot
     {
-        private Type defaultGame;
         private DiscordClient client;
+        private string DefaultGame;
+
         private const Permissions neededPermissions =
                   Permissions.DeafenMembers
                 | Permissions.ManageChannels
@@ -20,12 +22,18 @@ namespace LostAndFound.Engine.Discord
                 | Permissions.MuteMembers
                 | Permissions.SendMessages
                 | Permissions.SendTtsMessages;
+
+        private readonly DiscordGameRegistry GameRegistry = new DiscordGameRegistry();
         private readonly Dictionary<ulong, DiscordGuildBotInstance> BotLoockup = new Dictionary<ulong, DiscordGuildBotInstance>();
 
-        public async Task Start(Type defaultGame = null)
+        public void RegisterGame(string name, Func<string, DiscordClient, DiscordGuild, IGame> gameCtor)
         {
-            this.defaultGame = defaultGame;
+            GameRegistry.Add(name, gameCtor);
+        }
 
+        public async Task Start(string defaultGame = null)
+        {
+            this.DefaultGame = defaultGame;
             DotNetEnv.Env.Load();
 
             Console.Error.WriteLine("[ENGINE] Creating Discord client ...");
@@ -46,7 +54,7 @@ namespace LostAndFound.Engine.Discord
             await this.client.ConnectAsync();
             Console.Error.WriteLine("[ENGINE] ... Connected");
 
-            Console.WriteLine("Use following URL to invete the bot to your Server:");
+            Console.WriteLine("Use following URL to invite the bot to your Server:");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"https://discord.com/api/oauth2/authorize?client_id={client.CurrentUser.Id}&permissions={(long)neededPermissions}&scope=bot");
             Console.ResetColor();
@@ -81,7 +89,7 @@ namespace LostAndFound.Engine.Discord
                 Console.Error.WriteLine($"[ENGINE ERROR] Guild {e.Guild.Name} need {string.Join(", ", missingPermissions)}");
             }
 
-            var server = new DiscordGuildBotInstance(sender, e.Guild, this.defaultGame);
+            var server = new DiscordGuildBotInstance(sender, e.Guild, GameRegistry, DefaultGame);
             this.BotLoockup.Add(e.Guild.Id, server);
             return Task.CompletedTask;
         }

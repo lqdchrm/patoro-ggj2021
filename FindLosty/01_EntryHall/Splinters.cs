@@ -1,8 +1,9 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._03_Kitchen;
-using LostAndFound.FindLosty._02_DiningRoom;
+﻿using Patoro.TAE;
+using FindLosty._03_Kitchen;
+using FindLosty._02_DiningRoom;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+
+namespace FindLosty._01_EntryHall
 {
     public class Splinters : Item
     {

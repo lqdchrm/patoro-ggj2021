@@ -1,8 +1,9 @@
 ﻿using System;
-using LostAndFound.Engine;
-using LostAndFound.FindLosty._01_EntryHall;
+using Patoro.TAE;
+using FindLosty._01_EntryHall;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+
+namespace FindLosty._02_DiningRoom
 {
     public class Hamster : Item
     {

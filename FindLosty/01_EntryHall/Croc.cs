@@ -1,9 +1,10 @@
-using LostAndFound.Engine;
-using LostAndFound.FindLosty._02_DiningRoom;
-using LostAndFound.FindLosty._03_Kitchen;
+using Patoro.TAE;
+using FindLosty._02_DiningRoom;
+using FindLosty._03_Kitchen;
 using System;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+
+namespace FindLosty._01_EntryHall
 {
     public class Croc : Container
     {

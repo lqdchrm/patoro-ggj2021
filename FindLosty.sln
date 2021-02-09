@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindLosty", "FindLosty\FindLosty.csproj", "{5289D87C-B3EF-4383-964E-05145108018C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patoro.TAE", "Patoro.TAE\Patoro.TAE.csproj", "{BA22C4FC-577D-4AC8-A715-294DDAFE4727}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patoro.TAE.Discord", "Patoro.TAE.Discord\Patoro.TAE.Discord.csproj", "{2DEDCCE5-BD88-4DAD-A0F5-551B5D2AC25F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patoro.TAE.Terminal", "Patoro.TAE.Terminal\Patoro.TAE.Terminal.csproj", "{B4F3A81E-FE00-4422-9513-071022ECFFDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5289D87C-B3EF-4383-964E-05145108018C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5289D87C-B3EF-4383-964E-05145108018C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5289D87C-B3EF-4383-964E-05145108018C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5289D87C-B3EF-4383-964E-05145108018C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA22C4FC-577D-4AC8-A715-294DDAFE4727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA22C4FC-577D-4AC8-A715-294DDAFE4727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA22C4FC-577D-4AC8-A715-294DDAFE4727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA22C4FC-577D-4AC8-A715-294DDAFE4727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DEDCCE5-BD88-4DAD-A0F5-551B5D2AC25F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DEDCCE5-BD88-4DAD-A0F5-551B5D2AC25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DEDCCE5-BD88-4DAD-A0F5-551B5D2AC25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DEDCCE5-BD88-4DAD-A0F5-551B5D2AC25F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35AA8735-F0A8-4AA1-A054-D703DC190FDF}
+	EndGlobalSection
+EndGlobal

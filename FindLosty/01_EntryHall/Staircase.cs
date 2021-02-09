@@ -1,6 +1,7 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+
+namespace FindLosty._01_EntryHall
 {
     public class Staircase : Thing
     {
