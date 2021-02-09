@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include=".env">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Patoro.TAE.Discord\Patoro.TAE.Discord.csproj" />
     <ProjectReference Include="..\Patoro.TAE.Terminal\Patoro.TAE.Terminal.csproj" />
     <ProjectReference Include="..\Patoro.TAE\Patoro.TAE.csproj" />
