@@ -59,13 +59,12 @@ take DYNAMITE
 ################ OPEN CELLAR #################
 goto entryhall
 look staircase
-#end
 
-# use dynamite with metaldoor
-# goto frontyard
-# #delay 6000
-# goto cellar
-# 
-# ############### END ##########################
-# exit
-# #end
+use dynamite with metaldoor
+goto frontyard
+#delay 6000
+goto cellar
+
+############### END ##########################
+exit
+#end

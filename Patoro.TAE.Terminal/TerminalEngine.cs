@@ -37,7 +37,13 @@ namespace Patoro.TAE.Terminal
         public void Dispose() { }
         public Task HideRoom(TRoom room) => Task.CompletedTask;
         public Task InitRoom(TRoom room) => Task.CompletedTask;
-        public void MovePlayerTo(TPlayer player, TRoom room) { var oldRoom = player.Room; player.Room = room; Game.RaisePlayerChangedRoom(player, oldRoom); }
+        public void MovePlayerTo(TPlayer player, TRoom room)
+        {
+            var oldRoom = player.Room;
+            player.Room = room;
+            Game.RaisePlayerChangedRoom(player, oldRoom);
+        }
+
         public string FormatThing(TThing thing) =>
             !string.IsNullOrWhiteSpace(thing.Emoji)
             ? $"[{thing.Emoji} {thing.Name}]"
@@ -79,6 +85,7 @@ namespace Patoro.TAE.Terminal
             next = next != null ? $" <📜 {next}>" : null;
 
             Console.Write($"\n@{player?.Room?.Name} {player?.StatusText}{next} : ");
+
             return Console.ReadLine();
         }
 
