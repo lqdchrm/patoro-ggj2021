@@ -1,4 +1,4 @@
-﻿namespace LostAndFound.FindLosty
+﻿namespace FindLosty
 {
     public abstract class Item : Thing
     {

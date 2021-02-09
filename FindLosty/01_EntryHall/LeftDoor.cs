@@ -1,7 +1,8 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
+
 using System;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+namespace FindLosty._01_EntryHall
 {
     public class LeftDoor : Thing
     {

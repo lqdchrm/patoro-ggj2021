@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public class BaseCommand<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>

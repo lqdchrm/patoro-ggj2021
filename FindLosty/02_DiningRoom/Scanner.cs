@@ -1,7 +1,8 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._00_FrontYard;
+﻿using Patoro.TAE;
+using FindLosty._00_FrontYard;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+
+namespace FindLosty._02_DiningRoom
 {
     public class Scanner : Container
     {

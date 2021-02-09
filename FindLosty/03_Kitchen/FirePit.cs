@@ -1,9 +1,10 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._01_EntryHall;
+﻿using Patoro.TAE;
+using FindLosty._01_EntryHall;
 using System;
 using System.Linq;
 
-namespace LostAndFound.FindLosty._03_Kitchen
+
+namespace FindLosty._03_Kitchen
 {
     public class FirePit : Container
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public interface IGame : IDisposable
     {

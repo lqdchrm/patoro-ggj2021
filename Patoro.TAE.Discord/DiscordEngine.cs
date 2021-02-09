@@ -6,9 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LostAndFound.Engine.Events;
+using Patoro.TAE;
+using Patoro.TAE.Events;
 
-namespace LostAndFound.Engine.Discord
+namespace Patoro.TAE.Discord
 {
     public class DiscordEngine<TGame, TPlayer, TRoom, TContainer, TThing>
         : BaseEngine<TGame, TPlayer, TRoom, TContainer, TThing>

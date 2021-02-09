@@ -1,4 +1,4 @@
-﻿namespace LostAndFound.Engine.Events
+﻿namespace Patoro.TAE.Events
 {
     public class PlayerRoomChange<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>

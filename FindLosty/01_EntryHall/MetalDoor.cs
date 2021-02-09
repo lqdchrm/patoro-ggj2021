@@ -1,10 +1,11 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._04_LivingRoom;
+﻿using Patoro.TAE;
+using FindLosty._04_LivingRoom;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LostAndFound.FindLosty._01_EntryHall
+
+namespace FindLosty._01_EntryHall
 {
     public class MetalDoor : Thing
     {

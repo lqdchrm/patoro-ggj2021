@@ -1,13 +1,9 @@
-﻿using DSharpPlus;
-using DSharpPlus.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
-    public interface BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>
+    public interface BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>
         : BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
         where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
@@ -15,82 +11,77 @@ namespace LostAndFound.Engine
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        string RoomNumber { get; }
-        IEnumerable<TPlayer> Players { get; }
+        TRoom Room { get; set; }
+        string NormalizedName { get; }
 
-        void BroadcastMsg(string msg, IEnumerable<TPlayer> excludedPlayers);
-        void BroadcastMsg(string msg, params TPlayer[] excludedPlayers);
+        string StatusText { get; }
+
+        TThing ThingPlayerIsUsingAndHasToStop { get; set; }
+
+        void Mute();
+
+        void Unmute();
+
+        void Reply(string msg);
+
+        void ReplyWithState(string msg);
+
+        void ReplyImage(string msg);
 
         void Say(string msg);
 
-        bool IsVisible { get; }
-        Task Show(bool silent = false);
-        Task Hide(bool silent = false);
+        void MoveTo(TRoom room);
     }
 
-    public abstract class BaseRoomImpl<TGame, TPlayer, TRoom, TContainer, TThing>
-        : BaseContainerImpl<TGame, TPlayer, TRoom, TContainer, TThing>, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>
+    public abstract class BasePlayerImpl<TGame, TPlayer, TRoom, TContainer, TThing>
+        : BaseContainerImpl<TGame, TPlayer, TRoom, TContainer, TThing>, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>
         where TPlayer : class, BasePlayer<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
         where TRoom : class, BaseRoom<TGame, TPlayer, TRoom, TContainer, TThing>, TContainer
         where TContainer : class, BaseContainer<TGame, TPlayer, TRoom, TContainer, TThing>, TThing
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
-        public string RoomNumber { get; init; }
-        public IEnumerable<TPlayer> Players => this.Game.Players.Values.Where(p => this.Equals(p.Room)).ToList();
-        public bool IsVisible { get; private set; }
-        public override bool CanAcceptNonTransferables => true;
+        public TRoom Room { get; set; }
+        public string NormalizedName => string.Join("", this.Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
 
-        public BaseRoomImpl(TGame game, string roomNumber, string name = null) : base(game, name)
+        public override string Emoji => this.emoji;
+
+        public BasePlayerImpl(TGame game, string name) : base(game, name)
         {
-            this.RoomNumber = roomNumber;
+            this.emoji = Emojis.Players.TakeOneRandom();
             this.WasMentioned = true;
-            this.IsVisible = true;
-        }
-
-        public void BroadcastMsg(string msg, params TPlayer[] excludedPlayers) => BroadcastMsg(msg, excludedPlayers as IEnumerable<TPlayer>);
-        public void BroadcastMsg(string msg, IEnumerable<TPlayer> excludedPlayers) => Send(msg, false, excludedPlayers);
-
-        public void Say(string msg) => Send(msg, true, Array.Empty<TPlayer>());
-
-        private void Send(string msg, bool tts, IEnumerable<TPlayer> excludedPlayers)
-        {
-            foreach (var player in this.Players.Where(p => !excludedPlayers.Contains(p)))
-            {
-                if (tts)
-                    player.Say(msg);
-                else
-                    player.Reply(msg);
-            }
         }
 
         /*
-        ███████╗████████╗ █████╗ ████████╗███████╗
-        ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
-        ███████╗   ██║   ███████║   ██║   █████╗  
-        ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
-        ███████║   ██║   ██║  ██║   ██║   ███████╗
-        ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-        */
+         ███████╗████████╗ █████╗ ████████╗███████╗
+         ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+         ███████╗   ██║   ███████║   ██║   █████╗  
+         ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝  
+         ███████║   ██║   ██║  ██║   ██║   ███████╗
+         ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+         */
+        private readonly string emoji;
 
-        public async Task Show(bool silent = false)
+        public virtual string StatusText => ToString();
+
+        private TThing thingPlayerIsUsingAndHasToStop;
+        public TThing ThingPlayerIsUsingAndHasToStop
         {
-            if (!this.IsVisible)
+            get => this.thingPlayerIsUsingAndHasToStop;
+            set
             {
-                this.IsVisible = true;
-                await Game.ShowRoom(this as TRoom);
-
-                if (!silent)
-                    this.Game.Say($"Door opened.");
-            }
-        }
-
-        public async Task Hide(bool silent = false)
-        {
-            if (this.IsVisible)
-            {
-                this.IsVisible = false;
-                await Game.HideRoom(this as TRoom);
+                if (this is TPlayer self)
+                {
+                    if (this.thingPlayerIsUsingAndHasToStop != null && value == null)
+                    {
+                        this.Room.BroadcastMsg($"{this} stopped using {this.thingPlayerIsUsingAndHasToStop}", self);
+                    }
+                    else if (value != null && this.thingPlayerIsUsingAndHasToStop != value)
+                    {
+                        this.Room.BroadcastMsg($"{this} started using {value}", self);
+                    }
+                    this.thingPlayerIsUsingAndHasToStop = value;
+                }
             }
         }
 
@@ -102,7 +93,6 @@ namespace LostAndFound.Engine
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => $"This is the {this}.";
 
         /*
         ██╗  ██╗██╗ ██████╗██╗  ██╗
@@ -175,5 +165,18 @@ namespace LostAndFound.Engine
         ██║  ██║███████╗███████╗██║     ███████╗██║  ██║███████║
         ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
         */
+        public void Mute() => this.Game.Mute(this as TPlayer);
+
+        public void Unmute() => this.Game.Unmute(this as TPlayer);
+
+        public void MoveTo(TRoom room) => Game.MovePlayerTo(this as TPlayer, room);
+
+        public void Reply(string msg) => Game.SendMsgTo(this as TPlayer, msg);
+
+        public void ReplyWithState(string msg) => Game.SendMsgWithStateTo(this as TPlayer, msg);
+
+        public void ReplyImage(string msg) => Game.SendImageTo(this as TPlayer, msg);
+
+        public void Say(string msg) => Game.SendSpeechTo(this as TPlayer, msg);
     }
 }

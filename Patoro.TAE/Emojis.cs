@@ -3,7 +3,7 @@
 /// emojis: https://emojipedia.org/
 /// </summary>
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public static partial class Emojis
     {

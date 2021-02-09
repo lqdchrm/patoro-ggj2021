@@ -1,6 +1,6 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 
-namespace LostAndFound.FindLosty
+namespace FindLosty
 {
     public interface IThing : BaseThing<IFindLostyGame, IPlayer, IRoom, IContainer, IThing> { }
     public class Thing : BaseThingImpl<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IThing

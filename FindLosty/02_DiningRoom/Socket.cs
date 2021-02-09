@@ -1,7 +1,8 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._03_Kitchen;
+﻿using Patoro.TAE;
+using FindLosty._03_Kitchen;
 
-namespace LostAndFound.FindLosty._02_DiningRoom
+
+namespace FindLosty._02_DiningRoom
 {
     public class Socket : Container
     {

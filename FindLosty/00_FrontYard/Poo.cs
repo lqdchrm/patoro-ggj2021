@@ -1,8 +1,9 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._02_DiningRoom;
+﻿using Patoro.TAE;
+using FindLosty._02_DiningRoom;
 using System;
 
-namespace LostAndFound.FindLosty._00_FrontYard
+
+namespace FindLosty._00_FrontYard
 {
     public class Poo : Item
     {

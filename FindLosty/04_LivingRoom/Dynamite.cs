@@ -1,8 +1,9 @@
-﻿using LostAndFound.Engine;
-using LostAndFound.FindLosty._01_EntryHall;
+﻿using Patoro.TAE;
+using FindLosty._01_EntryHall;
 using System;
 
-namespace LostAndFound.FindLosty._04_LivingRoom
+
+namespace FindLosty._04_LivingRoom
 {
     public class Dynamite : Item
     {

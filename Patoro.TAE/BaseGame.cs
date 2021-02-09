@@ -1,13 +1,10 @@
-using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
-using LostAndFound.Engine.Events;
+using Patoro.TAE.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LostAndFound.Engine
+namespace Patoro.TAE
 {
     public interface BaseGame<TGame, TPlayer, TRoom, TContainer, TThing> : IGame
         where TGame : class, BaseGame<TGame, TPlayer, TRoom, TContainer, TThing>

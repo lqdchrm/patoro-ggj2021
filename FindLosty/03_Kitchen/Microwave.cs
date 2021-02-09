@@ -1,8 +1,9 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 using System.Linq;
-using LostAndFound.FindLosty._02_DiningRoom;
+using FindLosty._02_DiningRoom;
 
-namespace LostAndFound.FindLosty._03_Kitchen
+
+namespace FindLosty._03_Kitchen
 {
     public class Microwave : Container
     {

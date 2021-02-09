@@ -1,8 +1,8 @@
-﻿using LostAndFound.Engine;
+﻿using Patoro.TAE;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LostAndFound.FindLosty
+namespace FindLosty
 {
     public interface IRoom : BaseRoom<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>, IContainer { }
 

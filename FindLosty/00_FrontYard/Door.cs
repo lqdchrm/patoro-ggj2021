@@ -1,7 +1,8 @@
 ﻿using System.Linq;
-using LostAndFound.Engine;
+using Patoro.TAE;
 
-namespace LostAndFound.FindLosty._00_FrontYard
+
+namespace FindLosty._00_FrontYard
 {
     public class Door : Thing
     {
