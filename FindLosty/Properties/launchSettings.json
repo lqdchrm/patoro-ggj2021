@@ -9,7 +9,7 @@
     },
     "FindLosty-Webserver": {
       "commandName": "Project",
-      "commandLineArgs": "webserver 8080"
+      "commandLineArgs": "web 8080"
     }
   }
 }

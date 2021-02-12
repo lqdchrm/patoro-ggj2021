@@ -26,8 +26,8 @@ namespace FindLosty
                         break;
                     case "web":
                         {
-                            //var game = FindLostyGame.Webserver(args.ElementAtOrDefault(1));
-                            //await game.StartAsync();
+                            var game = FindLostyGame.Webserver(args.ElementAtOrDefault(1));
+                            await game.StartAsync();
                         }
                         break;
                 }

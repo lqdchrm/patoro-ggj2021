@@ -79,7 +79,7 @@ namespace Patoro.TAE.Terminal
             return Task.CompletedTask;
         }
 
-        public string GetPlayerInput(TPlayer player)
+        private string GetPlayerInput(TPlayer player)
         {
             var next = commands?.FirstOrDefault();
             next = next != null ? $" <📜 {next}>" : null;
