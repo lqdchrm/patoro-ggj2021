@@ -25,6 +25,33 @@ namespace Patoro.TAE
 
         #region String Extensions
 
+        public static string Normalize(this string input)
+        {
+            return string.Join("", input.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
+        }
+
+        public static string Boxed(this string input)
+        {
+            IEnumerable<string> lines = input.Replace("\r", "").Replace("\t", "    ").Split("\n");
+            var width = lines.Max(l => l.Length);
+            lines = lines.Select(l => l + new string(' ', (width - l.Length)));
+            var line = string.Join("", Enumerable.Range(0, width + 2).Select(i => "═"));
+            var first = $"╔{line}╗";
+            var last = $"╚{line}╝";
+
+            return $"\n{first}\n║ {string.Join(" ║\n║ ", lines)} ║\n{last}";
+        }
+
+        public static IEnumerable<string> AsCodePoints(this string s)
+        {
+            for (int i = 0; i < s.Length; ++i)
+            {
+                yield return char.ConvertFromUtf32(char.ConvertToUtf32(s, i));
+                if (char.IsHighSurrogate(s, i))
+                    i++;
+            }
+        }
+
         public static string FormatMultiline(this string text)
         {
             IEnumerable<string> lines = text.Replace("\r\n", "\n").Split('\n', StringSplitOptions.TrimEntries);
@@ -93,41 +120,5 @@ namespace Patoro.TAE
             return self.Union(tmp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
         #endregion
-
-        //public static IList<TPlayer> GetTextMentions<TPlayer>(this Engine.Events.PlayerCommand inner)
-        //{
-        //    if (inner is null)
-        //        return Array.Empty<TPlayer>();
-
-        //    var argumentMentioneds = inner?.Player.Game.Players.Values.Cast<TPlayer>().Where(IsPlayerNameInText) ?? Array.Empty<TPlayer>();
-
-        //    bool IsPlayerNameInText(TPlayer player)
-        //    {
-        //        var splitName = player.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        //        if (splitName.Length == 0)
-        //            return false;
-        //        var args = inner?.Args;
-        //        if (args is null)
-        //            return false;
-
-        //        var indexList = args.Select((value, index) => (value, index)).ToArray() ?? (Array.Empty<ValueTuple<string, int>>());
-        //        var possibleStarts = indexList.Where(x => x.value.Equals(splitName.First(), StringComparison.OrdinalIgnoreCase));
-
-        //        return possibleStarts.Any(start =>
-        //        {
-        //            if (splitName.Length + start.index > inner.Args.Count)
-        //                return false;
-
-        //            for (int i = 0; i < splitName.Length; i++)
-        //            {
-        //                if (!args[i + start.index].Equals(splitName[i], StringComparison.OrdinalIgnoreCase))
-        //                    return false;
-        //            }
-        //            return true;
-        //        });
-        //    }
-
-        //    return inner?.Mentions.Cast<Player>().Concat(argumentMentioneds).Distinct().ToList() ?? Array.Empty<Player>() as IList<Player>;
-        //}
     }
 }

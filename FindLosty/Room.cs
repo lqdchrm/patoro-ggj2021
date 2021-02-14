@@ -19,8 +19,6 @@ namespace FindLosty
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public virtual string Image => null;
-
         public override void Look(IPlayer sender)
         {
             var description = Description.ToString();
@@ -43,7 +41,7 @@ namespace FindLosty
             {
                 if (Image is not null)
                 {
-                    sender.Reply($"{Image}");
+                    sender.ReplyImage($"{Image}");
                     await Task.Delay(50);
                 }
                 sender.Reply($"{description}\n{friendsText}{contentText}{roomsText}");

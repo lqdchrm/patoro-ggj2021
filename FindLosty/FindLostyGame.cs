@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
+using Patoro.TAE.Webserver;
 
 namespace FindLosty
 {
@@ -47,6 +48,12 @@ namespace FindLosty
 
             return new FindLostyGame("FindLosty",
                 new TerminalEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(mode, scriptLines));
+        }
+
+        public static FindLostyGame Webserver(string port)
+        {
+            return new FindLostyGame("FindLosty",
+                new WebserverEngine<IFindLostyGame, IPlayer, IRoom, IContainer, IThing>(port));
         }
         #endregion
 

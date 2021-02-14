@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patoro.TAE.Discord", "Pator
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patoro.TAE.Terminal", "Patoro.TAE.Terminal\Patoro.TAE.Terminal.csproj", "{B4F3A81E-FE00-4422-9513-071022ECFFDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patoro.TAE.Webserver", "Patoro.TAE.Webserver\Patoro.TAE.Webserver.csproj", "{CEB59ABF-F12A-4606-BBFF-0C61DB18FBA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4F3A81E-FE00-4422-9513-071022ECFFDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB59ABF-F12A-4606-BBFF-0C61DB18FBA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB59ABF-F12A-4606-BBFF-0C61DB18FBA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB59ABF-F12A-4606-BBFF-0C61DB18FBA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB59ABF-F12A-4606-BBFF-0C61DB18FBA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Patoro.TAE.Discord\Patoro.TAE.Discord.csproj" />
     <ProjectReference Include="..\Patoro.TAE.Terminal\Patoro.TAE.Terminal.csproj" />
+    <ProjectReference Include="..\Patoro.TAE.Webserver\Patoro.TAE.Webserver.csproj" />
     <ProjectReference Include="..\Patoro.TAE\Patoro.TAE.csproj" />
   </ItemGroup>
 
