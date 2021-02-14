@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FindLosty._00_FrontYard
 {
-    public class Mansion : Container
+    public class Mansion : Thing
     {
         public override string Emoji => Emojis.Mansion;
 
@@ -30,7 +30,8 @@ namespace FindLosty._00_FrontYard
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
-        public override string Description => $"{House}\nThere seems to be only one way into the building. A large oak {Game.FrontYard.Door}.";
+        public override string Image => House;
+        public override string Description => $"There seems to be only one way into the building. A large oak {Game.FrontYard.Door}.";
 
         public string ShortDescription()
         {
