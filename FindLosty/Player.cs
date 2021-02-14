@@ -86,7 +86,9 @@ namespace FindLosty
 
             if (this == sender)
             {
-                sender.Reply($"You look {OneOf(adjs)}");
+                var header = $"You look {OneOf(adjs)}, and have:\n\t";
+                var items = string.Join("\n\t", this.Select(i => i.ToString()));
+                sender.Reply($"{header}{items}");
             } else {
                 var header = $"It's {StatusText}, owning:\n\t";
                 var items = string.Join("\n\t", this.Select(i => i.ToString()));
