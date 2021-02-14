@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace Patoro.TAE.Webserver
 {
@@ -42,12 +43,17 @@ namespace Patoro.TAE.Webserver
         public void Unmute(TPlayer player) { }
 
         public Task PrepareEngine() => Task.CompletedTask;
-        public void SendImageTo(TPlayer player, string msg) => SendReplyTo(player, msg);
-        public void SendReplyTo(TPlayer player, string msg)
+        public void SendImageTo(TPlayer player, string msg) => SendText(player, msg, false);
+        public void SendReplyTo(TPlayer player, string msg) => SendText(player, msg, true);
+
+        private void SendText(TPlayer player, string msg, bool doHighlight)
         {
-            if (Callers.TryGetValue(player.NormalizedName, out IClientProxy caller))
+            if (NameToIdMap.TryGetValue(player.NormalizedName, out string id))
             {
-                caller.SendAsync("msg", msg);
+                if (ClientsById.TryGetValue(id, out (IClientProxy, TPlayer) client))
+                {
+                    client.Item1.SendAsync("msg", HtmlTabled(msg.Boxed(), doHighlight));
+                }
             }
         }
 
@@ -55,13 +61,15 @@ namespace Patoro.TAE.Webserver
         public Task ShowRoom(TRoom room) => Task.CompletedTask;
 
         public TRoom StartRoom { get; private set; }
-        public readonly Dictionary<string, IClientProxy> Callers = new Dictionary<string, IClientProxy>();
+        public readonly Dictionary<string, (IClientProxy, TPlayer)> ClientsById = new Dictionary<string, (IClientProxy, TPlayer)>();
+        public readonly Dictionary<string, string> NameToIdMap = new Dictionary<string, string>();
 
         public Task StartEngine()
         {
             StartRoom = Game.Rooms.Values.First(r => r.IsVisible);
 
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 string[] args = new string[] { };
                 CreateHostBuilder(args).Build().Run();
             });
@@ -71,7 +79,8 @@ namespace Patoro.TAE.Webserver
             Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureServices(services => {
+                webBuilder.ConfigureServices(services =>
+                {
                     services.AddSingleton(this);
                 });
                 webBuilder.UseStartup<Startup<TGame, TPlayer, TRoom, TContainer, TThing>>();
@@ -107,5 +116,41 @@ namespace Patoro.TAE.Webserver
             System.GC.SuppressFinalize(this);
         }
         #endregion
+
+        private static IEnumerable<string> HtmlTableRowed(string line, bool doHighlight)
+        {
+            bool isHighlight = false;
+            for (int i = 0; i < line.Length; ++i)
+            {
+                char c = line[i];
+                if (i > 0 && line[i-1] == '[') isHighlight = true;
+                if (c == ']') isHighlight = false;
+
+                var clss = doHighlight && isHighlight ? " class=\"item\"" : "";
+
+                if (char.IsHighSurrogate(c))
+                {
+                    yield return $"<td{clss} colspan=\"2\">{char.ConvertFromUtf32(char.ConvertToUtf32(line, i++))}</td>";
+                }
+                else
+                {
+                    yield return $"<td{clss}>{c}</td>";
+                }
+            }
+        }
+
+        public static string HtmlTabled(string input, bool doHighlight)
+        {
+            IEnumerable<string> lines = input.Replace("\r", "").Split("\n", StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Any())
+            {
+                var head = $"<table><tbody>";
+                var foot = $"</tbody></table>";
+                return $"{head}\n{string.Join("\n", lines.Select(line => "<tr>" + string.Join("", HtmlTableRowed(line, doHighlight)) + "</tr>"))}\n{foot}";
+            } else
+            {
+                return "";
+            }
+        }
     }
 }

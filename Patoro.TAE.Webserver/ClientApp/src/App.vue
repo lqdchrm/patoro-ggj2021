@@ -1,7 +1,6 @@
 <template>
     <form class="console" @submit.prevent="sendCmd()">
-      <div>{{connected ? "Connected" : "Disconnected"}}</div>
-      <textarea ref="output" class="output" v-model="output" readonly />
+      <div ref="output" class="output" v-html="output"></div>
       <div class="input-line">
         <div class="prompt">{{prompt}}</div>
         <input ref="input" type="text" v-model="input">
@@ -23,8 +22,7 @@ export default {
     return {
       messages: [],
       prompt: "$",
-      input: "",
-      connected: false
+      input: ""
     }
   },
   mounted() {
@@ -37,7 +35,7 @@ export default {
   },
   computed: {
     output() {
-      return this.messages.join("\n")
+      return this.messages.join("<br>")
     }
   },
   methods: {
@@ -48,32 +46,24 @@ export default {
       this.messages.push(msg);
       this.$nextTick(() => this.scrollToBottom());
     },
-    sendCmd() {
+    async sendCmd() {
       let cmd = this.input
-      switch(cmd) {
-        case 'connect':
-          var action = connection.state == "Connected"
-            ? Promise.resolve()
-            : connection.start().then(() => { this.connected = true;}).catch(err => console.error(err));
-          action.then(() => {
-            return connection.invoke("connect", "player").catch(err => console.error(err.toString()));
-          });
-          break;
-        default:
-          if (this.connected) {
-            this.addMessage(`You: ${cmd}`)
-            connection.invoke("cmd", cmd).catch(err => console.error(err.toString()));
-          }
-          break;
+      try {
+        if (connection.state !== "Connected") await connection.start();
+
+        this.addMessage(`You: ${cmd}`);
+        await connection.invoke("cmd", cmd);
+        this.input = "";
+      } catch(err) {
+        console.error(err.toString());
       }
-      this.input = "";
     }
   }
 }
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
+@import url('http://fonts.cdnfonts.com/css/cousine');
 
 * {
   margin: 0;
@@ -112,7 +102,7 @@ html, body {
 }
 
 #app {
-  font-family: "Roboto Mono", Helvetica, Arial, sans-serif;
+  font-family: cousine, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
@@ -123,11 +113,17 @@ html, body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   overflow: hidden;
+  padding: 0 5%;
 }
 
 .console > * {
   flex: 0 1 auto;
+}
+
+.console table {
+  line-height: 1.2em;
 }
 
 .console > .output {
@@ -138,6 +134,14 @@ html, body {
   border-style: hidden;
   outline: none;
   resize: none;
+}
+
+.console td {
+  text-align: center;
+}
+
+.console .item {
+  color: darkred;
 }
 
 .console > .input-line {
