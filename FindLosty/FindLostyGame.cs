@@ -58,11 +58,14 @@ namespace FindLosty
         #endregion
 
         private bool gameEnded = false;
-        public bool GameEnded {
-            get {
+        public bool GameEnded
+        {
+            get
+            {
                 return gameEnded;
             }
-            set {
+            set
+            {
                 gameEnded = value;
             }
         }
@@ -256,15 +259,18 @@ namespace FindLosty
 
                 case "goto":
                     {
+                        var roomName = first ?? string.Empty;
                         var possibleRoomToGo = this.Rooms.Values.Where(x => x.IsVisible)
-                            .Where(room => room.RoomNumber == first
-                                    || (first.Length >= 2 && room.Name.StartsWith(first, StringComparison.OrdinalIgnoreCase)));
+                            .Where(room => room.RoomNumber == roomName
+                                    || (roomName.Length >= 2 && room.Name.StartsWith(roomName, StringComparison.OrdinalIgnoreCase)));
                         if (possibleRoomToGo.Skip(1).Any())
-                            player.Reply($"Multiple possible rooms found for {first}: {string.Join(", ", possibleRoomToGo)}.");
+                            player.Reply($"Multiple possible rooms found for {roomName}: {string.Join(", ", possibleRoomToGo)}.");
                         else if (possibleRoomToGo.Any())
                             player.MoveTo(possibleRoomToGo.First());
+                        else if (roomName == string.Empty)
+                            player.Reply($"You need to specify a room, possible Romms:\n  - {string.Join("\n  - ", this.Rooms.Values.Where(x => x.IsVisible))}");
                         else
-                            player.Reply($"Unknown Room: {first}.");
+                            player.Reply($"Unknown Room: {roomName}, possible Romms:\n  - {string.Join("\n  - ", this.Rooms.Values.Where(x => x.IsVisible))}.");
                     }
                     break;
 
@@ -352,7 +358,8 @@ namespace FindLosty
                     e.Player.Room = newRoom;
 
                     oldRoom.Game.BroadcastMsg($"{e.Player} left {oldRoom} and dropped {string.Join(", ", stuff)}.", e.Player);
-                } else
+                }
+                else
                 {
                     oldRoom.BroadcastMsg($"{e.Player} left {oldRoom}", e.Player);
                 }
