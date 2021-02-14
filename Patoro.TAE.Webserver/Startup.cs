@@ -35,7 +35,7 @@ namespace Patoro.TAE.Webserver
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp";
+                configuration.RootPath = "ClientApp/dist";
             });
         }
 
@@ -46,15 +46,16 @@ namespace Patoro.TAE.Webserver
             {
                 app.UseDeveloperExceptionPage();
             }
-
+#if DEBUG
             app.UseCors((opts) => {
                 opts.WithOrigins("http://localhost:8080")
                     .AllowAnyHeader()
                     .WithMethods("GET", "POST")
                     .AllowCredentials();
             });
+#endif
             app.UseRouting();
-            // app.UseSpaStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -63,18 +64,10 @@ namespace Patoro.TAE.Webserver
                 endpoints.MapHub<GameHub<TGame, TPlayer, TRoom, TContainer, TThing>>("/game");
             });
 
-            // app.UseSpa(spa =>
-            // {
-            //     if (env.IsDevelopment())
-            //         spa.Options.SourcePath = "ClientApp/";
-            //     else
-            //         spa.Options.SourcePath = "dist";
-
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseVueCli(npmScript: "serve");
-            //     }
-            // });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+            });
         }
     }
 }

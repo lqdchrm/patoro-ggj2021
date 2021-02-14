@@ -3,7 +3,7 @@
       <div ref="output" class="output" v-html="output"></div>
       <div class="input-line">
         <div class="prompt">{{prompt}}</div>
-        <input ref="input" type="text" v-model="input">
+        <input ref="input" type="text" v-model="input" @keyup.up.stop="lastEntry(true)" @keyup.down.stop="lastEntry(false)">
       </div>
     </form>
 </template>
@@ -22,14 +22,16 @@ export default {
     return {
       messages: [],
       prompt: "$",
-      input: ""
+      input: "",
+      commands: [],
+      commandIdx: -1
     }
   },
   mounted() {
     this.scrollToBottom();
     this.$refs.input.focus();
     connection.on("msg", (message) => {
-      console.log("Received: ", message);
+      // console.log("Received: ", message);
       this.addMessage(message);
     });
   },
@@ -48,14 +50,32 @@ export default {
     },
     async sendCmd() {
       let cmd = this.input
+      this.commands.push(cmd)
+      this.commandIdx = this.commands.length
       try {
-        if (connection.state !== "Connected") await connection.start();
+        if (connection.state !== "Connected")
+          await connection.start();
 
         this.addMessage(`You: ${cmd}`);
         await connection.invoke("cmd", cmd);
         this.input = "";
       } catch(err) {
         console.error(err.toString());
+      }
+    },
+    lastEntry(up) {
+      console.log(up ? 'UP' : 'DOWN', this.commands, this.commandIdx)
+
+      if (this.commands.length) {
+        if (up)
+          this.commandIdx--
+        else
+          this.commandIdx++
+
+        this.commandIdx = Math.max(0, Math.min(this.commands.length-1, this.commandIdx))
+
+        var last = this.commands[this.commandIdx]
+        this.input = last
       }
     }
   }
