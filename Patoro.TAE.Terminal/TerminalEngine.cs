@@ -56,15 +56,7 @@ namespace Patoro.TAE.Terminal
         {
             Task.Run(async () =>
             {
-                IEnumerable<string> lines = msg.Replace("\r", "").Replace("\t", "    ").Split("\n");
-                var width = lines.Max(l => l.Length);
-                lines = lines.Select(l => l.PadRight(width));
-                var line = string.Join("", Enumerable.Range(0, width+2).Select(i => "═"));
-                var first = $"╔{line}╗";
-                var last = $"╚{line}╝";
-
-                msg = $"\n{first}\n║ {string.Join(" ║\n║ ", lines)} ║\n{last}";
-                Console.WriteLine(msg.Replace("\n", "\r\n"));
+                Console.WriteLine(msg.Boxed().Replace("\n", "\r\n"));
 
                 if (Mode == "script")
                     await Task.Delay(50);

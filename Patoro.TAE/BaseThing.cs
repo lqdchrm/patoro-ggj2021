@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 /*
  * ASCII HELPERS (Font used: ANSI Shadow)
@@ -80,6 +81,9 @@ namespace Patoro.TAE
         ███████╗╚██████╔╝╚██████╔╝██║  ██╗
         ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
         */
+        public virtual string Image => null;
+
+
         public virtual string Description => OneOf(
             $"It's {a} {this}",
             $"Nice, {a} {this}"
@@ -87,8 +91,23 @@ namespace Patoro.TAE
 
         public virtual void Look(TPlayer sender)
         {
-            if (Description is not null)
-                sender.Reply(Description);
+            if (Image is not null && Description is not null)
+            {
+                Task.Run(async () =>
+                {
+                    sender.ReplyImage(Image);
+                    await Task.Delay(50);
+                    sender.Reply(Description);
+                }).Wait();
+            }
+            else
+            {
+                if (Image is not null)
+                    sender.ReplyImage(Image);
+
+                if (Description is not null)
+                    sender.Reply(Description);
+            }
         }
 
         /*

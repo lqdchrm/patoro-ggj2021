@@ -42,7 +42,7 @@ namespace Patoro.TAE
         where TThing : class, BaseThing<TGame, TPlayer, TRoom, TContainer, TThing>
     {
         public TRoom Room { get; set; }
-        public string NormalizedName => string.Join("", this.Name.ToLowerInvariant().Where(c => (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')));
+        public string NormalizedName => this.Name.Normalize();
 
         public override string Emoji => this.emoji;
 
