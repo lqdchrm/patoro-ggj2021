@@ -24,15 +24,5 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
   </ItemGroup>
- 
-  <ItemGroup>
-    <None Remove="TextFile.txt" />
-  </ItemGroup>
- 
-  <ItemGroup>
-    <Content Include="TextFile.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
 </Project>

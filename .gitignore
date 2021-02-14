@@ -1,6 +1,7 @@
 bin/
 obj/
 logs/
+publish/
 .vs/
 .env
 *.csproj.user
